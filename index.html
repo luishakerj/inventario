@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario LICC</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-elements">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <main class="app-container">
+        <!-- VISTA: MENÚ PRINCIPAL -->
+        <section id="view-menu" class="view active">
+            <div class="glass-panel text-center menu-panel">
+                <div class="icon-header">
+                    <img src="659214464177758344.jpg" alt="UNAP Logo" class="app-logo"
+                        style="max-width: 150px; height: auto;">
+                </div>
+                <h1 class="main-title">Inventario UELICC</h1>
+                <p class="subtitle">laboratorio</p>
+
+                <div class="role-selection">
+                    <button class="btn btn-primary" onclick="app.navigate('view-student')">
+                        <i class="ph ph-student"></i> Alumno
+                    </button>
+                    <button class="btn btn-secondary" onclick="app.navigate('view-admin')">
+                        <i class="ph ph-chalkboard-teacher"></i> Administrador
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!--fin de menu princiap-->
+
+
+
+        <!-- VISTA: ALUMNO -->
+        <section id="view-student" class="view">
+            <header class="top-nav glass-panel">
+                <div class="nav-left">
+                    <button class="btn-icon" onclick="app.navigate('view-menu')" title="Volver al Menú">
+                        <i class="ph ph-arrow-left"></i>
+                    </button>
+                    <h2>Consulta de Inventario</h2>
+                </div>
+                <div class="nav-actions">
+                    <div class="search-bar">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="search-student" placeholder="Buscar..."
+                            oninput="app.filterProducts('student')">
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area glass-panel">
+                <div class="scroll-top-mirror" id="mirror-student">
+                    <div class="scroll-top-mirror-inner" id="mirror-inner-student"></div>
+                </div>
+                <div class="table-responsive" id="scroll-student">
+                    <table class="modern-table" id="table-student">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th class="quantity-column">Cantidad / Unidad</th>
+
+                                <th class="marca-column">Marca</th>
+                                <th>Lote</th>
+                                <th>F. Producción</th>
+                                <th>F. Vencimiento</th>
+                                <th>Descripción</th>
+                                <th class="text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-student">
+                            <!-- Los datos se inyectarán aquí por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <!---fin de  alumno-->
+
+
+
+        <!-- VISTA: ADMINISTRADOR -->
+
+        <section id="view-admin" class="view">
+            <header class="top-nav glass-panel">
+                <div class="nav-left">
+                    <button class="btn-icon" onclick="app.navigate('view-menu-admin')" title="Volver al Menú">
+                        <i class="ph ph-arrow-left"></i>
+                    </button>
+                    <h2>Panel de Administración</h2>
+                </div>
+
+
+
+                <div class="nav-actions">
+                    <div class="search-bar">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="search-admin" placeholder="Buscar..."
+                            oninput="app.filterProducts('admin')">
+
+                        <div class="box-categoria" id="selecto-categoria"
+                            style="display: flex; gap: 10px; align-items: center;">
+                            <select id="category-filter-admin" class="categoria" onchange="app.filterProducts('admin')"
+                                style="padding: 6px 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                                <option value="seleccion">seleccion</option>
+                                <optgroup label="Reactivos">
+                                    <option value="Solventes">Solventes</option>
+                                    <option value="ácido">Ácido</option>
+                                    <option value="Bases y sales">Bases y sales</option>
+                                    <option value="Polimeros">Polímeros</option>
+                                    <option value="Congelados y refrigerados">Congelados y refrigerados</option>
+                                </optgroup>
+                                <!-- Categoría 2: Equipos -->
+                                <optgroup label="Equipos">
+                                    <option value="Equipos">Equipos</option>
+                                </optgroup>
+
+                                <!-- Categoría 3: Materiales -->
+                                <optgroup label="Materiales">
+                                    <option value="Materiales de laboratorio">Materiales de laboratorio</option>
+                                    <option value="Materiales de limpieza">Materiales de limpieza</option>
+                                    <option value="Articulos de oficina">Artículos de oficina</option>
+                                    <option value="Otros">Otros</option>
+                                    <option value="Pro frejol">Pro frejol</option>
+                                </optgroup>
+                                <!-- Todos -->
+                                <optgroup label="General">
+                                    <option value="todos">Todas las categorías</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!----venta de la palntilla opciones-->
+                    <div style="position: relative; display: inline-block;">
+                        <button class="btn-icon" onclick="app.toggleOpcionesMenu()" title="Opciones"
+                            style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; cursor: pointer;">
+                            <i class="ph ph-chart-bar" style="font-size: 1.2rem;"></i>
+                            <span>Opciones</span>
+                        </button>
+
+                        <div id="menu-opciones-flotante" class="oculto">
+                            <!-- Botón 1: Reporte -->
+                            <button class="menu-item" onclick="app.abrirModalReportes(); app.toggleOpcionesMenu();">
+                                <i class="ph ph-chart-bar"></i> Reporte
+                            </button>
+
+                            <!-- Botón 2: Nuevo Producto (Apuntando al ID correcto: modal-product) -->
+                            <button class="menu-item"
+                                onclick="app.openModal('modal-product'); app.toggleOpcionesMenu();">
+                                <i class="ph ph-plus"></i> Nuevo Producto
+                            </button>
+
+                            <!-- Botón 3: Papelera -->
+                            <button class="menu-item"
+                                onclick="app.navigate('view-papelera'); app.toggleOpcionesMenu();">
+                                <i class="ph ph-trash"></i> Papelera
+                            </button>
+
+                            <!-- Botón 4: Ver Historial -->
+                            <button class="menu-item" onclick="app.abrirModalHistorial(); app.toggleOpcionesMenu();">
+                                <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
+                            </button>
+                        </div>
+                    </div>
+
+
+            </header>
+
+
+
+
+
+            <!-- Contenedor principal que se va a imprimir -->
+            <div id="area-padron">
+                <h2>Inventario de Alimentos</h2>
+
+                <!-- Aquí colocas o dejas tu tabla con los datos reales -->
+                <table class="modern-table" id="table-admin-print">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+
+                            <!-- Tus demás columnas -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Tus filas de datos que cargan con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="print-filter-container"
+                style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                <select id="filtro-categoria-print"
+                    style="padding: 10px; border-radius: 10px; background: #22385c; color: white;">
+                    <option value="todos">todas las categorías</option>
+
+
+                    <!-- Categoría 1: Reactivos -->
+                    <optgroup label="Reactivos">
+                        <option value="Solventes">Solventes</option>
+                        <option value="Acido">Ácido</option>
+                        <option value="Bases y sales">Bases y sales</option>
+                        <option value="Polimeros">Polímeros</option>
+                        <option value="Vencidos">Vencidos</option>
+                        <option value="Congelados y refrigerados">Congelados y refrigerados</option>
+                    </optgroup>
+
+                    <!-- Categoría 2: Equipos -->
+                    <optgroup label="Equipos">
+                        <option value="Equipos">Equipos</option>
+                    </optgroup>
+
+                    <!-- Categoría 3: Materiales -->
+                    <optgroup label="Materiales">
+                        <option value="Materiales de laboratorio">Materiales de laboratorio</option>
+                        <option value="Materiales de limpieza">Materiales de limpieza</option>
+                        <option value="Articulos de oficina">Artículos de oficina</option>
+                        <option value="Otros">Otros</option>
+                        <option value="Pro frejol">Pro frejol</option>
+                    </optgroup>
+                </select>
+                <!-- Tu botón existente -->
+                <button onclick="imprimirPadron()" class="btn-imprimir">
+                    🖨️ Imprimir Padrón
+                </button>
+
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+            <div class="content-area glass-panel">
+                <div class="scroll-top-mirror" id="mirror-admin">
+                    <div class="scroll-top-mirror-inner" id="mirror-inner-admin"></div>
+                </div>
+                <div class="table-responsive" id="scroll-admin">
+                    <table class="modern-table" id="table-admin">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th class="quantity-column">Cantidad/Unidad</th>
+                                <th class="unit-column" aria-hidden="true"></th>
+                                <th>Marca</th>
+                                <th>Lote / Código</th>
+                                <th>F. Producción</th>
+                                <th>F. Vencimiento</th>
+                                <th>Descripción</th>
+                                <th class="text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-admin">
+                            <!-- Los datos se inyectarán aquí por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-product" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="modal-title">Agregar Producto</h3>
+                <button class="btn-icon" onclick="app.closeModal('modal-product')">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            <form id="product-form" onsubmit="app.saveProduct(event)">
+                <input type="hidden" id="product-id">
+
+                <div class="form-group">
+                    <label for="product-name">Nombre</label>
+                    <input type="text" id="product-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-desc">Descripción</label>
+                    <input type="text" id="product-desc">
+                </div>
+
+                <!-- Campo de Categoría -->
+                <div class="form-group">
+                    <label for="product-category">Categoría</label>
+                    <input type="text" id="product-category" required>
+                </div>
+
+                <!-- Campo de Stock -->
+                <div class="form-group">
+                    <label for="product-stock">Stock / Cantidad</label>
+                    <input type="number" id="product-stock" required>
+                </div>
+
+                <!-- Campo de Ubicación -->
+                <div class="form-group">
+                    <label for="product-location">Ubicación</label>
+                    <input type="text" id="product-location">
+                </div>
+
+                <!-- Campo de Lote -->
+                <div class="form-group">
+                    <label for="product-lote">Lote / Código</label>
+                    <input type="text" id="product-lote">
+                </div>
+
+                <!-- Campo de Fecha de Producción -->
+                <div class="form-group">
+                    <label for="product-prod-date">F. Producción</label>
+                    <input type="date" id="product-prod-date">
+                </div>
+
+                <!-- Campo de Fecha de Vencimiento -->
+                <div class="form-group">
+                    <label for="product-exp-date">F. Vencimiento</label>
+                    <input type="date" id="product-exp-date">
+                </div>
+
+
+
+                <!-- IMPORTANTE: El campo de Estado que causaba el error -->
+                <div class="form-group">
+                    <label for="product-state">Estado</label>
+                    <input type="text" id="product-state">
+                </div>
+
+                <!-- Sección de Imagen -->
+                <div class="form-group">
+                    <label for="product-image">Imagen del Producto (Opcional)</label>
+                    <input type="file" id="product-image" accept="image/*" onchange="app.handleImageUpload(event)">
+                    <input type="hidden" id="product-image-data">
+                    <div id="image-preview" style="margin-top: 10px; display: none; text-align: center;">
+                        <img id="image-preview-img" src="" alt="Vista previa"
+                            style="max-height: 150px; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <!-- Pie de página del modal con los botones -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost"
+                        onclick="app.closeModal('modal-product')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- MODAL: VER DETALLES DEL PRODUCTO -->
+    <div id="modal-view-product" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3>Detalles del Producto</h3>
+                <button class="btn-icon" onclick="app.closeModal('modal-view-product')">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            <div id="view-product-details" class="details-grid">
+                <!-- Se inyecta con JS -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    onclick="app.closeModal('modal-view-product')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <section id="view-papelera" class="view">
+        <div class="top-nav glass-panel"
+            style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button class="btn-icon" onclick="app.navigate('view-admin')"><i class="ph ph-arrow-left"></i></button>
+                <h2>Papelera de Reciclaje</h2>
+            </div>
+        </div>
+
+        <div class="panel administrativo"
+            style="background: var(--surface-card); padding: 1.5rem; border-radius: 12px;">
+            <div class="table-container">
+                <table class="table" style="width: 100%; text-align: left;">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Stock</th>
+                            <th style="text-align: right;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body-papelera">
+                        <!-- Se llena con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- MODAL: REPORTE DE ACTIVIDADES / INVENTARIO -->
+    <div id="reporte-generar" class="modal-overlay">
+        <div class="modal-content glass-panel" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3>📊 Generador de Reportes</h3>
+                <button class="btn-icon" onclick="app.closeModal('reporte-generar')">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+
+            <!-- FORMULARIO DE REPORTE -->
+
+            <div style="padding: 1.5rem; max-height: 600px; overflow-y: auto;">
+                <!-- Categoría de insumo que se usó -->
+
+                <div class="form-group">
+                    <label for="report-category">Categoría de insumo:</label>
+                    <select id="report-category"
+                        style="padding: 10px; border-radius: 8px; background: #22385c; color: white; width: 100%; border: 1px solid var(--surface-border);">
+                        <option value="">Seleccionar categoría</option>
+                        <option value="Solventes">Solventes</option>
+                        <option value="Acido">Ácido</option>
+                        <option value="Bases y sales">Bases y sales</option>
+                        <option value="Polimeros">Polímeros</option>
+                        <option value="Equipos">Equipos</option>
+                        <option value="Materiales de laboratorio">Materiales de laboratorio</option>
+                        <option value="Materiales de limpieza">Materiales de limpieza</option>
+                        <option value="Articulos de oficina">Artículos de oficina</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                    <br>
+                    <br>
+                    <!-- Nombre del insumo -->
+                    <div class="form-group">
+                        <label for="report-item-name">Nombre del insumo:</label>
+                        <input type="text" id="report-item-name" placeholder="Ej. Alcohol etílico, Guantes..."
+                            style="padding: 10px; border-radius: 8px; background: #22385c; color: white; width: 100%; border: 1px solid var(--surface-border);">
+                    </div>
+                    <!-- fecha de uso -->
+                    <div class="form-group">
+                        <label for="report-use-date">Fecha de su uso:</label>
+                        <input type="date" id="report-use-date"
+                            style="padding: 10px; border-radius: 8px; background: #22385c; color: white; width: 100%; border: 1px solid var(--surface-border);">
+                    </div>
+
+                    <!-- Cuánto se usó (cantidad) -->
+                    <div class="form-group">
+                        <label for="report-quantity-used">Cuánto se usó (cantidad):</label>
+                        <input type="number" id="report-quantity-used" placeholder="Ej. 5, 500..."
+                            style="padding: 10px; border-radius: 8px; background: #22385c; color: white; width: 100%; border: 1px solid var(--surface-border);">
+                    </div>
+
+
+                </div>
+
+                <!-- Subir una foto del insumo -->
+                <div class="form-group">
+                    <label for="report-item-image">Subir foto del insumo (Opcional):</label>
+                    <input type="file" id="report-item-image" accept="image/*"
+                        style="background: transparent; border: 1px dashed var(--surface-border); padding: 1rem; width: 100%; border-radius: 8px; color: white;">
+                </div>
+
+                <!-- Botones de acción -->
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" onclick="app.generateReport(event)">
+                        <i class="ph ph-magnifying-glass"></i> Generar Reporte
+                    </button>
+                    <button class="btn btn-ghost" onclick="app.exportReport()" style="flex: 1;">
+                        <i class="ph ph-download-simple"></i> Descargar CSV
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- RESULTADO DEL REPORTE -->
+            <div id="report-result" style="margin-top: 20px; min-height: 100px;">
+                <p style="color: var(--text-muted); text-align: center;">El reporte aparecerá aquí</p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" onclick="app.closeModal('reporte-generar')">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL: HISTORIAL DE REPORTES Y MOVIMIENTOS -->
+    <div id="modal-historial-reportes" class="modal-overlay">
+        <div class="modal-content glass-panel"
+            style="max-width: 950px; width: 95%; max-height: 85vh; display: flex; flex-direction: column; padding: 1.5rem; color: #f8fafc; background: #0f172a; border-radius: 12px; border: 1px solid #334155;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="ph ph-clock-counter-clockwise" style="font-size: 1.5rem; color: #10b981;"></i>
+                    <h3 style="color: #10b981; font-size: 1.25rem; margin: 0;">📋 Historial de Movimientos y Reportes
+                    </h3>
+                </div>
+                <button type="button" class="btn btn-ghost" onclick="app.closeModal('modal-historial-reportes')"
+                    style="cursor: pointer; background: transparent; border: none; color: #94a3b8; font-size: 1.3rem;">✕</button>
+            </div>
+
+            <!-- Filtros y Búsqueda interna -->
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
+                <div class="search-bar" style="flex: 1; min-width: 200px; padding: 0.4rem 0.8rem;">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" id="filtro-historial-buscar" placeholder="Buscar en historial..."
+                        oninput="app.renderizarHistorial()" style="width: 100%;">
+                </div>
+                <select id="filtro-historial-tipo" onchange="app.renderizarHistorial()"
+                    style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: 1px solid #334155; border-radius: 8px; font-size: 0.9rem; cursor: pointer;">
+                    <option value="todos">Todos los registros</option>
+                    <option value="reporte">Reportes de Insumos</option>
+                    <option value="nuevo_producto">Nuevos Productos</option>
+                    <option value="edicion">Productos Editados</option>
+                </select>
+                <button type="button" class="btn" onclick="app.limpiarHistorial()"
+                    style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #ef4444; padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    🗑️ Limpiar Historial
+                </button>
+            </div>
+
+            <!-- Tabla de Historial con Scroll -->
+            <div
+                style="overflow-x: auto; overflow-y: auto; flex: 1; max-height: 450px; border-radius: 8px; border: 1px solid #1e293b;">
+                <table
+                    style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; color: #f8fafc;">
+                    <thead>
+                        <tr
+                            style="border-bottom: 2px solid #334155; color: #94a3b8; position: sticky; top: 0; background: #0f172a; z-index: 2;">
+                            <th style="padding: 0.75rem;">Fecha y Hora</th>
+                            <th style="padding: 0.75rem;">Tipo</th>
+                            <th style="padding: 0.75rem;">Insumo / Producto</th>
+                            <th style="padding: 0.75rem;">Cantidad</th>
+                            <th style="padding: 0.75rem;">Categoría</th>
+                            <th style="padding: 0.75rem;">Lote / Marca</th>
+                            <th style="padding: 0.75rem;">Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-historial-cuerpo">
+                        <!-- Se inyecta dinámicamente con JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
+                <span id="historial-conteo" style="font-size: 0.85rem; color: #94a3b8;">Total de registros: 0</span>
+                <button type="button" class="btn btn-ghost"
+                    onclick="app.closeModal('modal-historial-reportes')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js?v=2026"></script>
+</body>
+
+</html>
