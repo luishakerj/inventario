@@ -112,72 +112,69 @@
                         <i class="ph ph-magnifying-glass"></i>
                         <input type="text" id="search-admin" placeholder="Buscar..."
                             oninput="app.filterProducts('admin')">
-
-                        <div class="box-categoria" id="selecto-categoria"
-                            style="display: flex; gap: 10px; align-items: center;">
-                            <select id="category-filter-admin" class="categoria" onchange="app.filterProducts('admin')"
-                                style="padding: 6px 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
-                                <option value="seleccion">seleccion</option>
-                                <optgroup label="Reactivos">
-                                    <option value="Solventes">Solventes</option>
-                                    <option value="ácido">Ácido</option>
-                                    <option value="Bases y sales">Bases y sales</option>
-                                    <option value="Polimeros">Polímeros</option>
-                                    <option value="Congelados y refrigerados">Congelados y refrigerados</option>
-                                </optgroup>
-                                <!-- Categoría 2: Equipos -->
-                                <optgroup label="Equipos">
-                                    <option value="Equipos">Equipos</option>
-                                </optgroup>
-
-                                <!-- Categoría 3: Materiales -->
-                                <optgroup label="Materiales">
-                                    <option value="Materiales de laboratorio">Materiales de laboratorio</option>
-                                    <option value="Materiales de limpieza">Materiales de limpieza</option>
-                                    <option value="Articulos de oficina">Artículos de oficina</option>
-                                    <option value="Otros">Otros</option>
-                                    <option value="Pro frejol">Pro frejol</option>
-                                </optgroup>
-                                <!-- Todos -->
-                                <optgroup label="General">
-                                    <option value="todos">Todas las categorías</option>
-                                </optgroup>
-                            </select>
-                        </div>
                     </div>
 
-                    <!----venta de la palntilla opciones-->
-                    <div style="position: relative; display: inline-block;">
-                        <button class="btn-icon" onclick="app.toggleOpcionesMenu()" title="Opciones"
-                            style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; cursor: pointer;">
-                            <i class="ph ph-chart-bar" style="font-size: 1.2rem;"></i>
-                            <span>Opciones</span>
+                    <div class="box-categoria" id="selecto-categoria"
+                        style="display: flex; gap: 10px; align-items: center;">
+                        <select id="category-filter-admin" class="categoria" onchange="app.filterProducts('admin')"
+                            style="padding: 6px 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                            <option value="seleccion">seleccion</option>
+                            <optgroup label="Reactivos">
+                                <option value="Solventes">Solventes</option>
+                                <option value="ácido">Ácido</option>
+                                <option value="Bases y sales">Bases y sales</option>
+                                <option value="Polimeros">Polímeros</option>
+                                <option value="Congelados y refrigerados">Congelados y refrigerados</option>
+                            </optgroup>
+                            <!-- Categoría 2: Equipos -->
+                            <optgroup label="Equipos">
+                                <option value="Equipos">Equipos</option>
+                            </optgroup>
+                            <!-- Categoría 3: Materiales -->
+                            <optgroup label="Materiales">
+                                <option value="Materiales de laboratorio">Materiales de laboratorio</option>
+                                <option value="Materiales de limpieza">Materiales de limpieza</option>
+                                <option value="Articulos de oficina">Artículos de oficina</option>
+                                <option value="Otros">Otros</option>
+                                <option value="Pro frejol">Pro frejol</option>
+                            </optgroup>
+                            <!-- Todos -->
+                            <optgroup label="General">
+                                <option value="todos">Todas las categorías</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <!----venta de la palntilla opciones-->
+                <div style="position: relative; display: inline-block;">
+                    <button class="btn-icon" onclick="app.toggleOpcionesMenu()" title="Opciones"
+                        style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; cursor: pointer;">
+                        <i class="ph ph-chart-bar" style="font-size: 1.2rem;"></i>
+                        <span>Opciones</span>
+                    </button>
+
+                    <div id="menu-opciones-flotante" class="oculto">
+                        <!-- Botón 1: Reporte -->
+                        <button class="menu-item" onclick="app.abrirModalReportes(); app.toggleOpcionesMenu();">
+                            <i class="ph ph-chart-bar"></i> Reporte
                         </button>
 
-                        <div id="menu-opciones-flotante" class="oculto">
-                            <!-- Botón 1: Reporte -->
-                            <button class="menu-item" onclick="app.abrirModalReportes(); app.toggleOpcionesMenu();">
-                                <i class="ph ph-chart-bar"></i> Reporte
-                            </button>
+                        <!-- Botón 2: Nuevo Producto (Apuntando al ID correcto: modal-product) -->
+                        <button class="menu-item" onclick="app.openModal('modal-product'); app.toggleOpcionesMenu();">
+                            <i class="ph ph-plus"></i> Nuevo Producto
+                        </button>
 
-                            <!-- Botón 2: Nuevo Producto (Apuntando al ID correcto: modal-product) -->
-                            <button class="menu-item"
-                                onclick="app.openModal('modal-product'); app.toggleOpcionesMenu();">
-                                <i class="ph ph-plus"></i> Nuevo Producto
-                            </button>
+                        <!-- Botón 3: Papelera -->
+                        <button class="menu-item" onclick="app.navigate('view-papelera'); app.toggleOpcionesMenu();">
+                            <i class="ph ph-trash"></i> Papelera
+                        </button>
 
-                            <!-- Botón 3: Papelera -->
-                            <button class="menu-item"
-                                onclick="app.navigate('view-papelera'); app.toggleOpcionesMenu();">
-                                <i class="ph ph-trash"></i> Papelera
-                            </button>
-
-                            <!-- Botón 4: Ver Historial -->
-                            <button class="menu-item" onclick="app.abrirModalHistorial(); app.toggleOpcionesMenu();">
-                                <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
-                            </button>
-                        </div>
+                        <!-- Botón 4: Ver Historial -->
+                        <button class="menu-item" onclick="app.abrirModalHistorial(); app.toggleOpcionesMenu();">
+                            <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
+                        </button>
                     </div>
+                </div>
 
 
             </header>
