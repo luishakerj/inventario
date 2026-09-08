@@ -805,8 +805,8 @@ select option {
 }
 
 /* Ocultar columna de marca en categoría "Marca" */
-.modern-table.hide-marca-column th:nth-child(5),
-.modern-table.hide-marca-column td:nth-child(5) {
+.modern-table.hide-marca-column th.marca-column,
+.modern-table.hide-marca-column td.marca-column {
     display: none !important;
     width: 0 !important;
     padding: 0 !important;
@@ -814,8 +814,8 @@ select option {
 }
 
 /* Ocultar columna de marca en categoría "Otros" */
-.modern-table.hide-marca-otros th:nth-child(5),
-.modern-table.hide-marca-otros td:nth-child(5) {
+.modern-table.hide-marca-otros th.marca-column,
+.modern-table.hide-marca-otros td.marca-column {
     display: none !important;
     width: 0 !important;
     padding: 0 !important;
@@ -852,8 +852,8 @@ select option {
 }
 
 /* Ocultar columna de descripción en categoría "Otros" */
-.modern-table.hide-description-column th:nth-child(9),
-.modern-table.hide-description-column td:nth-child(9) {
+.modern-table.hide-description-column th.desc-column,
+.modern-table.hide-description-column td.desc-column {
     display: none !important;
     width: 0 !important;
     padding: 0 !important;
@@ -1579,8 +1579,8 @@ select option {
     white-space: nowrap;
 }
 
-.modern-table:not(.show-acid-layout) th:nth-child(4),
-.modern-table:not(.show-acid-layout) td:nth-child(4) {
+.modern-table:not(.show-acid-layout) th.unit-column,
+.modern-table:not(.show-acid-layout) td.unit-cell {
     display: none !important;
 }
 
@@ -1751,10 +1751,8 @@ select option {
 }
 
 /* Orden real de columnas para Solventes después de agregar Unidad. */
-.modern-table.show-solvent-layout th:nth-child(4),
-.modern-table.show-solvent-layout td:nth-child(4),
-.modern-table.show-solvent-layout th:nth-child(10),
-.modern-table.show-solvent-layout td:nth-child(10) {
+.modern-table.show-solvent-layout th.unit-column,
+.modern-table.show-solvent-layout td.unit-cell {
     display: none !important;
 }
 
@@ -2025,13 +2023,9 @@ select option {
     min-width: 230px;
 }
 
-.modern-table.show-solvent-layout th:nth-child(4),
-.modern-table.show-solvent-layout td:nth-child(4) {
+.modern-table.show-solvent-layout th.unit-column,
+.modern-table.show-solvent-layout td.unit-cell {
     display: none !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
 }
 
 .modern-table.show-solvent-layout th:nth-child(5),
@@ -2675,4 +2669,28 @@ td.marca-column {
     position: relative;
     z-index: 6;
     pointer-events: auto;
+}
+
+/* Encabezado y filas tienen las mismas 9 columnas: no ocultar Marca en la vista general. */
+.modern-table:not(.show-equipment-state):not(.hide-marca-column):not(.hide-marca-otros) th.marca-column,
+.modern-table:not(.show-equipment-state):not(.hide-marca-column):not(.hide-marca-otros) td.marca-column {
+    display: table-cell !important;
+}
+
+.modern-table:not(.show-equipment-state) th.lote-column,
+.modern-table:not(.show-equipment-state) td.lote-column,
+.modern-table:not(.show-equipment-state):not(.hide-date-columns) th.prod-column,
+.modern-table:not(.show-equipment-state):not(.hide-date-columns) td.prod-column,
+.modern-table:not(.show-equipment-state):not(.hide-date-columns) th.exp-column,
+.modern-table:not(.show-equipment-state):not(.hide-date-columns) td.exp-column,
+.modern-table:not(.hide-description-column):not(.show-equipment-state) th.desc-column,
+.modern-table:not(.hide-description-column):not(.show-equipment-state) td.desc-column {
+    display: table-cell !important;
+}
+
+th.marca-column,
+td.marca-column {
+    max-width: 180px !important;
+    width: 160px !important;
+    min-width: 140px !important;
 }

@@ -101,6 +101,9 @@ function formatQuantityUnit(product) {
 
 const app = {
 
+    products: [],
+    activities: [],
+    trash: [],
     defaultProducts: [
         { nombre: "Ejemplo 1", categoria: "General", cantidad: 10, marca: "Genérica", lote: "001" }
     ],
@@ -316,31 +319,35 @@ const app = {
         const saved = localStorage.getItem('cirna_inventory');
         let loaded = false;
         if (saved) {
-            const parsed = JSON.parse(saved);
-            const hasCorruptedOthers = Array.isArray(parsed) && parsed.some(product => {
-                const category = normalizeCategory(product?.category || product?.categoria);
-                const name = String(product?.name || product?.nombre || '').trim();
-                return category === 'otros' && /^(?:\d[\d\-]*|\d+[.,]?\d*)$/.test(name.replace(/\s+/g, ''));
-            });
-
-            if (parsed && parsed.length > 0 && !hasCorruptedOthers) {
-                let updated = false;
-                this.products = parsed.map(product => {
-                    let p = {
-                        ...product,
-                        unit: normalizeQuantityUnit(product.unit)
-                    };
-                    if (p.id === 190 && (p.name === 'Alcohol etilico' || (p.lote && p.lote.length > 20))) {
-                        p.name = 'Alcohol metílico';
-                        p.lote = '-';
-                        updated = true;
-                    }
-                    return p;
+            try {
+                const parsed = JSON.parse(saved);
+                const hasCorruptedOthers = Array.isArray(parsed) && parsed.some(product => {
+                    const category = normalizeCategory(product?.category || product?.categoria);
+                    const name = String(product?.name || product?.nombre || '').trim();
+                    return category === 'otros' && /^(?:\d[\d\-]*|\d+[.,]?\d*)$/.test(name.replace(/\s+/g, ''));
                 });
-                if (updated) {
-                    localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+
+                if (Array.isArray(parsed) && parsed.length > 0 && !hasCorruptedOthers) {
+                    let updated = false;
+                    this.products = parsed.map(product => {
+                        let p = {
+                            ...product,
+                            unit: normalizeQuantityUnit(product.unit)
+                        };
+                        if (p.id === 190 && (p.name === 'Alcohol etilico' || (p.lote && p.lote.length > 20))) {
+                            p.name = 'Alcohol metílico';
+                            p.lote = '-';
+                            updated = true;
+                        }
+                        return p;
+                    });
+                    if (updated) {
+                        localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+                    }
+                    loaded = true;
                 }
-                loaded = true;
+            } catch (e) {
+                loaded = false;
             }
         }
 
@@ -354,27 +361,40 @@ const app = {
             }
         }
 
-        if (!loaded) {
-            // Usar datos del Excel (EXCEL_PRODUCTS viene de data.js)
+        const looksLikePlaceholder = Array.isArray(this.products) &&
+            this.products.length === 1 &&
+            (this.products[0]?.nombre === 'Ejemplo 1' || this.products[0]?.name === 'Ejemplo 1');
+
+        if (!loaded || looksLikePlaceholder) {
+            // Usar datos del Excel (la lista `products` viene de data.js)
             if (typeof products !== 'undefined' && products.length > 0) {
                 this.products = products;
-            } else {
+            } else if (!loaded) {
                 this.products = [...(this.defaultProducts || [])];
             }
-            localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+            try {
+                localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+            } catch (e) {
+                console.warn('No se pudo guardar el inventario en localStorage', e);
+            }
         }
 
         // Cargar actividades registradas
         const savedActivities = localStorage.getItem('cirna_activities');
         if (savedActivities) {
-            this.activities = JSON.parse(savedActivities);
+            try {
+                const parsedActivities = JSON.parse(savedActivities);
+                this.activities = Array.isArray(parsedActivities) ? parsedActivities : [];
+            } catch (e) {
+                this.activities = [];
+            }
         } else {
-            // Primera vez: registrar inicialización
+            this.activities = [];
             this.logActivity('Sistema inicializado', 'Bienvenido al Inventario LICC');
         }
 
         // Auto-categorizar productos basándose en el nombre
-        this.products = this.products.map(product => ({
+        this.products = (this.products || []).map(product => ({
             ...product,
             marca: product.marca || product.location || '',
             category: autoCategorizarProducto(product),
@@ -382,9 +402,16 @@ const app = {
         }));
 
         // Guardar cambios de categorización
-        localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+        try {
+            localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+        } catch (e) {
+            console.warn('No se pudo guardar el inventario en localStorage', e);
+        }
 
         this.renderTables();
+        if (typeof cargarFiltroCategorias === 'function') {
+            cargarFiltroCategorias(this.products);
+        }
         // Mostrar la vista de administración por defecto al iniciar
         this.navigate('view-menu'); // Cambia 'view-menu-admin' por el ID de tu pantalla con el logo
 
@@ -394,9 +421,6 @@ const app = {
         localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
         localStorage.setItem('cirna_trash', JSON.stringify(this.trash));
     },
-
-    // ---> PÉGALO AQUÍ <---
-    trash: [],
 
     deleteProduct(id) {
         const index = this.products.findIndex(p => String(p.id) === String(id));
@@ -502,6 +526,9 @@ const app = {
         const studentTable = document.getElementById('table-student');
         const adminTable = document.getElementById('table-admin');
 
+        if (!studentBody || !adminBody) return;
+        if (!Array.isArray(dataToRender)) dataToRender = [];
+
         studentBody.innerHTML = '';
         adminBody.innerHTML = '';
 
@@ -548,17 +575,15 @@ const app = {
         if (adminTable) adminTable.classList.toggle('hide-marca-column', hideMarcaColumn);
         if (studentTable) studentTable.classList.toggle('hide-marca-otros', hideMarcaOtros);
         if (adminTable) adminTable.classList.toggle('hide-marca-otros', hideMarcaOtros);
-        document.querySelectorAll('.quantity-column').forEach(column => {
-            column.textContent = showAcidLayout || showSolventLayout
-                ? 'Cantidad / Unidad'
-                : showEquipmentLayout || showCleaningMaterialsLayout ? 'Cantidad / Unidad' : 'Cantidad';
+        document.querySelectorAll('th.quantity-column').forEach(column => {
+            column.textContent = 'Cantidad / Unidad';
         });
-        document.querySelectorAll('.unit-column').forEach(column => {
-            column.textContent = '';
-            column.hidden = true;
-        });
-        document.querySelectorAll('.lot-column').forEach(column => {
-            column.textContent = showLabMaterialColumns ? 'Medidas/Volumen' : 'Lote';
+        document.querySelectorAll('th.lote-column, .lot-column').forEach(column => {
+            if (column.tagName === 'TH') {
+                column.textContent = showLabMaterialColumns ? 'Medidas/Volumen' : column.classList.contains('lote-column') && column.closest('#table-admin')
+                    ? 'Lote / Código'
+                    : 'Lote';
+            }
         });
 
         if (dataToRender.length === 0) {
@@ -588,30 +613,35 @@ const app = {
             const hideLocation = otherCategory || noMetadataCategory || equipment;
             const hideDescription = otherCategory || noMetadataCategory || equipment;
 
-            let stockClass = 'stock-ok';
-            if (p.stock < 5 || (typeof p.cantidad === 'number' && p.cantidad < 5)) stockClass = 'stock-low';
 
-            const prodCell = `<td>${noDateCategory ? '-' : prodDateItem}</td>`;
-            const expCell = `<td>${noDateCategory ? '-' : expDateItem}</td>`;
-            const marcaReal = p.marca || p.brand || p.fabricante || '-';
+
+            const prodCell = `<td class="prod-column">${noDateCategory ? '-' : prodDateItem}</td>`;
+            const expCell = `<td class="exp-column">${noDateCategory ? '-' : expDateItem}</td>`;
+            const marcaReal = p.marca || p.brand || p.fabricante || p.location || '-';
             const loteReal = p.lote || p.codigo || '-';
 
+            const stockVal = p.stock !== undefined ? p.stock : '-';
+            const stockClass = (Number(stockVal) > 0) ? 'stock-ok' : 'stock-low';
+            const quantityLabel = formatQuantityUnit(p);
 
-            const rowClass = equipment ? 'equipment-product-row' : (noMetadataCategory ? 'other-product-row' : (solvent ? 'solvent-product-row' : (acid ? 'acid-product-row' : '')));
-            const brandVal = hideLocation ? '' : marcaReal;
-            const loteVal = showLabMaterialColumns ? '' : (equipment ? '' : loteReal);
-            const descVal = hideDescription ? '' : descItem;
+            const isEquipRow = equipment || p.category === 'Equipos' || p.categoria === 'Equipos';
+            const rowClass = isEquipRow ? 'equipment-product-row' : '';
+
+            const brandVal = marcaReal;
+            const loteVal = loteReal;
+            const descVal = p.desc || p.descripcion || '-';
 
             const commonCells = `
-        <td>${nombreItem}</td>
-        <td>${categoriaItem}</td>
-        <td class="quantity-column"><span class="stock-badge ${stockClass}">${cantidadItem}</span></td>
+        <td class="name-column">${p.name || p.nombre || '-'}</td>
+        <td class="category-column">${p.category || p.categoria || '-'}</td>
+        <td class="quantity-column"><span class="stock-badge ${stockClass}">${quantityLabel}</span></td>
         <td class="marca-column">${brandVal}</td>
-        <td>${loteVal}</td>
+        <td class="lote-column">${loteVal}</td>
         ${prodCell}
         ${expCell}
-        <td>${descVal}</td>
+        <td class="desc-column">${descVal}</td>
     `;
+
 
             const trStudent = document.createElement('tr');
             trStudent.setAttribute('class', rowClass);
@@ -655,35 +685,19 @@ const app = {
         const normalize = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         const query = normalize(rawQuery);
 
-        // Capturamos AMBOS selectores para que funcionen juntos o por separado
-        const smallCategorySelect = document.getElementById('category-filter-admin');
-        const bigCategorySelect = document.querySelector('.category-select, select[id*="categoria"]'); // o el ID exacto de tu selector grande si lo tienes
-
-        const selectedSmallCat = smallCategorySelect ? smallCategorySelect.value : 'seleccion';
-        const selectedBigCat = bigCategorySelect ? bigCategorySelect.value : 'todas las categorías';
-        console.log("Valor capturado del selector:", selectedSmallCat);
-
-        const hasSmallFilter = selectedSmallCat && selectedSmallCat !== 'todos' && selectedSmallCat !== 'seleccion';
-        const hasBigFilter = selectedBigCat && selectedBigCat !== 'todos' && selectedBigCat !== 'todas las categorías';
-
-        const normSmallCat = normalize(selectedSmallCat);
-        const normBigCat = normalize(selectedBigCat);
+        const categorySelect = document.getElementById('category-filter-admin');
+        const selectedCat = categorySelect ? categorySelect.value : 'seleccion';
+        const hasCategoryFilter = selectedCat && selectedCat !== 'todos' && selectedCat !== 'seleccion';
 
         const filtered = this.products.filter(p => {
             const pCatNorm = normalize(p.category || p.categoria);
 
-            // 1. Filtro por selector pequeño (arriba)
-            if (hasSmallFilter) {
-                let matchesSmall = pCatNorm.includes(normSmallCat) || normSmallCat.includes(pCatNorm);
-                if (normSmallCat.includes('congelados') && pCatNorm.includes('congelado')) matchesSmall = true;
-                if (normSmallCat.includes('acido') && pCatNorm.includes('acido')) matchesSmall = true;
-                if (!matchesSmall) return false;
-            }
-
-            // 2. Filtro por selector grande (central)
-            if (hasBigFilter) {
-                let matchesBig = pCatNorm.includes(normBigCat) || normBigCat.includes(pCatNorm);
-                if (!matchesBig) return false;
+            if (hasCategoryFilter) {
+                const normCat = normalize(selectedCat);
+                let matchesCat = pCatNorm.includes(normCat) || normCat.includes(pCatNorm);
+                if (normCat.includes('congelados') && pCatNorm.includes('congelado')) matchesCat = true;
+                if (normCat.includes('acido') && pCatNorm.includes('acido')) matchesCat = true;
+                if (!matchesCat) return false;
             }
 
             // 3. Filtrado por texto de búsqueda general
@@ -965,6 +979,9 @@ const app = {
 
     // Registrar actividades
     logActivity(action, details = '') {
+        if (!Array.isArray(this.activities)) {
+            this.activities = [];
+        }
         const timestamp = new Date().toLocaleString('es-ES');
         this.activities.push({
             timestamp,
@@ -1327,9 +1344,9 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleEquipmentFields();
     });
 
-    document.getElementById('search-admin')?.addEventListener('input', () => app.filtrarProductos());
+    document.getElementById('search-admin')?.addEventListener('input', () => app.filterProducts('admin'));
 
-    document.getElementById('tu-select-categoria')?.addEventListener('change', () => app.filtrarProductos());
+    document.getElementById('tu-select-categoria')?.addEventListener('change', () => app.filterProducts('admin'));
 
     // Cerrar modales haciendo clic en el fondo oscuro
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
@@ -1404,6 +1421,7 @@ function setupMirrorScrollbars() {
 
 
 function imprimirPadron() {
+    const productos = (app && Array.isArray(app.products)) ? app.products : [];
     // Si los productos todavía no se cargaron del JSON, evitamos que falle
     if (!productos || productos.length === 0) {
         alert("Los productos aún se están cargando o la lista está vacía. Espera un segundo e intenta de nuevo.");
