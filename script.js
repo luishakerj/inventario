@@ -661,6 +661,7 @@ const app = {
 
         const selectedSmallCat = smallCategorySelect ? smallCategorySelect.value : 'seleccion';
         const selectedBigCat = bigCategorySelect ? bigCategorySelect.value : 'todas las categorías';
+        console.log("Valor capturado del selector:", selectedSmallCat);
 
         const hasSmallFilter = selectedSmallCat && selectedSmallCat !== 'todos' && selectedSmallCat !== 'seleccion';
         const hasBigFilter = selectedBigCat && selectedBigCat !== 'todos' && selectedBigCat !== 'todas las categorías';
