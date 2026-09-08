@@ -315,12 +315,14 @@ body {
 .content-area {
     padding: 2rem;
     flex-grow: 1;
+    overflow-x: auto;
 }
 
 .table-responsive {
     overflow-x: auto;
     overflow-y: visible;
     position: relative;
+    padding-right: 20px;
 }
 
 /* Scrollbar superior espejo */
@@ -329,6 +331,7 @@ body {
     overflow-y: hidden;
     height: 32px;
     margin-bottom: 4px;
+    padding-right: 20px;
 }
 
 .scroll-top-mirror-inner {
@@ -366,12 +369,19 @@ body {
     display: table-cell;
     text-align: right;
     vertical-align: middle;
-    min-width: 136px;
+    min-width: 180px;
     white-space: nowrap;
+    padding: 1rem 0.75rem;
 }
 
 .action-buttons .btn-icon {
-    margin-left: 0.25rem;
+    margin-left: 0.5rem;
+    display: inline-flex !important;
+    vertical-align: middle;
+    min-width: 36px;
+    min-height: 36px;
+    justify-content: center;
+    align-items: center;
 }
 
 .modern-table th:last-child,
@@ -977,7 +987,7 @@ select option {
 
 .modern-table.show-lab-material-columns {
     width: 100%;
-    min-width: 800px;
+    min-width: 1000px;
 }
 
 .modern-table.show-lab-material-columns th:nth-child(1),
@@ -1007,7 +1017,11 @@ select option {
 
 .modern-table.show-lab-material-columns th:nth-child(10),
 .modern-table.show-lab-material-columns td:nth-child(10) {
-    width: 10%;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
 }
 
 .modern-table.hide-other-columns th:nth-child(4),
@@ -1033,7 +1047,7 @@ select option {
 
 .modern-table.hide-date-columns {
     width: 100%;
-    min-width: 760px;
+    min-width: 1000px;
 }
 
 .modern-table.hide-other-columns {
@@ -1093,12 +1107,20 @@ select option {
 
 .modern-table.hide-date-columns th:nth-child(8),
 .modern-table.hide-date-columns td:nth-child(8) {
-    width: 18%;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
 }
 
 .modern-table.hide-date-columns th:nth-child(9),
 .modern-table.hide-date-columns td:nth-child(9) {
-    width: 12%;
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+    text-align: left !important;
+    padding: 1rem 0.75rem !important;
 }
 
 .date-col.hidden-date-col {
@@ -1350,7 +1372,7 @@ select option {
 
 .modern-table.show-cleaning-materials-layout {
     width: 100%;
-    min-width: 0;
+    min-width: 1200px;
     table-layout: fixed;
 }
 
@@ -1378,8 +1400,11 @@ select option {
 
 .modern-table.show-cleaning-materials-layout th:nth-child(10),
 .modern-table.show-cleaning-materials-layout td:nth-child(10) {
-    width: 12%;
-    min-width: 0;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
 }
 
 .modern-table.show-solvent-layout .action-buttons {
@@ -1587,6 +1612,9 @@ select option {
 .modern-table.hide-date-columns th:nth-child(6),
 .modern-table.hide-date-columns td:nth-child(6) {
     display: table-cell !important;
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
 }
 
 .modern-table.hide-date-columns th:nth-child(7),
@@ -1842,7 +1870,7 @@ select option {
 .modern-table.show-solvent-layout {
     table-layout: fixed;
     width: 100%;
-    min-width: 1180px;
+    min-width: 1400px;
 }
 
 .modern-table.show-solvent-layout th,
@@ -1909,24 +1937,30 @@ select option {
 
 .modern-table td.action-buttons {
     display: table-cell !important;
-    width: 190px !important;
-    min-width: 190px !important;
-    padding-left: 0.4rem;
-    padding-right: 0.4rem;
-    text-align: center;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    padding: 1rem 0.75rem !important;
+    text-align: right !important;
     white-space: nowrap !important;
     word-break: keep-all;
     overflow: visible;
+    vertical-align: middle !important;
 }
 
 .modern-table td.action-buttons .btn-icon {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    margin: 0 0.15rem;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    margin: 0 0.3rem !important;
     display: inline-flex !important;
-    vertical-align: middle;
-    flex: 0 0 36px;
+    vertical-align: middle !important;
+    flex: 0 0 36px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 10 !important;
 }
 
 /* Separacion final para las columnas reales de Solventes. */
@@ -2147,8 +2181,8 @@ select option {
 /* Calibracion final: encabezado y filas comparten exactamente el mismo ancho. */
 .modern-table {
     table-layout: fixed !important;
-    width: 1600px !important;
-    min-width: 1600px !important;
+    width: 100% !important;
+    min-width: 1400px !important;
 }
 
 .modern-table th:nth-child(8),
@@ -2181,8 +2215,8 @@ select option {
 /* Bases y sales: Descripcion y Acciones usan las mismas columnas que sus datos. */
 .modern-table.show-base-layout {
     table-layout: fixed !important;
-    width: 1600px !important;
-    min-width: 1600px !important;
+    width: 100% !important;
+    min-width: 1400px !important;
 }
 
 .modern-table.show-base-layout th:nth-child(9),
@@ -2201,11 +2235,12 @@ select option {
 .modern-table.show-base-layout th:nth-child(10),
 .modern-table.show-base-layout td:nth-child(10),
 .modern-table.show-base-layout td.action-buttons {
-    width: 220px !important;
-    min-width: 220px !important;
-    max-width: 220px !important;
-    text-align: center;
-    white-space: nowrap;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
+    white-space: nowrap !important;
     word-break: keep-all;
     overflow-wrap: normal;
 }
@@ -2213,8 +2248,8 @@ select option {
 /* Equipos: solo muestra las columnas utiles y mantiene Acciones alineada. */
 .modern-table.show-equipment-state {
     table-layout: fixed !important;
-    width: 1000px !important;
-    min-width: 1000px !important;
+    width: 100% !important;
+    min-width: 800px !important;
 }
 
 .modern-table.show-equipment-state th:nth-child(5),
@@ -2230,6 +2265,7 @@ select option {
     display: none !important;
     width: 0 !important;
     min-width: 0 !important;
+    max-width: 0 !important;
     padding: 0 !important;
 }
 
@@ -2301,11 +2337,11 @@ select option {
 .modern-table.show-equipment-state th:nth-child(10),
 .modern-table.show-equipment-state td:nth-child(10) {
     display: table-cell !important;
-    width: 300px !important;
-    min-width: 300px !important;
-    max-width: 300px !important;
-    padding: 1rem !important;
-    text-align: center !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    padding: 1rem 0.75rem !important;
+    text-align: right !important;
     white-space: nowrap !important;
 }
 
@@ -2333,8 +2369,8 @@ select option {
 
 /* Ajustes finales solicitados por categoria. */
 .modern-table.show-equipment-state {
-    width: 900px !important;
-    min-width: 900px !important;
+    width: 100% !important;
+    min-width: 800px !important;
 }
 
 .modern-table.show-equipment-state th:nth-child(40),
@@ -2380,27 +2416,92 @@ select option {
 
 .modern-table.show-solvent-layout th:nth-child(6),
 .modern-table.show-solvent-layout td:nth-child(6) {
-    width: 220px !important;
-    min-width: 220px !important;
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
 }
 
 .modern-table.show-solvent-layout th:nth-child(10),
 .modern-table.show-solvent-layout td:nth-child(10) {
     display: table-cell !important;
-    width: 220px !important;
-    min-width: 220px !important;
-    max-width: 220px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
 }
 
 
-/* Forzar un ancho amplio y cómodo exclusivamente para la columna Marca */
+/* Forzar un ancho consistente para la columna Marca */
 .modern-table th.marca-column,
 .modern-table td.marca-column {
-    width: 420px !important;
-    min-width: 420px !important;
-    max-width: 420px !important;
-    white-space: normal !important;
-    word-break: break-word !important;
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Forzar un ancho consistente para la columna Lote / Código */
+.modern-table th.lote-column,
+.modern-table td.lote-column {
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Forzar un ancho consistente para la columna Cantidad / Unidad */
+.modern-table th.quantity-column,
+.modern-table td.quantity-column {
+    width: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Asegurar que la columna de acciones tenga suficiente espacio y alineación correcta */
+.modern-table td.action-buttons {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+.modern-table th:last-child {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
+}
+
+/* Asegurar alineación consistente de encabezados con sus datos */
+.modern-table th {
+    text-align: left !important;
+    vertical-align: middle !important;
+}
+
+.modern-table td {
+    text-align: left !important;
+    vertical-align: middle !important;
+}
+
+/* Excepción para la columna de Acciones */
+.modern-table th:last-child,
+.modern-table td:last-child {
+    text-align: right !important;
 }
 
 #view-menu.active {
@@ -2542,35 +2643,202 @@ header,
 /* Corrección completa y unificada para la tabla de administración */
 #table-admin {
     width: 100% !important;
-    table-layout: auto !important;
+    table-layout: fixed !important;
+}
+
+#table-student {
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+/* Apply consistent column widths to student table */
+#table-student th:nth-child(3),
+#table-student td:nth-child(3) {
+    width: 140px !important;
+    max-width: 140px !important;
+    min-width: 140px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+#table-student th:nth-child(4),
+#table-student td:nth-child(4) {
+    width: 150px !important;
+    max-width: 150px !important;
+    min-width: 150px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+#table-student th:nth-child(5),
+#table-student td:nth-child(5) {
+    width: 160px !important;
+    max-width: 160px !important;
+    min-width: 160px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+#table-student th:nth-child(6),
+#table-student td:nth-child(6) {
+    width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+#table-student th:nth-child(7),
+#table-student td:nth-child(7) {
+    width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+#table-student th:nth-child(8),
+#table-student td:nth-child(8) {
+    width: 200px !important;
+    max-width: 200px !important;
+    min-width: 200px !important;
+    white-space: normal !important;
+    text-align: left !important;
+    overflow-wrap: break-word !important;
+}
+
+#table-student th:nth-child(9),
+#table-student td:nth-child(9) {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+}
+
+#table-student th:nth-child(8),
+#table-student td:nth-child(8) {
+    width: 200px !important;
+    max-width: 200px !important;
+    min-width: 200px !important;
+    white-space: normal !important;
+    text-align: left !important;
+    overflow-wrap: break-word !important;
 }
 
 #table-admin th:nth-child(4),
-#table-admin td:nth-child(4),
-#table-admin th:nth-child(5),
-#table-admin td:nth-child(5) {
-    width: 90px !important;
-    max-width: 90px !important;
+#table-admin td:nth-child(4) {
+    width: 20px !important;
+    max-width: 20px !important;
+    min-width: 20px !important;
     text-align: center !important;
     white-space: nowrap !important;
 }
 
+#table-admin th:nth-child(5),
+#table-admin td:nth-child(5) {
+    width: 150px !important;
+    max-width: 150px !important;
+    min-width: 150px !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
 #table-admin th:nth-child(6),
 #table-admin td:nth-child(6) {
-    width: auto !important;
-    min-width: 250px !important;
-    max-width: 400px !important;
-    word-break: break-word !important;
-    white-space: normal !important;
-    padding-right: 20px !important;
+    width: 160px !important;
+    max-width: 160px !important;
+    min-width: 160px !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
+
+#table-admin th:nth-child(7),
+#table-admin td:nth-child(7) {
+    width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+#table-admin th:nth-child(8),
+#table-admin td:nth-child(8) {
+    width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+#table-admin th:nth-child(9),
+#table-admin td:nth-child(9) {
+    width: 200px !important;
+    max-width: 200px !important;
+    min-width: 200px !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+}
+
+#table-admin td.action-buttons {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+#table-student td.action-buttons {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    padding: 1rem 0.75rem !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+
 
 #table-admin th:last-child,
 #table-admin td:last-child {
-    width: 140px !important;
-    min-width: 140px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
     text-align: right !important;
     white-space: nowrap !important;
+    padding: 1rem 0.75rem !important;
+}
+
+#table-student th:last-child,
+#table-student td:last-child {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    padding: 1rem 0.75rem !important;
 }
 
 .table-container {
@@ -2602,9 +2870,13 @@ header,
 #table-admin td:nth-child(3),
 #table-student th:nth-child(3),
 #table-student td:nth-child(3) {
-    width: 100px;
-    max-width: 100px;
-    white-space: nowrap;
+    width: 140px !important;
+    max-width: 140px !important;
+    min-width: 140px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 /* Ajusta el ancho de la columna Marca (cuarta columna) */
@@ -2612,11 +2884,13 @@ header,
 #table-admin td:nth-child(4),
 #table-student th:nth-child(4),
 #table-student td:nth-child(4) {
-    width: 120px;
-    max-width: 120px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 150px !important;
+    max-width: 150px !important;
+    min-width: 150px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    text-align: left !important;
 }
 
 .quantity-column {
@@ -2662,6 +2936,10 @@ td.marca-column {
     /* Coincide con el fondo de tu tabla */
     z-index: 5;
     /* Asegura que esté por encima del contenido y reciba los clics */
+    padding: 1rem 0.75rem !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
 }
 
 /* Opcional para asegurar que los botones respondan al cursor */
@@ -2669,6 +2947,11 @@ td.marca-column {
     position: relative;
     z-index: 6;
     pointer-events: auto;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
 }
 
 /* Encabezado y filas tienen las mismas 9 columnas: no ocultar Marca en la vista general. */
