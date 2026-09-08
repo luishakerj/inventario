@@ -101,6 +101,9 @@ function formatQuantityUnit(product) {
 
 const app = {
 
+    defaultProducts: [
+        { nombre: "Ejemplo 1", categoria: "General", cantidad: 10, marca: "Genérica", lote: "001" }
+    ],
     // Agrega esto dentro de tu objeto 'app' o al inicio de tu script
     verificarDatosIniciales() {
         // Revisa si ya existen reportes o inventario en el localStorage de tu amigo
@@ -356,7 +359,7 @@ const app = {
             if (typeof products !== 'undefined' && products.length > 0) {
                 this.products = products;
             } else {
-                this.products = [...this.defaultProducts];
+                this.products = [...(this.defaultProducts || [])];
             }
             localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
         }
