@@ -185,6 +185,69 @@ const app = {
 
     abrirModalReportes() {
         this.openModal('reporte-generar');
+        this.populateProductDropdown();
+    },
+
+    populateProductDropdown(categoryFilter = null) {
+        const select = document.getElementById('report-item-name');
+        const manualInput = document.getElementById('report-item-name-manual');
+        if (!select) return;
+        
+        // Guardar las opciones especiales (seleccionar y manual)
+        const specialOptions = [];
+        for (let i = 0; i < 2; i++) {
+            if (select.options[i]) {
+                specialOptions.push({
+                    value: select.options[i].value,
+                    text: select.options[i].textContent
+                });
+            }
+        }
+        
+        // Limpiar opciones existentes
+        select.innerHTML = '';
+        
+        // Restaurar opciones especiales
+        specialOptions.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.text;
+            select.appendChild(option);
+        });
+        
+        // Filtrar productos por categoría si se especifica
+        let productsToFilter = this.products;
+        if (categoryFilter && categoryFilter !== '') {
+            productsToFilter = this.products.filter(p => 
+                normalizeCategory(p.category || p.categoria) === normalizeCategory(categoryFilter)
+            );
+        }
+        
+        // Ordenar productos alfabéticamente
+        const sortedProducts = [...productsToFilter].sort((a, b) => 
+            (a.name || a.nombre || '').localeCompare(b.name || b.nombre || '', 'es', { sensitivity: 'base' })
+        );
+        
+        // Agregar opciones de productos
+        sortedProducts.forEach(product => {
+            const name = product.name || product.nombre || 'Sin nombre';
+            const stock = product.stock || 0;
+            const unit = product.unit || '';
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = `${name} (Stock: ${stock} ${unit})`;
+            select.appendChild(option);
+        });
+        
+        // Event listener para mostrar input manual si se selecciona la opción manual
+        select.onchange = function() {
+            if (manualInput) {
+                manualInput.style.display = this.value === 'manual' ? 'block' : 'none';
+                if (this.value !== 'manual') {
+                    manualInput.value = '';
+                }
+            }
+        };
     },
 
     renderReportHistory(filtro = 'todos') {
@@ -507,6 +570,7 @@ const app = {
         this.saveData();
         this.renderTables();
         this.renderTrashTable();
+        showToast(`Producto "${restoredItem?.name || restoredItem?.nombre || 'restaurado'}" restaurado correctamente`, 'success');
     },
 
     permanentDelete(index) {
@@ -829,7 +893,7 @@ const app = {
         const idInput = document.getElementById('product-id')?.value || '';
         const name = document.getElementById('product-name')?.value || '';
         const category = document.getElementById('product-category')?.value || '';
-        const stock = parseInt(document.getElementById('product-stock')?.value) || 0;
+        const stock = parseFloat(document.getElementById('product-stock')?.value) || 0;
 
         const noMetadataCategory = categoryHasNoMetadata(category);
         const laboratoryMaterials = isLaboratoryMaterials(category);
@@ -855,7 +919,7 @@ const app = {
             const id = parseInt(idInput);
             const index = this.products.findIndex(p => String(p.id) === String(id));
             if (index !== -1) {
-                this.products[index] = { id, name, category, stock, location, marca: location, image, desc, lote, prodDate, expDate, unit, state };
+                this.products[index] = { id, name, category, stock: parseFloat(stock), location, marca: location, image, desc, lote, prodDate, expDate, unit, state };
                 this.logActivity(`Producto editado: ${name} `, `Categoría: ${category}, Stock: ${stock} `);
                 this.registrarEnHistorial({
                     tipo: 'edicion',
@@ -866,11 +930,12 @@ const app = {
                     lote: lote || '-',
                     detalle: desc || 'Producto editado en el inventario'
                 });
+                showToast('Se ha editado correctamente', 'success');
             }
         } else {
             // Crear nuevo
             const newId = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
-            const nuevoProducto = { id: newId, name, category, stock, location, marca: location, image, desc, lote, prodDate, expDate, unit, state };
+            const nuevoProducto = { id: newId, name, category, stock: parseFloat(stock), location, marca: location, image, desc, lote, prodDate, expDate, unit, state };
             this.products.push(nuevoProducto);
             this.logActivity(`Producto creado: ${name} `, `Categoría: ${category}, Stock: ${stock} `);
             this.registrarEnHistorial({
@@ -882,6 +947,7 @@ const app = {
                 lote: lote || '-',
                 detalle: desc || (location ? `Marca: ${location} ` : 'Nuevo producto registrado en inventario')
             });
+            showToast('Producto creado correctamente', 'success');
         }
 
         this.saveData();
@@ -1065,15 +1131,37 @@ const app = {
 
         const categoryInput = document.getElementById('report-category');
         const nameInput = document.getElementById('report-item-name');
+        const nameManualInput = document.getElementById('report-item-name-manual');
         const dateInput = document.getElementById('report-use-date');
         const qtyInput = document.getElementById('report-quantity-used');
+        const unitInput = document.getElementById('report-unit');
 
-        const categoriaInsumo = categoryInput?.value?.trim() || 'Insumo general';
-        const nombreInsumo = nameInput?.value?.trim() || 'Insumo';
+        const categoriaSeleccionada = categoryInput?.value?.trim() || 'Insumo general';
+        
+        // Usar el nombre del dropdown si está seleccionado, si no usar el input manual
+        let nombreInsumo = nameInput?.value?.trim() || '';
+        let esProductoDropdown = false;
+        
+        if (nombreInsumo === 'manual' || nombreInsumo === '') {
+            nombreInsumo = nameManualInput?.value?.trim() || 'Insumo';
+        } else {
+            esProductoDropdown = true;
+        }
+        
         const fechaUsoRaw = dateInput?.value;
         const horaActual = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
         const fechaUso = fechaUsoRaw ? `${fechaUsoRaw} ${horaActual} ` : new Date().toLocaleString('es-ES');
-        const cantidadUso = qtyInput?.value || '1';
+        const cantidadValor = qtyInput?.value || '1';
+        const unidadSeleccionada = unitInput?.value || 'unidad';
+        const cantidadUso = `${cantidadValor} ${unidadSeleccionada}`;
+        
+        // Filtrar productos por categoría para la búsqueda
+        let productosParaBuscar = this.products;
+        if (categoriaSeleccionada && categoriaSeleccionada !== 'Insumo general') {
+            productosParaBuscar = this.products.filter(p => 
+                normalizeCategory(p.category || p.categoria) === normalizeCategory(categoriaSeleccionada)
+            );
+        }
 
         // ============================================
         // DESCUENTO AUTOMÁTICO DE STOCK (consumo)
@@ -1082,12 +1170,56 @@ const app = {
         // ============================================
         const normalizarTexto = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
-        const cantidadNum = parseFloat(String(cantidadUso).replace(',', '.')) || 0;
-        const producto = this.products.find(p =>
-            normalizarTexto(p.name || p.nombre) === normalizarTexto(nombreInsumo)
-        ) || this.products.find(p =>
-            normalizarTexto(p.name || p.nombre).includes(normalizarTexto(nombreInsumo))
+        const cantidadNum = parseFloat(String(cantidadValor).replace(',', '.')) || 0;
+        
+        // Búsqueda más robusta del producto con múltiples estrategias
+        const nombreBuscadoNormalizado = normalizarTexto(nombreInsumo);
+        
+        // Estrategia 1: Coincidencia exacta (normalizada) - primero en productos filtrados por categoría
+        let producto = productosParaBuscar.find(p =>
+            normalizarTexto(p.name || p.nombre) === nombreBuscadoNormalizado
         );
+        
+        // Estrategia 2: El nombre del producto contiene lo buscado - en productos filtrados
+        if (!producto) {
+            producto = productosParaBuscar.find(p =>
+                normalizarTexto(p.name || p.nombre).includes(nombreBuscadoNormalizado)
+            );
+        }
+        
+        // Estrategia 3: Lo buscado contiene parte del nombre del producto - en productos filtrados
+        if (!producto) {
+            producto = productosParaBuscar.find(p =>
+                nombreBuscadoNormalizado.includes(normalizarTexto(p.name || p.nombre))
+            );
+        }
+        
+        // Estrategia 4: Coincidencia de palabras clave (sustituciones comunes) - en productos filtrados
+        if (!producto) {
+            const sustituciones = {
+                'etanol': ['ethanol', 'alcohol etilico', 'alcohol etílico'],
+                'etano': ['ethanol', 'ethane', 'etanol'],
+                'alcohol': ['ethanol', 'alcohol etilico', 'alcohol etílico', 'metanol', 'isopropanol'],
+                'metanol': ['methanol'],
+                'acetona': ['acetone'],
+                'acido': ['acid'],
+                'agua': ['water']
+            };
+            
+            const palabrasClave = Object.keys(sustituciones);
+            for (const clave of palabrasClave) {
+                if (nombreBuscadoNormalizado.includes(clave)) {
+                    const alternativas = sustituciones[clave];
+                    for (const alt of alternativas) {
+                        producto = productosParaBuscar.find(p =>
+                            normalizarTexto(p.name || p.nombre).includes(normalizarTexto(alt))
+                        );
+                        if (producto) break;
+                    }
+                    if (producto) break;
+                }
+            }
+        }
 
         let detalleConsumo = 'Reporte de uso registrado (producto no encontrado en inventario)';
         let loteConsumo = '-';
@@ -1096,7 +1228,7 @@ const app = {
         if (producto && cantidadNum > 0) {
             const stockActual = parseFloat(producto.stock) || 0;
             const nuevoStock = Math.max(0, stockActual - cantidadNum);
-            producto.stock = Math.round(nuevoStock * 100) / 100;
+            producto.stock = parseFloat(nuevoStock.toFixed(2));
             stockRestante = producto.stock;
             loteConsumo = producto.lote || producto.codigo || '-';
 
@@ -1104,12 +1236,12 @@ const app = {
             this.renderTables();
 
             detalleConsumo = stockActual > 0
-                ? `Consumo registrado. Stock anterior: ${stockActual}, descontado: ${cantidadNum}, stock restante: ${producto.stock}${producto.unit ? ' ' + producto.unit : ''}`
+                ? `Consumo registrado. Stock anterior: ${stockActual}, descontado: ${cantidadNum} ${unidadSeleccionada}, stock restante: ${producto.stock}${producto.unit ? ' ' + producto.unit : ''}`
                 : `Consumo registrado. El stock ya estaba en 0, no se pudo descontar más.`;
 
             this.logActivity(
                 `Consumo de inventario: ${producto.name || producto.nombre}`,
-                `Se descontaron ${cantidadNum} del stock. Stock restante: ${producto.stock}`
+                `Se descontaron ${cantidadNum} ${unidadSeleccionada} del stock. Stock restante: ${producto.stock}`
             );
 
             // Aviso si el stock quedó en cero o agotado por el consumo
@@ -1118,32 +1250,45 @@ const app = {
             }
         }
 
+        // Determinar la categoría correcta para el historial
+        let categoriaParaHistorial = categoriaSeleccionada;
+        if (producto && producto.category) {
+            categoriaParaHistorial = producto.category;
+        } else if (producto && producto.categoria) {
+            categoriaParaHistorial = producto.categoria;
+        }
+
         this.registrarEnHistorial({
             tipo: 'reporte',
             tipoTexto: 'Reporte de Uso',
             nombre: nombreInsumo,
             cantidad: cantidadUso,
-            categoria: categoriaInsumo,
+            categoria: categoriaParaHistorial,
             lote: loteConsumo,
             detalle: detalleConsumo,
             fecha: fechaUso
         });
 
-        this.logActivity(`Reporte generado: ${nombreInsumo} `, `Cantidad: ${cantidadUso}, Categoría: ${categoriaInsumo} ${stockRestante !== null ? `| Stock restante: ${stockRestante}` : ''} `);
+        this.logActivity(`Reporte generado: ${nombreInsumo} `, `Cantidad: ${cantidadValor} ${unidadSeleccionada}, Categoría: ${categoriaParaHistorial} ${stockRestante !== null ? `| Stock restante: ${stockRestante}` : ''} `);
 
         const resultadoDiv = document.getElementById('report-result');
         if (resultadoDiv) {
             resultadoDiv.innerHTML = `
-    < div style = "background: rgba(16, 185, 129, 0.15); padding: 1.2rem; border-radius: 8px; border: 1px solid #10b981; color: #f8fafc; text-align: center; margin-top: 1rem;" >
+    <div style="background: rgba(16, 185, 129, 0.15); padding: 1.2rem; border-radius: 8px; border: 1px solid #10b981; color: #f8fafc; text-align: center; margin-top: 1rem;">
                     <h3 style="color: #10b981; margin-bottom: 0.4rem; font-size: 1.2rem;">✅ ¡Reporte guardado con éxito!</h3>
-                    <p style="margin: 0.2rem 0; color: #cbd5e1; font-size: 0.95rem;">Se registró el uso de <strong>${nombreInsumo}</strong> (Cantidad: ${cantidadUso}).</p>
+                    <p style="margin: 0.2rem 0; color: #cbd5e1; font-size: 0.95rem;">Se registró el uso de <strong>${nombreInsumo}</strong> (Cantidad: ${cantidadValor} ${unidadSeleccionada}).</p>
                     ${stockRestante !== null
                         ? `<p style="margin: 0.2rem 0; color: ${stockRestante <= 0 ? '#ef4444' : '#10b981'}; font-size: 0.95rem;">Stock restante en inventario: <strong>${stockRestante}${producto?.unit ? ' ' + producto.unit : ''}</strong>${stockRestante <= 0 ? ' ⚠️ Producto agotado' : ''}</p>`
                         : `<p style="margin: 0.2rem 0; color: #f59e0b; font-size: 0.85rem;">⚠️ No se encontró el producto en el inventario, solo se registró el reporte.</p>`}
                     <p style="margin: 0.2rem 0; color: #94a3b8; font-size: 0.85rem;">Fecha: ${fechaUso} | Categoría: ${categoriaInsumo}</p>
                     <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #38bdf8;">Ya puedes consultarlo en el botón <strong>"Ver Historial"</strong>.</p>
-                </div >
+                </div>
     `;
+            
+            // Ocultar el mensaje después de 3 segundos
+            setTimeout(() => {
+                resultadoDiv.style.display = 'none';
+            }, 3000);
         }
     },
     // Reporte de Actividades
