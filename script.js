@@ -1,4 +1,14 @@
 
+// Escapar HTML para prevenir inyección de código al renderizar datos en innerHTML
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Auto-categorizar productos basándose en el nombre
 function autoCategorizarProducto(product) {
     const name = String(product.name || '').trim().toLowerCase();
@@ -37,12 +47,37 @@ function categoryHasNoDates(category) {
 
 function categoryHasNoMetadata(category) {
     const normalized = normalizeCategory(category);
-    return /^articulos? de oficina$/.test(normalized) ||
-        normalized === 'materiales de limpieza';
+    return /^articulos? de oficina$/.test(normalized);
 }
 
 function isLaboratoryMaterials(category) {
     return normalizeCategory(category) === 'materiales de laboratorio';
+}
+
+// Mostrar notificación flotante de éxito/error
+function showToast(mensaje, tipo = 'success') {
+    const container = document.getElementById('toast-container') || (() => {
+        const c = document.createElement('div');
+        c.id = 'toast-container';
+        document.body.appendChild(c);
+        return c;
+    })();
+
+    const toast = document.createElement('div');
+    toast.className = `toast-message toast-${tipo}`;
+    const icono = tipo === 'success' ? 'ph-check-circle' : tipo === 'error' ? 'ph-x-circle' : 'ph-warning-circle';
+    toast.innerHTML = `<i class="ph ${icono}"></i><span>${escapeHtml(mensaje)}</span>`;
+
+    container.appendChild(toast);
+
+    // Animación de entrada
+    requestAnimationFrame(() => toast.classList.add('visible'));
+
+    // Desaparecer después de 3 segundos
+    setTimeout(() => {
+        toast.classList.remove('visible');
+        setTimeout(() => toast.remove(), 400);
+    }, 3000);
 }
 
 function isEquipment(category) {
@@ -50,7 +85,9 @@ function isEquipment(category) {
 }
 
 function isCleaningMaterials(category) {
-    return normalizeCategory(category) === 'materiales de limpieza';
+    const normalized = normalizeCategory(category);
+    return normalized === 'materiales de limpieza' ||
+        normalized === 'articulos de limpieza';
 }
 
 function isSolvent(category) {
@@ -275,17 +312,17 @@ const app = {
             tr.onmouseleave = () => tr.style.background = 'transparent';
 
             tr.innerHTML = `
-        <td style="padding: 0.75rem; font-weight: 500; color: #f8fafc;">${rep.nombre || '-'}</td>
-        <td style="padding: 0.75rem; color: #e2e8f0; font-weight: 500;">${rep.categoria || '-'}</td>
-        <td class="quantity-column" style="padding: 0.75rem; color: #e2e8f0; width: 100px; max-width: 100px;">${rep.cantidad !== undefined ? rep.cantidad : '-'}</td>
-        <td class="marca-column" style="padding: 0.75rem; color: #94a3b8; width: 120px; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${rep.marca || '-'}</td>
-        <td style="padding: 0.75rem; color: #94a3b8; font-family: monospace; font-size: 0.85rem;">${rep.lote || '-'}</td>
-        <td style="padding: 0.75rem; color: #94a3b8; font-size: 0.85rem;">${rep.fechaProd || '-'}</td>
-        <td style="padding: 0.75rem; color: #94a3b8; font-size: 0.85rem;">${rep.fechaVenc || '-'}</td>
-        <td style="padding: 0.75rem; color: #64748b; font-size: 0.85rem;">${rep.detalle || '-'}</td>
+        <td style="padding: 0.75rem; font-weight: 500; color: #f8fafc;">${escapeHtml(rep.nombre || '-')}</td>
+        <td style="padding: 0.75rem; color: #e2e8f0; font-weight: 500;">${escapeHtml(rep.categoria || '-')}</td>
+        <td class="quantity-column" style="padding: 0.75rem; color: #e2e8f0; width: 100px; max-width: 100px;">${rep.cantidad !== undefined ? escapeHtml(rep.cantidad) : '-'}</td>
+        <td class="marca-column" style="padding: 0.75rem; color: #94a3b8; width: 120px; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(rep.marca || '-')}</td>
+        <td style="padding: 0.75rem; color: #94a3b8; font-family: monospace; font-size: 0.85rem;">${escapeHtml(rep.lote || '-')}</td>
+        <td style="padding: 0.75rem; color: #94a3b8; font-size: 0.85rem;">${escapeHtml(rep.fechaProd || '-')}</td>
+        <td style="padding: 0.75rem; color: #94a3b8; font-size: 0.85rem;">${escapeHtml(rep.fechaVenc || '-')}</td>
+        <td style="padding: 0.75rem; color: #64748b; font-size: 0.85rem;">${escapeHtml(rep.detalle || '-')}</td>
         <td style="padding: 0.75rem; text-align: right;">
             <span style="color: ${badgeColor}; font-weight: 600; background: ${badgeBg}; border: 1px solid ${badgeBorder}; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem;">
-                ${badgeText}
+                ${escapeHtml(badgeText)}
             </span>
         </td>
     `;
@@ -430,6 +467,8 @@ const app = {
             this.saveData();
             this.renderTables();
             this.renderTrashTable();
+            showToast(`Se eliminó "${deletedItem.name || deletedItem.nombre || 'el producto'}" con éxito`, 'success');
+            this.logActivity(`Producto eliminado: ${deletedItem.name || deletedItem.nombre}`, 'Movido a la papelera de reciclaje');
 
             // Redirige automáticamente a la papelera al eliminar el objeto
             this.navigate('view-papelera');
@@ -472,9 +511,11 @@ const app = {
 
     permanentDelete(index) {
         if (confirm("¿Estás seguro de eliminar este insumo permanentemente?")) {
+            const deletedItem = this.trash[index];
             this.trash.splice(index, 1);
             this.saveData();
             this.renderTrashTable();
+            showToast(`Se eliminó "${deletedItem?.name || deletedItem?.nombre || 'el producto'}" permanentemente con éxito`, 'success');
         }
     },
     // ---------------------
@@ -534,12 +575,12 @@ const app = {
 
         const hasDateColumns = dataToRender.some(p => !categoryHasNoDates(p.category));
         const hasMetadataColumns = dataToRender.some(p => !categoryHasNoMetadata(p.category));
+        // Lab, limpieza y artículos de limpieza comparten el layout completo de columnas
         const showLabMaterialColumns = dataToRender.length > 0 &&
-            dataToRender.every(p => isLaboratoryMaterials(p.category));
+            dataToRender.every(p => isLaboratoryMaterials(p.category) || isCleaningMaterials(p.category));
         const showEquipmentLayout = dataToRender.length > 0 &&
             dataToRender.every(p => isEquipment(p.category));
-        const showCleaningMaterialsLayout = dataToRender.length > 0 &&
-            dataToRender.every(p => isCleaningMaterials(p.category));
+        const showCleaningMaterialsLayout = false;
         const showSolventLayout = dataToRender.length > 0 &&
             dataToRender.every(p => isSolvent(p.category));
         const showAcidLayout = dataToRender.length > 0 &&
@@ -615,8 +656,8 @@ const app = {
 
 
 
-            const prodCell = `<td class="prod-column">${noDateCategory ? '-' : prodDateItem}</td>`;
-            const expCell = `<td class="exp-column">${noDateCategory ? '-' : expDateItem}</td>`;
+            const prodCell = `<td class="prod-column">${noDateCategory ? '-' : escapeHtml(prodDateItem)}</td>`;
+            const expCell = `<td class="exp-column">${noDateCategory ? '-' : escapeHtml(expDateItem)}</td>`;
             const marcaReal = p.marca || p.brand || p.fabricante || p.location || '-';
             const loteReal = p.lote || p.codigo || '-';
 
@@ -632,14 +673,14 @@ const app = {
             const descVal = p.desc || p.descripcion || '-';
 
             const commonCells = `
-        <td class="name-column">${p.name || p.nombre || '-'}</td>
-        <td class="category-column">${p.category || p.categoria || '-'}</td>
-        <td class="quantity-column"><span class="stock-badge ${stockClass}">${quantityLabel}</span></td>
-        <td class="marca-column">${brandVal}</td>
-        <td class="lote-column">${loteVal}</td>
+        <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
+        <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
+        <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(quantityLabel)}</span></td>
+        <td class="marca-column">${escapeHtml(brandVal)}</td>
+        <td class="lote-column">${escapeHtml(loteVal)}</td>
         ${prodCell}
         ${expCell}
-        <td class="desc-column">${descVal}</td>
+        <td class="desc-column">${escapeHtml(descVal)}</td>
     `;
 
 
@@ -905,34 +946,34 @@ const app = {
         const prodHtml = noDateCategory ? '' : `
         <div class="detail-item">
             <span class="label">F. Producción</span>
-            <span class="value">${p.prodDate || '-'}</span>
+            <span class="value">${escapeHtml(p.prodDate || '-')}</span>
         </div>`;
 
         const expHtml = noDateCategory ? '' : `
         <div class="detail-item">
             <span class="label">F. Vencimiento</span>
-            <span class="value">${p.expDate || '-'}</span>
+            <span class="value">${escapeHtml(p.expDate || '-')}</span>
         </div>`;
 
         const imageHtml = p.image
 
             ? `<div style = "grid-column:span 2;text-align:center;margin-bottom:1rem;" >
-    <img src="${p.image}" alt="${p.name}" style="max-height:200px;border-radius:8px;box-shadow:var(--shadow-soft);">
+    <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" style="max-height:200px;border-radius:8px;box-shadow:var(--shadow-soft);">
     </div>`
             : '';
 
         const equipmentDetailHtml = imageHtml + `
         <div class="detail-item">
             <span class="label">Nombre</span>
-            <span class="value">${p.name || '-'}</span>
+            <span class="value">${escapeHtml(p.name || '-')}</span>
         </div>
             <div class="detail-item">
                 <span class="label">Categoría</span>
-                <span class="value">${p.category || '-'}</span>
+                <span class="value">${escapeHtml(p.category || '-')}</span>
             </div>
             <div class="detail-item">
                 <span class="label">Unidad</span>
-                <span class="value">${p.unit || p.unidad || '-'}</span>
+                <span class="value">${escapeHtml(p.unit || p.unidad || '-')}</span>
             </div>
 `;
 
@@ -941,37 +982,37 @@ const app = {
             : imageHtml + `
     <div class="detail-item">
                 <span class="label">Nombre</span>
-                <span class="value">${p.name || '-'}</span>
+                <span class="value">${escapeHtml(p.name || '-')}</span>
             </div>
     <div class="detail-item">
         <span class="label">Categoría</span>
-        <span class="value">${p.category || '-'}</span>
+        <span class="value">${escapeHtml(p.category || '-')}</span>
     </div>
             ${cleaningMaterials ? '' : `<div class="detail-item">
                 <span class="label">Cantidad (UND)</span>
-                <span class="value">${p.stock || '0'}</span>
+                <span class="value">${escapeHtml(p.stock || '0')}</span>
             </div>`}
             ${equipment || cleaningMaterials ? `<div class="detail-item">
                 <span class="label">Unidad</span>
-                <span class="value">${p.unit || p.unidad || '-'}</span>
+                <span class="value">${escapeHtml(p.unit || p.unidad || '-')}</span>
             </div>` : ''
             }
             ${equipment || cleaningMaterials ? '' : `
             <div class="detail-item">
                 <span class="label">Marca</span>
-                <span class="value">${p.marca || p.location || '-'}</span>
+                <span class="value">${escapeHtml(p.marca || p.location || '-')}</span>
             </div>
             <div class="detail-item">
                 <span class="label">Lote</span>
-                <span class="value">${p.lote || '-'}</span>
+                <span class="value">${escapeHtml(p.lote || '-')}</span>
             </div>`}
             ${prodHtml}
             ${expHtml}
             ${equipment || cleaningMaterials ? '' : `<div class="detail-item" style="grid-column:span 2;">
                 <span class="label">Descripción / Estado</span>
-                <span class="value">${p.desc || '-'}</span>
+                <span class="value">${escapeHtml(p.desc || '-')}</span>
             </div>`}
-            ${equipment ? `<div class="detail-item"><span class="label">Estado</span><span class="value">${p.state || 'Operativo'}</span></div>` : ''}
+            ${equipment ? `<div class="detail-item"><span class="label">Estado</span><span class="value">${escapeHtml(p.state || 'Operativo')}</span></div>` : ''}
 `;
 
         this.openModal('modal-view-product');
@@ -1034,18 +1075,61 @@ const app = {
         const fechaUso = fechaUsoRaw ? `${fechaUsoRaw} ${horaActual} ` : new Date().toLocaleString('es-ES');
         const cantidadUso = qtyInput?.value || '1';
 
+        // ============================================
+        // DESCUENTO AUTOMÁTICO DE STOCK (consumo)
+        // Busca el insumo/reactivo en el inventario y
+        // resta la cantidad utilizada de la base de datos.
+        // ============================================
+        const normalizarTexto = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+
+        const cantidadNum = parseFloat(String(cantidadUso).replace(',', '.')) || 0;
+        const producto = this.products.find(p =>
+            normalizarTexto(p.name || p.nombre) === normalizarTexto(nombreInsumo)
+        ) || this.products.find(p =>
+            normalizarTexto(p.name || p.nombre).includes(normalizarTexto(nombreInsumo))
+        );
+
+        let detalleConsumo = 'Reporte de uso registrado (producto no encontrado en inventario)';
+        let loteConsumo = '-';
+        let stockRestante = null;
+
+        if (producto && cantidadNum > 0) {
+            const stockActual = parseFloat(producto.stock) || 0;
+            const nuevoStock = Math.max(0, stockActual - cantidadNum);
+            producto.stock = Math.round(nuevoStock * 100) / 100;
+            stockRestante = producto.stock;
+            loteConsumo = producto.lote || producto.codigo || '-';
+
+            this.saveData();
+            this.renderTables();
+
+            detalleConsumo = stockActual > 0
+                ? `Consumo registrado. Stock anterior: ${stockActual}, descontado: ${cantidadNum}, stock restante: ${producto.stock}${producto.unit ? ' ' + producto.unit : ''}`
+                : `Consumo registrado. El stock ya estaba en 0, no se pudo descontar más.`;
+
+            this.logActivity(
+                `Consumo de inventario: ${producto.name || producto.nombre}`,
+                `Se descontaron ${cantidadNum} del stock. Stock restante: ${producto.stock}`
+            );
+
+            // Aviso si el stock quedó en cero o agotado por el consumo
+            if (producto.stock <= 0) {
+                detalleConsumo += ' ⚠️ ¡El producto se ha AGOTADO!';
+            }
+        }
+
         this.registrarEnHistorial({
             tipo: 'reporte',
             tipoTexto: 'Reporte de Uso',
             nombre: nombreInsumo,
             cantidad: cantidadUso,
             categoria: categoriaInsumo,
-            lote: '-',
-            detalle: 'Reporte de uso registrado',
+            lote: loteConsumo,
+            detalle: detalleConsumo,
             fecha: fechaUso
         });
 
-        this.logActivity(`Reporte generado: ${nombreInsumo} `, `Cantidad: ${cantidadUso}, Categoría: ${categoriaInsumo} `);
+        this.logActivity(`Reporte generado: ${nombreInsumo} `, `Cantidad: ${cantidadUso}, Categoría: ${categoriaInsumo} ${stockRestante !== null ? `| Stock restante: ${stockRestante}` : ''} `);
 
         const resultadoDiv = document.getElementById('report-result');
         if (resultadoDiv) {
@@ -1053,6 +1137,9 @@ const app = {
     < div style = "background: rgba(16, 185, 129, 0.15); padding: 1.2rem; border-radius: 8px; border: 1px solid #10b981; color: #f8fafc; text-align: center; margin-top: 1rem;" >
                     <h3 style="color: #10b981; margin-bottom: 0.4rem; font-size: 1.2rem;">✅ ¡Reporte guardado con éxito!</h3>
                     <p style="margin: 0.2rem 0; color: #cbd5e1; font-size: 0.95rem;">Se registró el uso de <strong>${nombreInsumo}</strong> (Cantidad: ${cantidadUso}).</p>
+                    ${stockRestante !== null
+                        ? `<p style="margin: 0.2rem 0; color: ${stockRestante <= 0 ? '#ef4444' : '#10b981'}; font-size: 0.95rem;">Stock restante en inventario: <strong>${stockRestante}${producto?.unit ? ' ' + producto.unit : ''}</strong>${stockRestante <= 0 ? ' ⚠️ Producto agotado' : ''}</p>`
+                        : `<p style="margin: 0.2rem 0; color: #f59e0b; font-size: 0.85rem;">⚠️ No se encontró el producto en el inventario, solo se registró el reporte.</p>`}
                     <p style="margin: 0.2rem 0; color: #94a3b8; font-size: 0.85rem;">Fecha: ${fechaUso} | Categoría: ${categoriaInsumo}</p>
                     <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #38bdf8;">Ya puedes consultarlo en el botón <strong>"Ver Historial"</strong>.</p>
                 </div >

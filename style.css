@@ -1372,7 +1372,7 @@ select option {
 
 .modern-table.show-cleaning-materials-layout {
     width: 100%;
-    min-width: 1200px;
+    min-width: 700px;
     table-layout: fixed;
 }
 
@@ -1380,11 +1380,32 @@ select option {
 .modern-table.show-cleaning-materials-layout td {
     padding: 0.8rem 0.65rem;
     line-height: 1.35;
+    vertical-align: middle;
+}
+
+/* Ocultar: columna vacía (4), marca (5), lote (6), f.prod (7), f.venc (8), desc (9)
+   para Materiales de limpieza — solo se muestran: Nombre, Categoría, Cantidad, Acciones */
+.modern-table.show-cleaning-materials-layout th:nth-child(4),
+.modern-table.show-cleaning-materials-layout td:nth-child(4),
+.modern-table.show-cleaning-materials-layout th.marca-column,
+.modern-table.show-cleaning-materials-layout td.marca-column,
+.modern-table.show-cleaning-materials-layout th.lote-column,
+.modern-table.show-cleaning-materials-layout td.lote-column,
+.modern-table.show-cleaning-materials-layout th.prod-column,
+.modern-table.show-cleaning-materials-layout td.prod-column,
+.modern-table.show-cleaning-materials-layout th.exp-column,
+.modern-table.show-cleaning-materials-layout td.exp-column,
+.modern-table.show-cleaning-materials-layout th.desc-column,
+.modern-table.show-cleaning-materials-layout td.desc-column {
+    display: none !important;
+    width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
 }
 
 .modern-table.show-cleaning-materials-layout th:nth-child(1),
 .modern-table.show-cleaning-materials-layout td:nth-child(1) {
-    width: 34%;
+    width: 40%;
 }
 
 .modern-table.show-cleaning-materials-layout th:nth-child(2),
@@ -1394,17 +1415,26 @@ select option {
 
 .modern-table.show-cleaning-materials-layout th:nth-child(3),
 .modern-table.show-cleaning-materials-layout td:nth-child(3) {
-    width: 14%;
+    width: 16%;
     white-space: nowrap;
 }
 
-.modern-table.show-cleaning-materials-layout th:nth-child(10),
-.modern-table.show-cleaning-materials-layout td:nth-child(10) {
-    width: 180px !important;
-    min-width: 180px !important;
-    max-width: 180px !important;
+.modern-table.show-cleaning-materials-layout th.action-buttons,
+.modern-table.show-cleaning-materials-layout td.action-buttons {
+    width: 14% !important;
+    min-width: 120px !important;
     text-align: right !important;
-    padding: 1rem 0.75rem !important;
+    padding: 0.8rem 0.65rem !important;
+}
+
+/* ── Materiales de laboratorio: ocultar solo fechas de prod/venc,
+       conservar: Nombre, Categoría, Cantidad, Marca, Lote, Descripción, Acciones ── */
+.modern-table.show-lab-material-columns th:nth-child(4),
+.modern-table.show-lab-material-columns td:nth-child(4) {
+    display: none !important;
+    width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
 }
 
 .modern-table.show-solvent-layout .action-buttons {
@@ -2942,6 +2972,28 @@ td.marca-column {
     max-width: 180px !important;
 }
 
+/* FIX: la columna sticky tapaba las lineas de separacion de las filas.
+   Se restauran los bordes debajo y se agrega un separador a la izquierda. */
+.table-responsive th:last-child {
+    border-bottom: 1px solid var(--surface-border) !important;
+    border-left: 1px solid var(--surface-border) !important;
+}
+
+.table-responsive td:last-child {
+    border-bottom: 1px solid rgba(69, 85, 128, 0.05) !important;
+    border-left: 1px solid rgba(69, 85, 128, 0.08) !important;
+}
+
+/* Alinear el contenido de la columna Acciones a la derecha, centrado verticalmente */
+.table-responsive td:last-child {
+    vertical-align: middle;
+    text-align: right;
+}
+
+.table-responsive td:last-child .btn-icon {
+    vertical-align: middle;
+}
+
 /* Opcional para asegurar que los botones respondan al cursor */
 .table-responsive td:last-child button {
     position: relative;
@@ -2954,20 +3006,21 @@ td.marca-column {
     min-height: 36px !important;
 }
 
-/* Encabezado y filas tienen las mismas 9 columnas: no ocultar Marca en la vista general. */
-.modern-table:not(.show-equipment-state):not(.hide-marca-column):not(.hide-marca-otros) th.marca-column,
-.modern-table:not(.show-equipment-state):not(.hide-marca-column):not(.hide-marca-otros) td.marca-column {
+/* Mostrar Marca en vista general — excluir layouts que la ocultan */
+.modern-table:not(.show-equipment-state):not(.hide-marca-column):not(.hide-marca-otros):not(.show-cleaning-materials-layout):not(.hide-other-columns) th.marca-column,
+.modern-table:not(.show-equipment-state):not(.hide-marca-column):not(.hide-marca-otros):not(.show-cleaning-materials-layout):not(.hide-other-columns) td.marca-column {
     display: table-cell !important;
 }
 
-.modern-table:not(.show-equipment-state) th.lote-column,
-.modern-table:not(.show-equipment-state) td.lote-column,
-.modern-table:not(.show-equipment-state):not(.hide-date-columns) th.prod-column,
-.modern-table:not(.show-equipment-state):not(.hide-date-columns) td.prod-column,
-.modern-table:not(.show-equipment-state):not(.hide-date-columns) th.exp-column,
-.modern-table:not(.show-equipment-state):not(.hide-date-columns) td.exp-column,
-.modern-table:not(.hide-description-column):not(.show-equipment-state) th.desc-column,
-.modern-table:not(.hide-description-column):not(.show-equipment-state) td.desc-column {
+/* Mostrar Lote, Fechas, Descripción — excluir layouts que las ocultan */
+.modern-table:not(.show-equipment-state):not(.hide-other-columns):not(.show-cleaning-materials-layout):not(.show-lab-material-columns) th.lote-column,
+.modern-table:not(.show-equipment-state):not(.hide-other-columns):not(.show-cleaning-materials-layout):not(.show-lab-material-columns) td.lote-column,
+.modern-table:not(.show-equipment-state):not(.hide-date-columns):not(.hide-other-columns):not(.show-cleaning-materials-layout):not(.show-lab-material-columns) th.prod-column,
+.modern-table:not(.show-equipment-state):not(.hide-date-columns):not(.hide-other-columns):not(.show-cleaning-materials-layout):not(.show-lab-material-columns) td.prod-column,
+.modern-table:not(.show-equipment-state):not(.hide-date-columns):not(.hide-other-columns):not(.show-cleaning-materials-layout):not(.show-lab-material-columns) th.exp-column,
+.modern-table:not(.show-equipment-state):not(.hide-date-columns):not(.hide-other-columns):not(.show-cleaning-materials-layout):not(.show-lab-material-columns) td.exp-column,
+.modern-table:not(.hide-description-column):not(.show-equipment-state):not(.hide-other-columns):not(.show-cleaning-materials-layout):not(.show-lab-material-columns) th.desc-column,
+.modern-table:not(.hide-description-column):not(.show-equipment-state):not(.hide-other-columns):not(.show-cleaning-materials-layout):not(.show-lab-material-columns) td.desc-column {
     display: table-cell !important;
 }
 
@@ -2976,4 +3029,189 @@ td.marca-column {
     max-width: 180px !important;
     width: 160px !important;
     min-width: 140px !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   CORRECCIÓN FINAL: alinear nth-child con 9 columnas
+   (col4=Marca, col5=Lote, col6=F.Prod, col7=F.Venc, col8=Desc, col9=Acciones)
+   ══════════════════════════════════════════════════════ */
+
+/* hide-date-columns: ocultar F.Prod (6) y F.Venc (7) */
+.modern-table.hide-date-columns th.prod-column,
+.modern-table.hide-date-columns td.prod-column,
+.modern-table.hide-date-columns th.exp-column,
+.modern-table.hide-date-columns td.exp-column {
+    display: none !important;
+    width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+/* hide-other-columns: ocultar Marca(4), Lote(5), F.Prod(6), F.Venc(7), Desc(8) */
+.modern-table.hide-other-columns th.marca-column,
+.modern-table.hide-other-columns td.marca-column,
+.modern-table.hide-other-columns th.lote-column,
+.modern-table.hide-other-columns td.lote-column,
+.modern-table.hide-other-columns th.prod-column,
+.modern-table.hide-other-columns td.prod-column,
+.modern-table.hide-other-columns th.exp-column,
+.modern-table.hide-other-columns td.exp-column,
+.modern-table.hide-other-columns th.desc-column,
+.modern-table.hide-other-columns td.desc-column {
+    display: none !important;
+    width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+/* show-lab-material-columns: ocultar F.Prod, F.Venc */
+.modern-table.show-lab-material-columns th.prod-column,
+.modern-table.show-lab-material-columns td.prod-column,
+.modern-table.show-lab-material-columns th.exp-column,
+.modern-table.show-lab-material-columns td.exp-column {
+    display: none !important;
+    width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   GARANTÍA: columna Acciones SIEMPRE visible y sticky
+   ══════════════════════════════════════════════════════ */
+.modern-table th.action-buttons,
+.modern-table td.action-buttons {
+    display: table-cell !important;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Ancho compacto para limpieza y lab sin scroll horizontal */
+.modern-table.show-cleaning-materials-layout {
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+.modern-table.show-lab-material-columns {
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+/* Anchos para lab materials (cols visibles: 1=Nombre, 2=Cat, 3=Cant, 4=Marca, 5=Lote, 6=Desc, 7=Acciones) */
+.modern-table.show-lab-material-columns th.name-column,
+.modern-table.show-lab-material-columns td.name-column {
+    width: 26% !important;
+}
+
+.modern-table.show-lab-material-columns th.category-column,
+.modern-table.show-lab-material-columns td.category-column {
+    width: 18% !important;
+}
+
+.modern-table.show-lab-material-columns th.quantity-column,
+.modern-table.show-lab-material-columns td.quantity-column {
+    width: 14% !important;
+}
+
+.modern-table.show-lab-material-columns th.marca-column,
+.modern-table.show-lab-material-columns td.marca-column {
+    width: 14% !important;
+    display: table-cell !important;
+}
+
+.modern-table.show-lab-material-columns th.lote-column,
+.modern-table.show-lab-material-columns td.lote-column {
+    display: none !important;
+}
+
+.modern-table.show-lab-material-columns th.desc-column,
+.modern-table.show-lab-material-columns td.desc-column {
+    display: none !important;
+}
+
+.modern-table.show-lab-material-columns th.action-buttons,
+.modern-table.show-lab-material-columns td.action-buttons {
+    width: 160px !important;
+    min-width: 140px !important;
+    max-width: 180px !important;
+    text-align: right !important;
+}
+
+/* Anchos para cleaning materials (cols visibles: 1=Nombre, 2=Cat, 3=Cant, 7=Acciones) */
+.modern-table.show-cleaning-materials-layout th.name-column,
+.modern-table.show-cleaning-materials-layout td.name-column {
+    width: 36% !important;
+}
+
+.modern-table.show-cleaning-materials-layout th.category-column,
+.modern-table.show-cleaning-materials-layout td.category-column {
+    width: 28% !important;
+}
+
+.modern-table.show-cleaning-materials-layout th.quantity-column,
+.modern-table.show-cleaning-materials-layout td.quantity-column {
+    width: 18% !important;
+}
+
+.modern-table.show-cleaning-materials-layout th.action-buttons,
+.modern-table.show-cleaning-materials-layout td.action-buttons {
+    width: 18% !important;
+    min-width: 140px !important;
+    text-align: right !important;
+}
+/* Notificaciones toast */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+.toast-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    font-size: 0.95rem;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: auto;
+    max-width: 340px;
+}
+.toast-message.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+.toast-message i {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+.toast-success {
+    border-left: 4px solid #10b981;
+}
+.toast-success i {
+    color: #10b981;
+}
+.toast-error {
+    border-left: 4px solid #ef4444;
+}
+.toast-error i {
+    color: #ef4444;
+}
+.toast-warning {
+    border-left: 4px solid #f59e0b;
+}
+.toast-warning i {
+    color: #f59e0b;
 }
