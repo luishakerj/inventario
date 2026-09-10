@@ -98,7 +98,7 @@
         <section id="view-admin" class="view">
             <header class="top-nav glass-panel">
                 <div class="nav-left">
-                    <button class="btn-icon" onclick="app.navigate('view-menu-admin')" title="Volver al Menú">
+                    <button class="btn-icon" onclick="app.navigate('view-menu')" title="Volver al Menú">
                         <i class="ph ph-arrow-left"></i>
                     </button>
                     <h2>Panel de Administración</h2>
@@ -306,16 +306,16 @@
                     <div style="display: flex; gap: 10px;">
                         <input type="number" id="product-stock" required step="0.01" min="0"
                             style="padding: 10px; border-radius: 8px; background: #22385c; color: white; flex: 3; min-width: 200px; border: 1px solid var(--surface-border);">
-                        <select id="product-unit" 
+                        <select id="product-unit"
                             style="padding: 10px; border-radius: 8px; background: #22385c; color: white; flex: 1; min-width: 100px; border: 1px solid var(--surface-border); cursor: pointer;">
-                            <option value="L">L  (litros)</option>
-                            <option value="g">g  (gramos)</option>
+                            <option value="L">L (litros)</option>
+                            <option value="g">g (gramos)</option>
                             <option value="kilo">kilo</option>
                             <option value="unidad">unidad</option>
                             <option value="u">u (unidades)</option>
-                            <option value="ML">ML  (mililitros)</option>
-                            <option value="MG">MG  (miligramos)</option>
-                            <option value="KG">KG  (kilogramos)</option>
+                            <option value="ML">ML (mililitros)</option>
+                            <option value="MG">MG (miligramos)</option>
+                            <option value="KG">KG (kilogramos)</option>
                         </select>
                     </div>
                 </div>
@@ -464,7 +464,7 @@
                     <!-- Nombre del insumo -->
                     <div class="form-group">
                         <label for="report-item-name">Nombre del insumo:</label>
-                        <select id="report-item-name" 
+                        <select id="report-item-name"
                             style="padding: 10px; border-radius: 8px; background: #22385c; color: white; width: 100%; border: 1px solid var(--surface-border); cursor: pointer;">
                             <option value="">Seleccionar producto del inventario...</option>
                             <option value="manual">Escribir nombre manualmente...</option>
@@ -483,18 +483,19 @@
                     <div class="form-group">
                         <label for="report-quantity-used">Cuánto se usó (cantidad):</label>
                         <div style="display: flex; gap: 10px;">
-                            <input type="number" id="report-quantity-used" placeholder="Ej. 5, 500..." step="0.01" min="0"
+                            <input type="number" id="report-quantity-used" placeholder="Ej. 5, 500..." step="0.01"
+                                min="0"
                                 style="padding: 10px; border-radius: 8px; background: #22385c; color: white; flex: 3; min-width: 200px; border: 1px solid var(--surface-border);">
-                            <select id="report-unit" 
+                            <select id="report-unit"
                                 style="padding: 10px; border-radius: 8px; background: #22385c; color: white; flex: 1; min-width: 100px; border: 1px solid var(--surface-border); cursor: pointer;">
-                                <option value="L">L  (litros)</option>
-                                <option value="g">g   (gramos)</option>
+                                <option value="L">L (litros)</option>
+                                <option value="g">g (gramos)</option>
                                 <option value="kilo">kilo</option>
                                 <option value="unidad">unidad</option>
                                 <option value="u">u (unidades)</option>
-                                <option value="ML">ML   (mililitros)</option>
-                                <option value="MG">MG  (miligramos)</option>
-                                <option value="KG">KG   (kilogramos)</option>
+                                <option value="ML">ML (mililitros)</option>
+                                <option value="MG">MG (miligramos)</option>
+                                <option value="KG">KG (kilogramos)</option>
                             </select>
                         </div>
                     </div>
