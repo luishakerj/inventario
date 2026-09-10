@@ -1136,16 +1136,12 @@ const app = {
         const qtyInput = document.getElementById('report-quantity-used');
         const unitInput = document.getElementById('report-unit');
 
-        const categoriaSeleccionada = categoryInput?.value?.trim() || 'Insumo general';
+        const categoriaInsumo = categoryInput?.value?.trim() || 'Insumo general';
         
         // Usar el nombre del dropdown si está seleccionado, si no usar el input manual
         let nombreInsumo = nameInput?.value?.trim() || '';
-        let esProductoDropdown = false;
-        
         if (nombreInsumo === 'manual' || nombreInsumo === '') {
             nombreInsumo = nameManualInput?.value?.trim() || 'Insumo';
-        } else {
-            esProductoDropdown = true;
         }
         
         const fechaUsoRaw = dateInput?.value;
@@ -1157,9 +1153,9 @@ const app = {
         
         // Filtrar productos por categoría para la búsqueda
         let productosParaBuscar = this.products;
-        if (categoriaSeleccionada && categoriaSeleccionada !== 'Insumo general') {
+        if (categoriaInsumo && categoriaInsumo !== 'Insumo general') {
             productosParaBuscar = this.products.filter(p => 
-                normalizeCategory(p.category || p.categoria) === normalizeCategory(categoriaSeleccionada)
+                normalizeCategory(p.category || p.categoria) === normalizeCategory(categoriaInsumo)
             );
         }
 
@@ -1250,26 +1246,18 @@ const app = {
             }
         }
 
-        // Determinar la categoría correcta para el historial
-        let categoriaParaHistorial = categoriaSeleccionada;
-        if (producto && producto.category) {
-            categoriaParaHistorial = producto.category;
-        } else if (producto && producto.categoria) {
-            categoriaParaHistorial = producto.categoria;
-        }
-
         this.registrarEnHistorial({
             tipo: 'reporte',
             tipoTexto: 'Reporte de Uso',
             nombre: nombreInsumo,
             cantidad: cantidadUso,
-            categoria: categoriaParaHistorial,
+            categoria: categoriaInsumo,
             lote: loteConsumo,
             detalle: detalleConsumo,
             fecha: fechaUso
         });
 
-        this.logActivity(`Reporte generado: ${nombreInsumo} `, `Cantidad: ${cantidadValor} ${unidadSeleccionada}, Categoría: ${categoriaParaHistorial} ${stockRestante !== null ? `| Stock restante: ${stockRestante}` : ''} `);
+        this.logActivity(`Reporte generado: ${nombreInsumo} `, `Cantidad: ${cantidadValor} ${unidadSeleccionada}, Categoría: ${categoriaInsumo} ${stockRestante !== null ? `| Stock restante: ${stockRestante}` : ''} `);
 
         const resultadoDiv = document.getElementById('report-result');
         if (resultadoDiv) {

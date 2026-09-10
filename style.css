@@ -40,6 +40,11 @@
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);
+    background-image: linear-gradient(rgba(15, 23, 42, 0.25), rgba(15, 23, 42, 0.4)), url('pexels-billsalazar-17862090.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--text-main);
     min-height: 100vh;
     overflow-x: hidden;
@@ -56,6 +61,7 @@ body {
     bottom: 0;
     z-index: -1;
     overflow: hidden;
+    opacity: 0.25;
 }
 
 .blob {
@@ -3160,6 +3166,7 @@ td.marca-column {
     min-width: 140px !important;
     text-align: right !important;
 }
+
 /* Notificaciones toast */
 #toast-container {
     position: fixed;
@@ -3171,6 +3178,7 @@ td.marca-column {
     gap: 10px;
     pointer-events: none;
 }
+
 .toast-message {
     display: flex;
     align-items: center;
@@ -3179,8 +3187,8 @@ td.marca-column {
     color: #f8fafc;
     padding: 14px 20px;
     border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     font-size: 0.95rem;
     font-weight: 500;
     opacity: 0;
@@ -3189,29 +3197,37 @@ td.marca-column {
     pointer-events: auto;
     max-width: 340px;
 }
+
 .toast-message.visible {
     opacity: 1;
     transform: translateX(0);
 }
+
 .toast-message i {
     font-size: 1.3rem;
     flex-shrink: 0;
 }
+
 .toast-success {
     border-left: 4px solid #10b981;
 }
+
 .toast-success i {
     color: #10b981;
 }
+
 .toast-error {
     border-left: 4px solid #ef4444;
 }
+
 .toast-error i {
     color: #ef4444;
 }
+
 .toast-warning {
     border-left: 4px solid #f59e0b;
 }
+
 .toast-warning i {
     color: #f59e0b;
 }
