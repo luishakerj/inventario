@@ -115,13 +115,105 @@ function isReagent(category) {
 }
 
 function normalizeQuantityUnit(unit) {
-    const value = String(unit || '').trim().toUpperCase().replace(/\s+/g, ' ');
-    const match = value.match(/^(\d+(?:[.,]\d+)?)\s*(ML|L|MG|G|KG|U)$/);
-    if (!match) return value;
+    let value = String(unit || '').trim().replace(/\s+/g, ' ');
+    if (!value) return '';
+    if (/^kilos?$/i.test(value)) return 'KG';
+
+    const match = value.match(/^(\d+(?:[.,]\d+)?)\s*(ML|L|MG|G|KG|U|KILO)s?$/i);
+    if (!match) {
+        const upper = value.toUpperCase();
+        if (['KG', 'G', 'MG', 'L', 'ML', 'U'].includes(upper)) return upper === 'G' ? 'g' : upper;
+        return value;
+    }
 
     const amount = match[1].replace(',', '.');
-    return `${amount} ${match[2]}`;
+    let u = match[2].toUpperCase();
+    if (u === 'KILO') u = 'KG';
+    if (u === 'G') u = 'g';
+    return `${amount} ${u}`;
 }
+
+// Sistema de conversión métrica y agotamiento proporcional de stock
+const UNIT_SYSTEM = {
+    parse(unitStr) {
+        if (!unitStr) return { dimension: 'COUNT', baseFactor: 1, unit: 'u', amount: 1 };
+        const raw = String(unitStr).trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        let amount = 1;
+        let unitPart = raw;
+        const matchNum = raw.match(/^(\d+(?:[.,]\d+)?)\s*(.*)$/);
+        if (matchNum && matchNum[2]) {
+            amount = parseFloat(matchNum[1].replace(',', '.')) || 1;
+            unitPart = matchNum[2].trim();
+        }
+
+        // Masa: unidad base en gramos (g)
+        // 1 KG = 1000 g, 1 g = 1 g, 1 MG = 0.001 g
+        if (/^(kg|kilo|kilos|kilogramo|kilogramos)$/.test(unitPart)) {
+            return { dimension: 'MASS', baseFactor: 1000 * amount, unit: 'KG', amount };
+        }
+        if (/^(g|gr|grs|gramo|gramos)$/.test(unitPart)) {
+            return { dimension: 'MASS', baseFactor: 1 * amount, unit: 'g', amount };
+        }
+        if (/^(mg|mgs|miligramo|miligramos)$/.test(unitPart)) {
+            return { dimension: 'MASS', baseFactor: 0.001 * amount, unit: 'MG', amount };
+        }
+
+        // Volumen: unidad base en mililitros (ML)
+        // 1 L = 1000 ML, 1 ML = 1 ML
+        if (/^(l|lt|lts|litro|litros)$/.test(unitPart)) {
+            return { dimension: 'VOLUME', baseFactor: 1000 * amount, unit: 'L', amount };
+        }
+        if (/^(ml|mls|mililitro|mililitros)$/.test(unitPart)) {
+            return { dimension: 'VOLUME', baseFactor: 1 * amount, unit: 'ML', amount };
+        }
+
+        // Conteo
+        return { dimension: 'COUNT', baseFactor: 1 * amount, unit: 'u', amount };
+    },
+
+    toBase(amount, unitStr) {
+        const p = this.parse(unitStr);
+        return {
+            dimension: p.dimension,
+            baseValue: (parseFloat(amount) || 0) * p.baseFactor,
+            parsed: p
+        };
+    },
+
+    formatOptimal(baseValue, dimension) {
+        if (baseValue <= 0) {
+            return { stock: 0, unit: dimension === 'MASS' ? 'g' : dimension === 'VOLUME' ? 'ML' : 'u' };
+        }
+
+        if (dimension === 'MASS') {
+            // baseValue en gramos
+            if (baseValue >= 1000) {
+                const kg = parseFloat((baseValue / 1000).toFixed(3));
+                return { stock: kg, unit: 'KG' };
+            } else if (baseValue >= 1) {
+                const g = parseFloat(baseValue.toFixed(3));
+                return { stock: g, unit: 'g' };
+            } else {
+                const mg = parseFloat((baseValue * 1000).toFixed(2));
+                return { stock: mg, unit: 'MG' };
+            }
+        }
+
+        if (dimension === 'VOLUME') {
+            // baseValue en mililitros
+            if (baseValue >= 1000) {
+                const l = parseFloat((baseValue / 1000).toFixed(3));
+                return { stock: l, unit: 'L' };
+            } else {
+                const ml = parseFloat(baseValue.toFixed(2));
+                return { stock: ml, unit: 'ML' };
+            }
+        }
+
+        return { stock: parseFloat(baseValue.toFixed(2)), unit: 'u' };
+    }
+};
 
 function formatQuantityUnit(product) {
     const quantity = product.stock ?? 0;
@@ -129,9 +221,11 @@ function formatQuantityUnit(product) {
     if (isEquipment(product.category) || categoryHasNoMetadata(product.category)) {
         return `${quantity} / ${unit || '-'}`;
     }
-    return isReagent(product.category)
-        ? `${quantity} / ${unit || 'UND'}`
-        : `${quantity} ${unit}`.trim();
+    const hasPackagedAmount = /^(\d+(?:[.,]\d+)?)\s*(ML|L|MG|G|KG|U)$/i.test(String(unit).trim());
+    if (isReagent(product.category) && hasPackagedAmount) {
+        return `${quantity} / ${unit}`;
+    }
+    return `${quantity} ${unit || 'UND'}`.trim();
 }
 
 // Gestor del estado de la aplicación
@@ -160,6 +254,7 @@ const app = {
                     nombre: 'Muestra de laboratorio de prueba',
                     cantidad: 25,
                     categoria: 'General',
+                    marca: 'LICC',
                     lote: 'LOTE-001',
                     detalle: 'Carga automática inicial para vista previa'
                 }
@@ -239,12 +334,28 @@ const app = {
             select.appendChild(option);
         });
         
-        // Event listener para mostrar input manual si se selecciona la opción manual
+        // Event listener para mostrar input manual si se selecciona la opción manual y adaptar unidad sugerida
         select.onchange = function() {
             if (manualInput) {
                 manualInput.style.display = this.value === 'manual' ? 'block' : 'none';
                 if (this.value !== 'manual') {
                     manualInput.value = '';
+                }
+            }
+
+            // Adaptar unidad sugerida en el reporte según la dimensión del producto
+            if (this.value && this.value !== 'manual') {
+                const selProd = app.products.find(p => (p.name || p.nombre) === this.value);
+                const unitSelect = document.getElementById('report-unit');
+                if (selProd && unitSelect) {
+                    const parsed = UNIT_SYSTEM.parse(selProd.unit);
+                    if (parsed.dimension === 'MASS') {
+                        unitSelect.value = (parsed.unit === 'KG') ? 'g' : (parsed.unit || 'g');
+                    } else if (parsed.dimension === 'VOLUME') {
+                        unitSelect.value = (parsed.unit === 'L') ? 'ML' : (parsed.unit || 'ML');
+                    } else if (parsed.dimension === 'COUNT') {
+                        unitSelect.value = 'u';
+                    }
                 }
             }
         };
@@ -271,6 +382,7 @@ const app = {
             nombre: item.nombre || 'Sin nombre',
             cantidad: (item.cantidad !== undefined && item.cantidad !== null && String(item.cantidad).trim() !== '') ? item.cantidad : '1',
             categoria: item.categoria || '-',
+            marca: item.marca || item.location || item.brand || '-',
             lote: item.lote || '-',
             detalle: item.detalle || '-'
         };
@@ -324,17 +436,16 @@ const app = {
                 const matchTipo = norm(rep.tipoTexto || rep.tipo).includes(buscarQuery);
                 const matchCat = norm(rep.categoria).includes(buscarQuery);
                 const matchLote = norm(rep.lote).includes(buscarQuery);
+                const matchMarca = norm(rep.marca).includes(buscarQuery);
                 const matchDetalle = norm(rep.detalle).includes(buscarQuery);
                 const matchFecha = norm(rep.fecha).includes(buscarQuery);
-                if (!matchNombre && !matchTipo && !matchCat && !matchLote && !matchDetalle && !matchFecha) {
+                if (!matchNombre && !matchTipo && !matchCat && !matchLote && !matchMarca && !matchDetalle && !matchFecha) {
                     return false;
                 }
             }
 
             return true;
         });
-
-
 
         // Actualizar contador
         const conteoEl = document.getElementById('historial-conteo');
@@ -343,7 +454,7 @@ const app = {
         }
 
         if (reportesFiltrados.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 2.5rem; color: #94a3b8; font-size: 0.95rem;">No hay registros en el historial.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2.5rem; color: #94a3b8; font-size: 0.95rem;">No hay registros en el historial.</td></tr>`;
             return;
         }
 
@@ -374,21 +485,23 @@ const app = {
             tr.onmouseenter = () => tr.style.background = 'rgba(255, 255, 255, 0.03)';
             tr.onmouseleave = () => tr.style.background = 'transparent';
 
+            // Orden de columnas: Nombre, Categoría, Cantidad, Lote, Marca, Fecha, Acción
             tr.innerHTML = `
-        <td style="padding: 0.75rem; font-weight: 500; color: #f8fafc;">${escapeHtml(rep.nombre || '-')}</td>
-        <td style="padding: 0.75rem; color: #e2e8f0; font-weight: 500;">${escapeHtml(rep.categoria || '-')}</td>
-        <td class="quantity-column" style="padding: 0.75rem; color: #e2e8f0; width: 100px; max-width: 100px;">${rep.cantidad !== undefined ? escapeHtml(rep.cantidad) : '-'}</td>
-        <td class="marca-column" style="padding: 0.75rem; color: #94a3b8; width: 120px; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(rep.marca || '-')}</td>
-        <td style="padding: 0.75rem; color: #94a3b8; font-family: monospace; font-size: 0.85rem;">${escapeHtml(rep.lote || '-')}</td>
-        <td style="padding: 0.75rem; color: #94a3b8; font-size: 0.85rem;">${escapeHtml(rep.fechaProd || '-')}</td>
-        <td style="padding: 0.75rem; color: #94a3b8; font-size: 0.85rem;">${escapeHtml(rep.fechaVenc || '-')}</td>
-        <td style="padding: 0.75rem; color: #64748b; font-size: 0.85rem;">${escapeHtml(rep.detalle || '-')}</td>
-        <td style="padding: 0.75rem; text-align: right;">
-            <span style="color: ${badgeColor}; font-weight: 600; background: ${badgeBg}; border: 1px solid ${badgeBorder}; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem;">
-                ${escapeHtml(badgeText)}
-            </span>
-        </td>
-    `;
+                <td style="padding: 0.75rem; font-weight: 500; color: #f8fafc;">
+                    <div>${escapeHtml(rep.nombre || '-')}</div>
+                    ${rep.detalle && rep.detalle !== '-' ? `<div style="font-size: 0.75rem; color: #64748b; margin-top: 2px;">${escapeHtml(rep.detalle)}</div>` : ''}
+                </td>
+                <td style="padding: 0.75rem; color: #cbd5e1;">${escapeHtml(rep.categoria || '-')}</td>
+                <td style="padding: 0.75rem; color: #38bdf8; font-weight: 600;">${rep.cantidad !== undefined ? escapeHtml(rep.cantidad) : '-'}</td>
+                <td style="padding: 0.75rem; color: #94a3b8; font-family: monospace; font-size: 0.85rem;">${escapeHtml(rep.lote || '-')}</td>
+                <td style="padding: 0.75rem; color: #94a3b8;">${escapeHtml(rep.marca || '-')}</td>
+                <td style="padding: 0.75rem; color: #94a3b8; font-size: 0.8rem; white-space: nowrap;">${escapeHtml(rep.fecha || '-')}</td>
+                <td style="padding: 0.75rem; text-align: center; white-space: nowrap;">
+                    <span style="color: ${badgeColor}; font-weight: 600; background: ${badgeBg}; border: 1px solid ${badgeBorder}; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; display: inline-block;">
+                        ${escapeHtml(badgeText)}
+                    </span>
+                </td>
+            `;
             tbody.appendChild(tr);
         });
     },
@@ -1223,21 +1336,42 @@ const app = {
 
         if (producto && cantidadNum > 0) {
             const stockActual = parseFloat(producto.stock) || 0;
-            const nuevoStock = Math.max(0, stockActual - cantidadNum);
-            producto.stock = parseFloat(nuevoStock.toFixed(2));
-            stockRestante = producto.stock;
+            const unidadProd = producto.unit || '';
+
+            // Conversión y agotamiento proporcional de stock
+            const prodBase = UNIT_SYSTEM.toBase(stockActual, unidadProd);
+            const usoBase = UNIT_SYSTEM.toBase(cantidadNum, unidadSeleccionada);
+
+            const textoStockAnterior = `${stockActual} ${unidadProd}`.trim();
+            const textoDescontado = `${cantidadNum} ${unidadSeleccionada}`;
+
+            let nuevoStockVal = 0;
+            let nuevaUnidad = unidadProd;
+
+            if (prodBase.dimension === usoBase.dimension) {
+                const stockRestanteBase = Math.max(0, prodBase.baseValue - usoBase.baseValue);
+                const optimal = UNIT_SYSTEM.formatOptimal(stockRestanteBase, prodBase.dimension);
+                nuevoStockVal = optimal.stock;
+                nuevaUnidad = optimal.unit;
+            } else {
+                nuevoStockVal = Math.max(0, parseFloat((stockActual - cantidadNum).toFixed(3)));
+            }
+
+            producto.stock = nuevoStockVal;
+            producto.unit = nuevaUnidad;
+            stockRestante = `${nuevoStockVal} ${nuevaUnidad}`.trim();
             loteConsumo = producto.lote || producto.codigo || '-';
 
             this.saveData();
             this.renderTables();
 
             detalleConsumo = stockActual > 0
-                ? `Consumo registrado. Stock anterior: ${stockActual}, descontado: ${cantidadNum} ${unidadSeleccionada}, stock restante: ${producto.stock}${producto.unit ? ' ' + producto.unit : ''}`
+                ? `Consumo registrado. Stock anterior: ${textoStockAnterior}, descontado: ${textoDescontado}, stock restante: ${stockRestante}`
                 : `Consumo registrado. El stock ya estaba en 0, no se pudo descontar más.`;
 
             this.logActivity(
                 `Consumo de inventario: ${producto.name || producto.nombre}`,
-                `Se descontaron ${cantidadNum} ${unidadSeleccionada} del stock. Stock restante: ${producto.stock}`
+                `Se descontaron ${textoDescontado} del stock. Stock restante: ${stockRestante}`
             );
 
             // Aviso si el stock quedó en cero o agotado por el consumo
@@ -1252,6 +1386,7 @@ const app = {
             nombre: nombreInsumo,
             cantidad: cantidadUso,
             categoria: categoriaInsumo,
+            marca: producto ? (producto.marca || producto.brand || producto.location || '-') : '-',
             lote: loteConsumo,
             detalle: detalleConsumo,
             fecha: fechaUso
@@ -1266,7 +1401,7 @@ const app = {
                     <h3 style="color: #10b981; margin-bottom: 0.4rem; font-size: 1.2rem;">✅ ¡Reporte guardado con éxito!</h3>
                     <p style="margin: 0.2rem 0; color: #cbd5e1; font-size: 0.95rem;">Se registró el uso de <strong>${nombreInsumo}</strong> (Cantidad: ${cantidadValor} ${unidadSeleccionada}).</p>
                     ${stockRestante !== null
-                        ? `<p style="margin: 0.2rem 0; color: ${stockRestante <= 0 ? '#ef4444' : '#10b981'}; font-size: 0.95rem;">Stock restante en inventario: <strong>${stockRestante}${producto?.unit ? ' ' + producto.unit : ''}</strong>${stockRestante <= 0 ? ' ⚠️ Producto agotado' : ''}</p>`
+                        ? `<p style="margin: 0.2rem 0; color: ${producto?.stock <= 0 ? '#ef4444' : '#10b981'}; font-size: 0.95rem;">Stock restante en inventario: <strong>${stockRestante}</strong>${producto?.stock <= 0 ? ' ⚠️ Producto agotado' : ''}</p>`
                         : `<p style="margin: 0.2rem 0; color: #f59e0b; font-size: 0.85rem;">⚠️ No se encontró el producto en el inventario, solo se registró el reporte.</p>`}
                     <p style="margin: 0.2rem 0; color: #94a3b8; font-size: 0.85rem;">Fecha: ${fechaUso} | Categoría: ${categoriaInsumo}</p>
                     <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #38bdf8;">Ya puedes consultarlo en el botón <strong>"Ver Historial"</strong>.</p>
