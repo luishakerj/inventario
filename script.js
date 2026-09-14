@@ -148,11 +148,11 @@ const UNIT_SYSTEM = {
         }
 
         // Masa: unidad base en gramos (g)
-        // 1 KG = 1000 g, 1 g = 1 g, 1 MG = 0.001 g
-        if (/^(kg|kilo|kilos|kilogramo|kilogramos)$/.test(unitPart)) {
+        // 1 KG = 1000 g, 1 g = 1 g (o gm), 1 MG = 0.001 g (1 g = 1000 mg)
+        if (/^(kg|kgs|kilo|kilos|kilogramo|kilogramos)$/.test(unitPart)) {
             return { dimension: 'MASS', baseFactor: 1000 * amount, unit: 'KG', amount };
         }
-        if (/^(g|gr|grs|gramo|gramos)$/.test(unitPart)) {
+        if (/^(g|gm|gms|gr|grs|gramo|gramos)$/.test(unitPart)) {
             return { dimension: 'MASS', baseFactor: 1 * amount, unit: 'g', amount };
         }
         if (/^(mg|mgs|miligramo|miligramos)$/.test(unitPart)) {
@@ -280,49 +280,90 @@ const app = {
 
     abrirModalReportes() {
         this.openModal('reporte-generar');
+        this.populateReportCategories();
         this.populateProductDropdown();
     },
 
-    populateProductDropdown(categoryFilter = null) {
+    populateReportCategories(selectedCat = null) {
+        const catSelect = document.getElementById('report-category');
+        if (!catSelect) return;
+
+        const currentVal = selectedCat !== null ? selectedCat : catSelect.value;
+        const defaultCats = [
+            'Solventes', 'Acido', 'Bases y sales', 'Polimeros',
+            'Equipos', 'Materiales de laboratorio', 'Materiales de limpieza',
+            'Articulos de oficina', 'Otros'
+        ];
+
+        // Obtener categorías únicas de los productos existentes
+        const productCats = (this.products || [])
+            .map(p => p.category || p.categoria)
+            .filter(c => c && String(c).trim() !== '');
+
+        const allCats = Array.from(new Set([...defaultCats, ...productCats]));
+        allCats.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+
+        catSelect.innerHTML = '<option value="">Todas las categorías</option>';
+        allCats.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat;
+            opt.textContent = cat === 'Acido' ? 'Ácido' : cat;
+            catSelect.appendChild(opt);
+        });
+
+        if (currentVal) {
+            const foundOpt = Array.from(catSelect.options).find(o =>
+                normalizeCategory(o.value) === normalizeCategory(currentVal)
+            );
+            if (foundOpt) {
+                catSelect.value = foundOpt.value;
+            }
+        }
+    },
+
+    onReportCategoryChange(category) {
+        const select = document.getElementById('report-item-name');
+        const currentlySelected = select ? select.value : '';
+        this.populateProductDropdown(category, currentlySelected);
+    },
+
+    populateProductDropdown(categoryFilter = null, preserveSelection = null) {
         const select = document.getElementById('report-item-name');
         const manualInput = document.getElementById('report-item-name-manual');
         if (!select) return;
-        
-        // Guardar las opciones especiales (seleccionar y manual)
-        const specialOptions = [];
-        for (let i = 0; i < 2; i++) {
-            if (select.options[i]) {
-                specialOptions.push({
-                    value: select.options[i].value,
-                    text: select.options[i].textContent
-                });
-            }
-        }
-        
+
+        const currentVal = preserveSelection !== null ? preserveSelection : select.value;
+
         // Limpiar opciones existentes
-        select.innerHTML = '';
-        
-        // Restaurar opciones especiales
-        specialOptions.forEach(opt => {
-            const option = document.createElement('option');
-            option.value = opt.value;
-            option.textContent = opt.text;
-            select.appendChild(option);
-        });
-        
+        select.innerHTML = `
+            <option value="">Seleccionar producto del inventario...</option>
+            <option value="manual">Escribir nombre manualmente...</option>
+        `;
+
         // Filtrar productos por categoría si se especifica
-        let productsToFilter = this.products;
-        if (categoryFilter && categoryFilter !== '') {
-            productsToFilter = this.products.filter(p => 
+        let productsToFilter = this.products || [];
+        if (categoryFilter && categoryFilter.trim() !== '') {
+            productsToFilter = (this.products || []).filter(p =>
                 normalizeCategory(p.category || p.categoria) === normalizeCategory(categoryFilter)
             );
         }
-        
+
         // Ordenar productos alfabéticamente
-        const sortedProducts = [...productsToFilter].sort((a, b) => 
+        const sortedProducts = [...productsToFilter].sort((a, b) =>
             (a.name || a.nombre || '').localeCompare(b.name || b.nombre || '', 'es', { sensitivity: 'base' })
         );
-        
+
+        // Si había un producto seleccionado y no está en la categoría filtrada, preservarlo para no desactivarlo
+        if (currentVal && currentVal !== 'manual' && currentVal !== '') {
+            const isPresent = sortedProducts.some(p => (p.name || p.nombre) === currentVal);
+            if (!isPresent) {
+                const existingProd = (this.products || []).find(p => (p.name || p.nombre) === currentVal);
+                if (existingProd) {
+                    sortedProducts.unshift(existingProd);
+                }
+            }
+        }
+
         // Agregar opciones de productos
         sortedProducts.forEach(product => {
             const name = product.name || product.nombre || 'Sin nombre';
@@ -333,9 +374,14 @@ const app = {
             option.textContent = `${name} (Stock: ${stock} ${unit})`;
             select.appendChild(option);
         });
-        
-        // Event listener para mostrar input manual si se selecciona la opción manual y adaptar unidad sugerida
-        select.onchange = function() {
+
+        // Restaurar la selección previa
+        if (currentVal) {
+            select.value = currentVal;
+        }
+
+        // Event listener al cambiar el insumo: sincroniza la categoría y sugiere unidad sin deseleccionar
+        select.onchange = function () {
             if (manualInput) {
                 manualInput.style.display = this.value === 'manual' ? 'block' : 'none';
                 if (this.value !== 'manual') {
@@ -343,18 +389,37 @@ const app = {
                 }
             }
 
-            // Adaptar unidad sugerida en el reporte según la dimensión del producto
             if (this.value && this.value !== 'manual') {
-                const selProd = app.products.find(p => (p.name || p.nombre) === this.value);
+                const selProd = (app.products || []).find(p => (p.name || p.nombre) === this.value);
                 const unitSelect = document.getElementById('report-unit');
-                if (selProd && unitSelect) {
-                    const parsed = UNIT_SYSTEM.parse(selProd.unit);
-                    if (parsed.dimension === 'MASS') {
-                        unitSelect.value = (parsed.unit === 'KG') ? 'g' : (parsed.unit || 'g');
-                    } else if (parsed.dimension === 'VOLUME') {
-                        unitSelect.value = (parsed.unit === 'L') ? 'ML' : (parsed.unit || 'ML');
-                    } else if (parsed.dimension === 'COUNT') {
-                        unitSelect.value = 'u';
+                const catSelect = document.getElementById('report-category');
+
+                if (selProd) {
+                    // Sincronizar categoría en el select sin dejarla en blanco
+                    if (catSelect && selProd.category) {
+                        let foundOption = Array.from(catSelect.options).find(o =>
+                            normalizeCategory(o.value) === normalizeCategory(selProd.category)
+                        );
+                        if (!foundOption) {
+                            const newOpt = document.createElement('option');
+                            newOpt.value = selProd.category;
+                            newOpt.textContent = selProd.category;
+                            catSelect.appendChild(newOpt);
+                            foundOption = newOpt;
+                        }
+                        catSelect.value = foundOption.value;
+                    }
+
+                    // Sugerir unidad según la escala
+                    if (unitSelect) {
+                        const parsed = UNIT_SYSTEM.parse(selProd.unit);
+                        if (parsed.dimension === 'MASS') {
+                            unitSelect.value = (parsed.unit === 'KG') ? 'g' : (parsed.unit || 'g');
+                        } else if (parsed.dimension === 'VOLUME') {
+                            unitSelect.value = (parsed.unit === 'L') ? 'ML' : (parsed.unit || 'ML');
+                        } else if (parsed.dimension === 'COUNT') {
+                            unitSelect.value = 'u';
+                        }
                     }
                 }
             }
@@ -1168,8 +1233,8 @@ const app = {
         <span class="value">${escapeHtml(p.category || '-')}</span>
     </div>
             ${cleaningMaterials ? '' : `<div class="detail-item">
-                <span class="label">Cantidad (UND)</span>
-                <span class="value">${escapeHtml(p.stock || '0')}</span>
+                <span class="label">Stock / Cantidad</span>
+                <span class="value" style="font-weight: 600; color: #38bdf8;">${escapeHtml(formatQuantityUnit(p))}</span>
             </div>`}
             ${equipment || cleaningMaterials ? `<div class="detail-item">
                 <span class="label">Unidad</span>
@@ -1249,25 +1314,25 @@ const app = {
         const qtyInput = document.getElementById('report-quantity-used');
         const unitInput = document.getElementById('report-unit');
 
-        const categoriaInsumo = categoryInput?.value?.trim() || 'Insumo general';
-        
+        let categoriaInsumo = categoryInput?.value?.trim() || 'Insumo general';
+
         // Usar el nombre del dropdown si está seleccionado, si no usar el input manual
         let nombreInsumo = nameInput?.value?.trim() || '';
         if (nombreInsumo === 'manual' || nombreInsumo === '') {
             nombreInsumo = nameManualInput?.value?.trim() || 'Insumo';
         }
-        
+
         const fechaUsoRaw = dateInput?.value;
         const horaActual = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
         const fechaUso = fechaUsoRaw ? `${fechaUsoRaw} ${horaActual} ` : new Date().toLocaleString('es-ES');
         const cantidadValor = qtyInput?.value || '1';
         const unidadSeleccionada = unitInput?.value || 'unidad';
         const cantidadUso = `${cantidadValor} ${unidadSeleccionada}`;
-        
+
         // Filtrar productos por categoría para la búsqueda
         let productosParaBuscar = this.products;
         if (categoriaInsumo && categoriaInsumo !== 'Insumo general') {
-            productosParaBuscar = this.products.filter(p => 
+            productosParaBuscar = this.products.filter(p =>
                 normalizeCategory(p.category || p.categoria) === normalizeCategory(categoriaInsumo)
             );
         }
@@ -1280,30 +1345,41 @@ const app = {
         const normalizarTexto = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
         const cantidadNum = parseFloat(String(cantidadValor).replace(',', '.')) || 0;
-        
-        // Búsqueda más robusta del producto con múltiples estrategias
+
+        // Búsqueda robusta del producto con múltiples estrategias
         const nombreBuscadoNormalizado = normalizarTexto(nombreInsumo);
-        
-        // Estrategia 1: Coincidencia exacta (normalizada) - primero en productos filtrados por categoría
+
+        // Estrategia 1: Coincidencia exacta en productos filtrados por categoría
         let producto = productosParaBuscar.find(p =>
             normalizarTexto(p.name || p.nombre) === nombreBuscadoNormalizado
         );
-        
-        // Estrategia 2: El nombre del producto contiene lo buscado - en productos filtrados
+
+        // Estrategia 1b: Coincidencia exacta en TODO el inventario (por si la categoría no coincide)
+        if (!producto && productosParaBuscar !== this.products) {
+            producto = this.products.find(p =>
+                normalizarTexto(p.name || p.nombre) === nombreBuscadoNormalizado
+            );
+        }
+
+        // Estrategia 2: El nombre del producto contiene lo buscado
         if (!producto) {
             producto = productosParaBuscar.find(p =>
                 normalizarTexto(p.name || p.nombre).includes(nombreBuscadoNormalizado)
+            ) || this.products.find(p =>
+                normalizarTexto(p.name || p.nombre).includes(nombreBuscadoNormalizado)
             );
         }
-        
-        // Estrategia 3: Lo buscado contiene parte del nombre del producto - en productos filtrados
+
+        // Estrategia 3: Lo buscado contiene parte del nombre del producto
         if (!producto) {
             producto = productosParaBuscar.find(p =>
                 nombreBuscadoNormalizado.includes(normalizarTexto(p.name || p.nombre))
+            ) || this.products.find(p =>
+                nombreBuscadoNormalizado.includes(normalizarTexto(p.name || p.nombre))
             );
         }
-        
-        // Estrategia 4: Coincidencia de palabras clave (sustituciones comunes) - en productos filtrados
+
+        // Estrategia 4: Coincidencia de palabras clave (sustituciones comunes)
         if (!producto) {
             const sustituciones = {
                 'etanol': ['ethanol', 'alcohol etilico', 'alcohol etílico'],
@@ -1314,13 +1390,13 @@ const app = {
                 'acido': ['acid'],
                 'agua': ['water']
             };
-            
+
             const palabrasClave = Object.keys(sustituciones);
             for (const clave of palabrasClave) {
                 if (nombreBuscadoNormalizado.includes(clave)) {
                     const alternativas = sustituciones[clave];
                     for (const alt of alternativas) {
-                        producto = productosParaBuscar.find(p =>
+                        producto = this.products.find(p =>
                             normalizarTexto(p.name || p.nombre).includes(normalizarTexto(alt))
                         );
                         if (producto) break;
@@ -1328,6 +1404,11 @@ const app = {
                     if (producto) break;
                 }
             }
+        }
+
+        // Si se encontró el producto, asegurar la categoría real del producto
+        if (producto && producto.category) {
+            categoriaInsumo = producto.category;
         }
 
         let detalleConsumo = 'Reporte de uso registrado (producto no encontrado en inventario)';
@@ -1401,13 +1482,13 @@ const app = {
                     <h3 style="color: #10b981; margin-bottom: 0.4rem; font-size: 1.2rem;">✅ ¡Reporte guardado con éxito!</h3>
                     <p style="margin: 0.2rem 0; color: #cbd5e1; font-size: 0.95rem;">Se registró el uso de <strong>${nombreInsumo}</strong> (Cantidad: ${cantidadValor} ${unidadSeleccionada}).</p>
                     ${stockRestante !== null
-                        ? `<p style="margin: 0.2rem 0; color: ${producto?.stock <= 0 ? '#ef4444' : '#10b981'}; font-size: 0.95rem;">Stock restante en inventario: <strong>${stockRestante}</strong>${producto?.stock <= 0 ? ' ⚠️ Producto agotado' : ''}</p>`
-                        : `<p style="margin: 0.2rem 0; color: #f59e0b; font-size: 0.85rem;">⚠️ No se encontró el producto en el inventario, solo se registró el reporte.</p>`}
+                    ? `<p style="margin: 0.2rem 0; color: ${producto?.stock <= 0 ? '#ef4444' : '#10b981'}; font-size: 0.95rem;">Stock restante en inventario: <strong>${stockRestante}</strong>${producto?.stock <= 0 ? ' ⚠️ Producto agotado' : ''}</p>`
+                    : `<p style="margin: 0.2rem 0; color: #f59e0b; font-size: 0.85rem;">⚠️ No se encontró el producto en el inventario, solo se registró el reporte.</p>`}
                     <p style="margin: 0.2rem 0; color: #94a3b8; font-size: 0.85rem;">Fecha: ${fechaUso} | Categoría: ${categoriaInsumo}</p>
                     <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #38bdf8;">Ya puedes consultarlo en el botón <strong>"Ver Historial"</strong>.</p>
                 </div>
     `;
-            
+
             // Ocultar el mensaje después de 3 segundos
             setTimeout(() => {
                 resultadoDiv.style.display = 'none';

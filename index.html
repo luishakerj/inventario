@@ -444,9 +444,9 @@
 
                 <div class="form-group">
                     <label for="report-category">Categoría de insumo:</label>
-                    <select id="report-category" onchange="app.populateProductDropdown(this.value)"
-                        style="padding: 10px; border-radius: 8px; background: #22385c; color: white; width: 100%; border: 1px solid var(--surface-border);">
-                        <option value="">Seleccionar categoría</option>
+                    <select id="report-category" onchange="app.onReportCategoryChange(this.value)"
+                        style="padding: 10px; border-radius: 8px; background: #22385c; color: white; width: 100%; border: 1px solid var(--surface-border); cursor: pointer;">
+                        <option value="">Todas las categorías</option>
                         <option value="Solventes">Solventes</option>
                         <option value="Acido">Ácido</option>
                         <option value="Bases y sales">Bases y sales</option>
@@ -597,7 +597,7 @@
     </div>
 
     <script src="data.js"></script>
-    <script src="script.js?v=2026"></script>
+    <script src="script.js?v=2026_v2"></script>
 </body>
 
 </html>
