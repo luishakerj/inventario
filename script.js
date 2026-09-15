@@ -935,6 +935,7 @@ const app = {
             const descVal = p.desc || p.descripcion || '-';
 
             const commonCells = `
+        <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
         <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(quantityLabel)}</span></td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>

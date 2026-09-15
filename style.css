@@ -125,6 +125,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
 }
 
 .view {
@@ -271,9 +273,8 @@ body {
     padding: 1rem 1.5rem;
     margin-bottom: 2rem;
     overflow: visible !important;
-    /* <--- Esto evita que el header corte los elementos flotantes */
     position: relative;
-    /* <--- Le da un contexto seguro al header */
+    z-index: 50;
 }
 
 .nav-left {
@@ -283,8 +284,16 @@ body {
 }
 
 .nav-left h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.nav-left p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
 }
 
 .nav-actions {
@@ -421,10 +430,45 @@ body {
     border-radius: 8px;
     padding: 8px;
     transition: all 0.2s ease;
+    color: white;
 }
 
-.action-buttons .btn-icon:hover {
-    background: rgba(255, 255, 255, 0.15);
+/* Botón Ver - Azul */
+.action-buttons .btn-icon:first-child {
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
+}
+
+.action-buttons .btn-icon:first-child:hover {
+    background: rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.5);
+    transform: scale(1.05);
+}
+
+/* Botón Editar - Verde/Amarillo */
+.action-buttons .btn-icon:nth-child(2) {
+    background: rgba(234, 179, 8, 0.2);
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    color: #fbbf24;
+}
+
+.action-buttons .btn-icon:nth-child(2):hover {
+    background: rgba(234, 179, 8, 0.3);
+    border-color: rgba(234, 179, 8, 0.5);
+    transform: scale(1.05);
+}
+
+/* Botón Eliminar - Rojo */
+.action-buttons .btn-icon:nth-child(3) {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
+.action-buttons .btn-icon:nth-child(3):hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.5);
     transform: scale(1.05);
 }
 
@@ -921,13 +965,27 @@ select option {
     border: 0 !important;
 }
 
-/* Columna 10: Acciones */
+/* Columna 10: Acciones - FIJA A LA DERECHA (para tabla de estudiantes) */
 .modern-table th:nth-child(10),
 .modern-table td:nth-child(10) {
     min-width: 150px;
     max-width: 180px;
     text-align: right;
     white-space: nowrap;
+    position: sticky;
+    right: 0;
+    background: rgba(30, 41, 59, 0.95);
+    z-index: 10;
+}
+
+.modern-table th:nth-child(10) {
+    background: rgba(30, 41, 59, 0.98);
+    z-index: 20;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modern-table td:nth-child(10) {
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .modern-table:not(.show-equipment-state) .state-column,
@@ -1100,28 +1158,54 @@ select option {
     display: none;
 }
 
+#menu-opciones-flotante,
+#menu-opciones-flotante-student {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 200px;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .menu-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 16px;
+    background: transparent;
     border: none;
     border-radius: 8px;
     color: white;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
     font-size: 0.9rem;
     text-align: left;
+    white-space: nowrap;
 }
 
 .menu-item:hover {
     background: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
 }
 
 .menu-item i {
     font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.menu-item:hover i {
+    color: white;
 }
     padding: 1rem 0.75rem !important;
 }

@@ -112,26 +112,30 @@
         <!-- 2. VISTA: ESTUDIANTE / PERSONAL -->
         <section id="view-student" class="view">
             <header class="top-nav glass-panel"
-                style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; flex-wrap: wrap;">
-                <div class="nav-left">
-                    <button class="btn-icon" onclick="app.navigate('view-menu')" title="Volver al Menú">
-                        <i class="ph ph-arrow-left"></i>
+                style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; flex-wrap: wrap;">
+                <div class="nav-left" style="display: flex; align-items: center; gap: 12px;">
+                    <button class="btn-icon" onclick="app.navigate('view-menu')" title="Volver al Menú"
+                        style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255, 255, 255, 0.08);">
+                        <i class="ph ph-arrow-left" style="font-size: 1.2rem;"></i>
                     </button>
-                    <h2>Consulta de Inventario</h2>
+                    <div>
+                        <h2 style="margin: 0; font-size: 1.4rem; color: white; font-weight: 600;">Consulta de Inventario</h2>
+                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Sistema de gestión de productos</p>
+                    </div>
                 </div>
 
                 <div class="nav-actions"
-                    style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-left: auto;">
+                    style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                     <!-- Buscador -->
-                    <div class="search-bar">
+                    <div class="search-bar" style="flex: 1; min-width: 250px;">
                         <i class="ph ph-magnifying-glass"></i>
-                        <input type="text" id="search-student" placeholder="Buscar..."
+                        <input type="text" id="search-student" placeholder="Buscar productos..."
                             oninput="app.filterProducts('student')">
                     </div>
 
                     <!-- Selector Filtro Categoría -->
                     <select id="category-filter-student" class="categoria" onchange="app.filterProducts('student')"
-                        style="height: 36px; padding: 0 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                        style="height: 40px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; min-width: 150px;">
                         <option value="seleccion">selección</option>
                         <optgroup label="Reactivos">
                             <option value="Solventes">Solventes</option>
@@ -158,21 +162,17 @@
                     <!-- Menú Flotante Opciones -->
                     <div style="position: relative; display: inline-block;">
                         <button class="btn-icon" onclick="app.toggleOpcionesMenuStudent()" title="Opciones"
-                            style="height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; color: white; cursor: pointer;">
-                            <i class="ph ph-chart-bar"></i>
-                            <span>Opciones</span>
+                            style="height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: white; cursor: pointer;">
+                            <i class="ph ph-chart-bar" style="font-size: 1.1rem;"></i>
+                            <span style="font-weight: 500;">Opciones</span>
                         </button>
 
                         <div id="menu-opciones-flotante-student" class="oculto">
                             <button class="menu-item"
                                 onclick="app.abrirModalReportes(); app.toggleOpcionesMenuStudent();">
                                 <i class="ph ph-chart-bar"></i> Reporte
-                            </button>
+                            </button>   
                            
-                            <button class="menu-item"
-                                onclick="app.navigate('view-papelera'); app.toggleOpcionesMenuStudent();">
-                                <i class="ph ph-trash"></i> Papelera
-                            </button>
                             <button class="menu-item"
                                 onclick="app.abrirModalHistorial(); app.toggleOpcionesMenuStudent();">
                                 <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
@@ -183,9 +183,9 @@
             </header>
 
             <!-- Grupo de Imprimir Padrón ( Selector + Botón juntos) -->
-            <div class="glass-panel" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; padding: 10px 20px; margin-bottom: 15px;">
+            <div class="glass-panel" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; padding: 12px 24px; margin-bottom: 15px;">
                 <select id="filtro-categoria-print-student"
-                    style="height: 36px; padding: 0 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; min-width: 200px;">
+                    style="height: 40px; padding: 0 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255,255,255,0.15); font-size: 0.9rem; min-width: 180px;">
                     <option value="todos">Todas las categorías</option>
                     <optgroup label="Reactivos">
                         <option value="Solventes">Solventes</option>
@@ -208,7 +208,7 @@
                 </select>
 
                 <button onclick="imprimirPadron('student')" class="btn-imprimir"
-                    style="height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 16px;">
+                    style="height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 16px;">
                     <i class="ph ph-printer"></i> Imprimir Padrón
                 </button>
             </div>
@@ -244,35 +244,36 @@
 
         <!-- VISTA: ADMINISTRADOR -->
         <section id="view-admin" class="view">
-            <!-- Header con alineación alineada horizontalmente -->
+            <!-- Header con mejor estética -->
             <header class="top-nav glass-panel"
-                style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; flex-wrap: wrap;">
+                style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; flex-wrap: wrap;">
 
                 <!-- Lado Izquierdo: Título y Volver -->
-                <div class="nav-left" style="display: flex; align-items: center; gap: 10px; min-width: 220px;">
-                    <button class="btn-icon" onclick="app.navigate('view-menu')" title="Volver al Menú">
-                        <i class="ph ph-arrow-left"></i>
+                <div class="nav-left" style="display: flex; align-items: center; gap: 12px;">
+                    <button class="btn-icon" onclick="app.navigate('view-menu')" title="Volver al Menú"
+                        style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255, 255, 255, 0.08);">
+                        <i class="ph ph-arrow-left" style="font-size: 1.2rem;"></i>
                     </button>
-                    <h2 style="margin: 0; font-size: 1.3rem; color: white; white-space: nowrap;">Panel de Administración
-                    </h2>
+                    <div>
+                        <h2 style="margin: 0; font-size: 1.4rem; color: white; font-weight: 600;">Panel de Administración</h2>
+                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Gestión completa del inventario</p>
+                    </div>
                 </div>
 
                 <!-- Lado Derecho: Controles encajados en una sola fila -->
                 <div class="nav-actions"
-                    style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-left: auto;">
+                    style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
 
                     <!-- Buscador -->
-                    <div class="search-bar" style="position: relative; display: flex; align-items: center;">
-                        <i class="ph ph-magnifying-glass"
-                            style="position: absolute; left: 10px; color: rgba(255,255,255,0.5);"></i>
-                        <input type="text" id="search-admin" placeholder="Buscar..."
-                            oninput="app.filterProducts('admin')"
-                            style="padding: 6px 12px 6px 30px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; height: 36px;">
+                    <div class="search-bar" style="flex: 1; min-width: 250px;">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="search-admin" placeholder="Buscar productos..."
+                            oninput="app.filterProducts('admin')">
                     </div>
 
                     <!-- Filtro de Categoría de Tabla -->
                     <select id="category-filter-admin" class="categoria" onchange="app.filterProducts('admin')"
-                        style="height: 36px; padding: 0 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                        style="height: 40px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; min-width: 150px;">
                         <option value="seleccion">selección</option>
                         <optgroup label="Reactivos">
                             <option value="Solventes">Solventes</option>
@@ -299,9 +300,9 @@
                     <!-- Menú de Opciones Flotante -->
                     <div style="position: relative; display: inline-block;">
                         <button class="btn-icon" onclick="app.toggleOpcionesMenu()" title="Opciones"
-                            style="height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; color: white; cursor: pointer;">
-                            <i class="ph ph-chart-bar"></i>
-                            <span>Opciones</span>
+                            style="height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: white; cursor: pointer;">
+                            <i class="ph ph-chart-bar" style="font-size: 1.1rem;"></i>
+                            <span style="font-weight: 500;">Opciones</span>
                         </button>
 
                         <div id="menu-opciones-flotante" class="oculto">
@@ -322,15 +323,13 @@
                         </div>
                     </div>
 
-                  
-
-                
+                </div>
             </header>
 
-            <!-- Grupo de Imprimir Padrón ( Selector + Botón juntos) -->
-            <div class="glass-panel" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; padding: 10px 20px; margin-bottom: 15px;">
+            <!-- Grupo de Imprimir Padrón separado con color azul -->
+            <div class="glass-panel" style="display: flex; gap: 12px; align-items: center; justify-content: flex-end; padding: 16px 24px; margin: 16px 0; background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1)); border: 1px solid rgba(59, 130, 246, 0.3);">
                 <select id="filtro-categoria-print-admin"
-                    style="height: 36px; padding: 0 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; min-width: 200px;">
+                    style="height: 40px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 0.9rem; min-width: 200px;">
                     <option value="todos">Todas las categorías</option>
                     <optgroup label="Reactivos">
                         <option value="Solventes">Solventes</option>
@@ -352,8 +351,8 @@
                     </optgroup>
                 </select>
 
-                <button onclick="imprimirPadron('admin')" class="btn-imprimir"
-                    style="height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 16px;">
+                <button onclick="imprimirPadron('admin')" class="btn-primary"
+                    style="height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 20px; background: linear-gradient(135deg, #3b82f6, #2563eb); border: none; color: white; border-radius: 10px; font-weight: 500; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">
                     <i class="ph ph-printer"></i> Imprimir Padrón
                 </button>
             </div>
