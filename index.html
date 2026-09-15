@@ -21,6 +21,7 @@
     </div>
 
     <main class="app-container">
+
         <!-- VISTA: MENÚ PRINCIPAL -->
         <section id="view-menu" class="view active">
             <div class="glass-panel text-center menu-panel">
@@ -33,37 +34,187 @@
 
                 <div class="role-selection">
                     <button class="btn btn-primary" onclick="app.navigate('view-student')">
-                        <i class="ph ph-student"></i> Alumno
+                        <i class="ph ph-student"></i> Personal
+
                     </button>
-                    <button class="btn btn-secondary" onclick="app.navigate('view-admin')">
+                    <button class="btn btn-secondary" onclick="app.navigate('view-login')">
                         <i class="ph ph-chalkboard-teacher"></i> Administrador
                     </button>
                 </div>
             </div>
         </section>
-        <!--fin de menu princiap-->
 
+        <!-- VISTA: LOGIN -->
+        <section id="view-login" class="view">
+            <div class="glass-panel text-center menu-panel" style="padding: 3rem;">
+                <div class="icon-header">
+                    <i class="ph ph-lock-key" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                </div>
+                <h2 style="color: white; font-size: 1.8rem; margin-bottom: 0.5rem;">Acceso Administrativo</h2>
+                <p style="color: rgba(255,255,255,0.6); margin-bottom: 2rem;">Ingresa tus credenciales para continuar</p>
 
+                <form id="loginForm" style="text-align: left;">
+                    <div class="input-group" style="margin-bottom: 1.5rem;">
+                        <label for="username" style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-size: 0.9rem;">Correo o Usuario</label>
+                        <input type="text" id="username" required placeholder="Ingresa tu correo"
+                            style="width: 100%; padding: 12px 16px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: border-color 0.2s;">
+                    </div>
 
-        <!-- VISTA: ALUMNO -->
+                    <div class="input-group" style="margin-bottom: 2rem;">
+                        <label for="password" style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-size: 0.9rem;">Contraseña</label>
+                        <input type="password" id="password" required placeholder="Ingresa tu contraseña"
+                            style="width: 100%; padding: 12px 16px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: border-color 0.2s;">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-login"
+                        style="width: 100%; padding: 12px; font-size: 1rem; border-radius: 8px;">
+                        <i class="ph ph-sign-in"></i> Entrar
+                    </button>
+                </form>
+
+                <div style="margin-top: 1.5rem;">
+                    <button onclick="app.navigate('view-menu')" class="btn-ghost"
+                        style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
+                        <i class="ph ph-arrow-left"></i> Volver al menú
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. VISTA: MENÚ PRINCIPAL (INICIO) -->
+        <section id="view-menu" class="view active">
+            <div class="menu-container glass-panel"
+                style="max-width: 480px; margin: 60px auto; padding: 3rem 2rem; text-align: center; border-radius: 20px;">
+                <div class="icon-header">
+                    <img src="659214464177758344.jpg" alt="UNAP Logo" class="app-logo"
+                        style="max-width: 120px; height: auto; margin-bottom: 1.5rem; border-radius: 12px;">
+                </div>
+                <h1 style="color: white; font-size: 2.8rem; margin-bottom: 0.5rem; font-weight: 700;">UELICC</h1>
+                <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem; font-size: 1.1rem;">Sistema de Inventario de Laboratorio</p>
+
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="app.navigate('view-student')"
+                        style="padding: 16px 24px; font-size: 1.1rem; border-radius: 12px; font-weight: 500;">
+                        <i class="ph ph-users" style="font-size: 1.3rem;"></i> Personal / Estudiantes
+                    </button>
+                    <button class="btn btn-secondary" onclick="app.navigate('view-admin')"
+                        style="padding: 16px 24px; font-size: 1.1rem; border-radius: 12px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); font-weight: 500;">
+                        <i class="ph ph-shield-check" style="font-size: 1.3rem;"></i> Administrador
+                    </button>
+                </div>
+
+                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">Universidad Nacional del Altiplano - LICC</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. VISTA: ESTUDIANTE / PERSONAL -->
         <section id="view-student" class="view">
-            <header class="top-nav glass-panel">
+            <header class="top-nav glass-panel"
+                style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; flex-wrap: wrap;">
                 <div class="nav-left">
                     <button class="btn-icon" onclick="app.navigate('view-menu')" title="Volver al Menú">
                         <i class="ph ph-arrow-left"></i>
                     </button>
                     <h2>Consulta de Inventario</h2>
                 </div>
-                <div class="nav-actions">
+
+                <div class="nav-actions"
+                    style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-left: auto;">
+                    <!-- Buscador -->
                     <div class="search-bar">
                         <i class="ph ph-magnifying-glass"></i>
                         <input type="text" id="search-student" placeholder="Buscar..."
                             oninput="app.filterProducts('student')">
                     </div>
+
+                    <!-- Selector Filtro Categoría -->
+                    <select id="category-filter-student" class="categoria" onchange="app.filterProducts('student')"
+                        style="height: 36px; padding: 0 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                        <option value="seleccion">selección</option>
+                        <optgroup label="Reactivos">
+                            <option value="Solventes">Solventes</option>
+                            <option value="ácido">Ácido</option>
+                            <option value="Bases y sales">Bases y sales</option>
+                            <option value="Polimeros">Polímeros</option>
+                            <option value="Congelados y refrigerados">Congelados y refrigerados</option>
+                        </optgroup>
+                        <optgroup label="Equipos">
+                            <option value="Equipos">Equipos</option>
+                        </optgroup>
+                        <optgroup label="Materiales">
+                            <option value="Materiales de laboratorio">Materiales de laboratorio</option>
+                            <option value="Materiales de limpieza">Materiales de limpieza</option>
+                            <option value="Articulos de oficina">Artículos de oficina</option>
+                            <option value="Otros">Otros</option>
+                            <option value="Pro frejol">Pro frejol</option>
+                        </optgroup>
+                        <optgroup label="General">
+                            <option value="todos">Todas las categorías</option>
+                        </optgroup>
+                    </select>
+
+                    <!-- Menú Flotante Opciones -->
+                    <div style="position: relative; display: inline-block;">
+                        <button class="btn-icon" onclick="app.toggleOpcionesMenuStudent()" title="Opciones"
+                            style="height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; color: white; cursor: pointer;">
+                            <i class="ph ph-chart-bar"></i>
+                            <span>Opciones</span>
+                        </button>
+
+                        <div id="menu-opciones-flotante-student" class="oculto">
+                            <button class="menu-item"
+                                onclick="app.abrirModalReportes(); app.toggleOpcionesMenuStudent();">
+                                <i class="ph ph-chart-bar"></i> Reporte
+                            </button>
+                           
+                            <button class="menu-item"
+                                onclick="app.navigate('view-papelera'); app.toggleOpcionesMenuStudent();">
+                                <i class="ph ph-trash"></i> Papelera
+                            </button>
+                            <button class="menu-item"
+                                onclick="app.abrirModalHistorial(); app.toggleOpcionesMenuStudent();">
+                                <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            <div class="content-area glass-panel">
+            <!-- Grupo de Imprimir Padrón ( Selector + Botón juntos) -->
+            <div class="glass-panel" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; padding: 10px 20px; margin-bottom: 15px;">
+                <select id="filtro-categoria-print-student"
+                    style="height: 36px; padding: 0 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; min-width: 200px;">
+                    <option value="todos">Todas las categorías</option>
+                    <optgroup label="Reactivos">
+                        <option value="Solventes">Solventes</option>
+                        <option value="Acido">Ácido</option>
+                        <option value="Bases y sales">Bases y sales</option>
+                        <option value="Polimeros">Polímeros</option>
+                        <option value="Vencidos">Vencidos</option>
+                        <option value="Congelados y refrigerados">Congelados y refrigerados</option>
+                    </optgroup>
+                    <optgroup label="Equipos">
+                        <option value="Equipos">Equipos</option>
+                    </optgroup>
+                    <optgroup label="Materiales">
+                        <option value="Materiales de laboratorio">Materiales de laboratorio</option>
+                        <option value="Materiales de limpieza">Materiales de limpieza</option>
+                        <option value="Articulos de oficina">Artículos de oficina</option>
+                        <option value="Otros">Otros</option>
+                        <option value="Pro frejol">Pro frejol</option>
+                    </optgroup>
+                </select>
+
+                <button onclick="imprimirPadron('student')" class="btn-imprimir"
+                    style="height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 16px;">
+                    <i class="ph ph-printer"></i> Imprimir Padrón
+                </button>
+            </div>
+
+            <!-- Contenido Principal Tabla Estudiante -->
+            <div class="content-area glass-panel" style="margin-top: 0; padding: 20px; border-radius: 12px;">
                 <div class="scroll-top-mirror" id="mirror-student">
                     <div class="scroll-top-mirror-inner" id="mirror-inner-student"></div>
                 </div>
@@ -83,134 +234,104 @@
                             </tr>
                         </thead>
                         <tbody id="table-body-student">
-                            <!-- Los datos se inyectarán aquí por JS -->
+                            <!-- Se llena dinámicamente con JS -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
-        <!---fin de  alumno-->
-
 
 
         <!-- VISTA: ADMINISTRADOR -->
-
         <section id="view-admin" class="view">
-            <header class="top-nav glass-panel">
-                <div class="nav-left">
+            <!-- Header con alineación alineada horizontalmente -->
+            <header class="top-nav glass-panel"
+                style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; flex-wrap: wrap;">
+
+                <!-- Lado Izquierdo: Título y Volver -->
+                <div class="nav-left" style="display: flex; align-items: center; gap: 10px; min-width: 220px;">
                     <button class="btn-icon" onclick="app.navigate('view-menu')" title="Volver al Menú">
                         <i class="ph ph-arrow-left"></i>
                     </button>
-                    <h2>Panel de Administración</h2>
+                    <h2 style="margin: 0; font-size: 1.3rem; color: white; white-space: nowrap;">Panel de Administración
+                    </h2>
                 </div>
 
+                <!-- Lado Derecho: Controles encajados en una sola fila -->
+                <div class="nav-actions"
+                    style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-left: auto;">
 
-
-                <div class="nav-actions">
-                    <div class="search-bar">
-                        <i class="ph ph-magnifying-glass"></i>
+                    <!-- Buscador -->
+                    <div class="search-bar" style="position: relative; display: flex; align-items: center;">
+                        <i class="ph ph-magnifying-glass"
+                            style="position: absolute; left: 10px; color: rgba(255,255,255,0.5);"></i>
                         <input type="text" id="search-admin" placeholder="Buscar..."
-                            oninput="app.filterProducts('admin')">
+                            oninput="app.filterProducts('admin')"
+                            style="padding: 6px 12px 6px 30px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; height: 36px;">
                     </div>
 
-                    <div class="box-categoria" id="selecto-categoria"
-                        style="display: flex; gap: 10px; align-items: center;">
-                        <select id="category-filter-admin" class="categoria" onchange="app.filterProducts('admin')"
-                            style="padding: 6px 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
-                            <option value="seleccion">seleccion</option>
-                            <optgroup label="Reactivos">
-                                <option value="Solventes">Solventes</option>
-                                <option value="ácido">Ácido</option>
-                                <option value="Bases y sales">Bases y sales</option>
-                                <option value="Polimeros">Polímeros</option>
-                                <option value="Congelados y refrigerados">Congelados y refrigerados</option>
-                            </optgroup>
-                            <!-- Categoría 2: Equipos -->
-                            <optgroup label="Equipos">
-                                <option value="Equipos">Equipos</option>
-                            </optgroup>
-                            <!-- Categoría 3: Materiales -->
-                            <optgroup label="Materiales">
-                                <option value="Materiales de laboratorio">Materiales de laboratorio</option>
-                                <option value="Materiales de limpieza">Materiales de limpieza</option>
-                                <option value="Articulos de oficina">Artículos de oficina</option>
-                                <option value="Otros">Otros</option>
-                                <option value="Pro frejol">Pro frejol</option>
-                            </optgroup>
-                            <!-- Todos -->
-                            <optgroup label="General">
-                                <option value="todos">Todas las categorías</option>
-                            </optgroup>
-                        </select>
+                    <!-- Filtro de Categoría de Tabla -->
+                    <select id="category-filter-admin" class="categoria" onchange="app.filterProducts('admin')"
+                        style="height: 36px; padding: 0 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                        <option value="seleccion">selección</option>
+                        <optgroup label="Reactivos">
+                            <option value="Solventes">Solventes</option>
+                            <option value="ácido">Ácido</option>
+                            <option value="Bases y sales">Bases y sales</option>
+                            <option value="Polimeros">Polímeros</option>
+                            <option value="Congelados y refrigerados">Congelados y refrigerados</option>
+                        </optgroup>
+                        <optgroup label="Equipos">
+                            <option value="Equipos">Equipos</option>
+                        </optgroup>
+                        <optgroup label="Materiales">
+                            <option value="Materiales de laboratorio">Materiales de laboratorio</option>
+                            <option value="Materiales de limpieza">Materiales de limpieza</option>
+                            <option value="Articulos de oficina">Artículos de oficina</option>
+                            <option value="Otros">Otros</option>
+                            <option value="Pro frejol">Pro frejol</option>
+                        </optgroup>
+                        <optgroup label="General">
+                            <option value="todos">Todas las categorías</option>
+                        </optgroup>
+                    </select>
+
+                    <!-- Menú de Opciones Flotante -->
+                    <div style="position: relative; display: inline-block;">
+                        <button class="btn-icon" onclick="app.toggleOpcionesMenu()" title="Opciones"
+                            style="height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; color: white; cursor: pointer;">
+                            <i class="ph ph-chart-bar"></i>
+                            <span>Opciones</span>
+                        </button>
+
+                        <div id="menu-opciones-flotante" class="oculto">
+                            <button class="menu-item" onclick="app.abrirModalReportes(); app.toggleOpcionesMenu();">
+                                <i class="ph ph-chart-bar"></i> Reporte
+                            </button>
+                            <button class="menu-item"
+                                onclick="app.openModal('modal-product'); app.toggleOpcionesMenu();">
+                                <i class="ph ph-plus"></i> Nuevo Producto
+                            </button>
+                            <button class="menu-item"
+                                onclick="app.navigate('view-papelera'); app.toggleOpcionesMenu();">
+                                <i class="ph ph-trash"></i> Papelera
+                            </button>
+                            <button class="menu-item" onclick="app.abrirModalHistorial(); app.toggleOpcionesMenu();">
+                                <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <!----venta de la palntilla opciones-->
-                <div style="position: relative; display: inline-block;">
-                    <button class="btn-icon" onclick="app.toggleOpcionesMenu()" title="Opciones"
-                        style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; cursor: pointer;">
-                        <i class="ph ph-chart-bar" style="font-size: 1.2rem;"></i>
-                        <span>Opciones</span>
-                    </button>
 
-                    <div id="menu-opciones-flotante" class="oculto">
-                        <!-- Botón 1: Reporte -->
-                        <button class="menu-item" onclick="app.abrirModalReportes(); app.toggleOpcionesMenu();">
-                            <i class="ph ph-chart-bar"></i> Reporte
-                        </button>
+                  
 
-                        <!-- Botón 2: Nuevo Producto (Apuntando al ID correcto: modal-product) -->
-                        <button class="menu-item" onclick="app.openModal('modal-product'); app.toggleOpcionesMenu();">
-                            <i class="ph ph-plus"></i> Nuevo Producto
-                        </button>
-
-                        <!-- Botón 3: Papelera -->
-                        <button class="menu-item" onclick="app.navigate('view-papelera'); app.toggleOpcionesMenu();">
-                            <i class="ph ph-trash"></i> Papelera
-                        </button>
-
-                        <!-- Botón 4: Ver Historial -->
-                        <button class="menu-item" onclick="app.abrirModalHistorial(); app.toggleOpcionesMenu();">
-                            <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
-                        </button>
-                    </div>
-                </div>
-
-
+                
             </header>
 
-
-
-
-
-            <!-- Contenedor principal que se va a imprimir -->
-            <div id="area-padron">
-                <h2>Inventario de Alimentos</h2>
-
-                <!-- Aquí colocas o dejas tu tabla con los datos reales -->
-                <table class="modern-table" id="table-admin-print">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-
-                            <!-- Tus demás columnas -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Tus filas de datos que cargan con JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-
-
-            <div class="print-filter-container"
-                style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
-                <select id="filtro-categoria-print"
-                    style="padding: 10px; border-radius: 10px; background: #22385c; color: white;">
-                    <option value="todos">todas las categorías</option>
-
-
-                    <!-- Categoría 1: Reactivos -->
+            <!-- Grupo de Imprimir Padrón ( Selector + Botón juntos) -->
+            <div class="glass-panel" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; padding: 10px 20px; margin-bottom: 15px;">
+                <select id="filtro-categoria-print-admin"
+                    style="height: 36px; padding: 0 10px; border-radius: 8px; background: #22385c; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; min-width: 200px;">
+                    <option value="todos">Todas las categorías</option>
                     <optgroup label="Reactivos">
                         <option value="Solventes">Solventes</option>
                         <option value="Acido">Ácido</option>
@@ -219,13 +340,9 @@
                         <option value="Vencidos">Vencidos</option>
                         <option value="Congelados y refrigerados">Congelados y refrigerados</option>
                     </optgroup>
-
-                    <!-- Categoría 2: Equipos -->
                     <optgroup label="Equipos">
                         <option value="Equipos">Equipos</option>
                     </optgroup>
-
-                    <!-- Categoría 3: Materiales -->
                     <optgroup label="Materiales">
                         <option value="Materiales de laboratorio">Materiales de laboratorio</option>
                         <option value="Materiales de limpieza">Materiales de limpieza</option>
@@ -234,43 +351,33 @@
                         <option value="Pro frejol">Pro frejol</option>
                     </optgroup>
                 </select>
-                <!-- Tu botón existente -->
-                <button onclick="imprimirPadron()" class="btn-imprimir">
-                    🖨️ Imprimir Padrón
-                </button>
 
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
+                <button onclick="imprimirPadron('admin')" class="btn-imprimir"
+                    style="height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 16px;">
+                    <i class="ph ph-printer"></i> Imprimir Padrón
+                </button>
             </div>
-            <div class="content-area glass-panel">
-                <div class="scroll-top-mirror" id="mirror-admin">
-                    <div class="scroll-top-mirror-inner" id="mirror-inner-admin"></div>
-                </div>
-                <div class="table-responsive" id="scroll-admin">
-                    <table class="modern-table" id="table-admin">
+            <!-- Contenedor Único de Tabla -->
+            <div class="content-area glass-panel" style="margin-top: 0; padding: 20px; border-radius: 12px;">
+                <div class="table-responsive" id="scroll-admin" style="overflow-x: auto;">
+                    <table class="modern-table" id="table-admin" style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr>
-                                <th class="name-column">Nombre</th>
-                                <th class="category-column">Categoría</th>
-                                <th class="quantity-column">Cantidad/Unidad</th>
-                                <th class="marca-column">Marca</th>
-                                <th class="lote-column">Lote / Código</th>
-                                <th class="prod-column">F. Producción</th>
-                                <th class="exp-column">F. Vencimiento</th>
-                                <th class="desc-column">Descripción</th>
-                                <th class="action-buttons text-right">Acciones</th>
+                                <th style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Categoría</th>
+                                <th style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Cantidad / Unidad</th>
+                                <th style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Marca</th>
+                                <th style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Lote / Código</th>
+                                <th style="padding: 12px 16px; text-align: right; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="table-body-admin">
-                            <!-- Los datos se inyectarán aquí por JS -->
+                            <!-- Filas cargadas dinámicamente -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
+
     </main>
 
     <div id="modal-product" class="modal-overlay">

@@ -264,6 +264,13 @@ const app = {
             localStorage.setItem('inventario_reportes', JSON.stringify(datosPrueba));
         }
     },
+    // Agrega esta función dentro de tu objeto 'app' o en script.js
+    toggleOpcionesMenuStudent() {
+        const menu = document.getElementById('menu-opciones-flotante-student');
+        if (menu) {
+            menu.classList.toggle('oculto');
+        }
+    },
 
     toggleOpcionesMenu() {
         const menu = document.getElementById('menu-opciones-flotante');
@@ -686,13 +693,15 @@ const app = {
             console.warn('No se pudo guardar el inventario en localStorage', e);
         }
 
+        // Renderizar tablas al iniciar
         this.renderTables();
+
         if (typeof cargarFiltroCategorias === 'function') {
             cargarFiltroCategorias(this.products);
         }
-        // Mostrar la vista de administración por defecto al iniciar
-        this.navigate('view-menu'); // Cambia 'view-menu-admin' por el ID de tu pantalla con el logo
 
+        // Navegar al menú principal SOLO al cargar la app por primera vez
+        this.navigate('view-menu');
     },
 
     saveData() {
@@ -706,13 +715,19 @@ const app = {
             const deletedItem = this.products.splice(index, 1)[0];
             this.trash.push(deletedItem);
             this.saveData();
-            this.renderTables();
-            this.renderTrashTable();
-            showToast(`Se eliminó "${deletedItem.name || deletedItem.nombre || 'el producto'}" con éxito`, 'success');
-            this.logActivity(`Producto eliminado: ${deletedItem.name || deletedItem.nombre}`, 'Movido a la papelera de reciclaje');
 
-            // Redirige automáticamente a la papelera al eliminar el objeto
-            this.navigate('view-papelera');
+            // Re-renderizar sin cambiar abruptamente de vista
+            this.renderTables();
+            if (typeof this.renderTrashTable === 'function') {
+                this.renderTrashTable();
+            }
+
+            const nombreProducto = deletedItem.name || deletedItem.nombre || 'el producto';
+            showToast(`Se eliminó "${nombreProducto}" con éxito`, 'success');
+
+            if (typeof this.logActivity === 'function') {
+                this.logActivity(`Producto eliminado: ${nombreProducto}`, 'Movido a la papelera de reciclaje');
+            }
         }
     },
 
@@ -765,33 +780,36 @@ const app = {
 
 
     // Navegación entre vistas
+    // Navegación entre vistas
     navigate(viewId) {
-        // Ocultar todas las vistas de forma estricta
+        // 1. Ocultar todas las vistas quitando la clase y limpiando estilos en línea
         document.querySelectorAll('.view').forEach(v => {
             v.classList.remove('active');
-            v.style.display = 'none';
+            v.style.display = ''; // Limpia el 'none' o 'flex' previo
         });
 
-        // Mostrar la vista solicitada
+        // 2. Activar únicamente la vista solicitada
         const targetView = document.getElementById(viewId);
         if (targetView) {
             targetView.classList.add('active');
-            targetView.style.display = 'block';
+        } else {
+            console.error(`No existe un elemento con id="${viewId}"`);
         }
 
-        // Renderizar los datos actualizados cuando se entra a una vista
+        // 3. Renderizar datos
         this.renderTables();
 
-        // Si entra a la papelera, actualizar su tabla
+        // 4. Actualizar papelera si aplica
         if (viewId === 'view-papelera' && typeof this.renderTrashTable === 'function') {
             this.renderTrashTable();
         }
 
+        // 5. Reiniciar scrolls horizontales
         document.querySelectorAll('.table-responsive, .scroll-top-mirror').forEach(scrollContainer => {
             scrollContainer.scrollLeft = 0;
         });
 
-        // Limpiar búsquedas al cambiar de vista
+        // 6. Limpiar campos de búsqueda
         const searchStudent = document.getElementById('search-student');
         if (searchStudent) searchStudent.value = '';
         const searchAdmin = document.getElementById('search-admin');
@@ -870,10 +888,12 @@ const app = {
         });
 
         if (dataToRender.length === 0) {
-            const emptyCols = (hasDateColumns ? 9 : 7) - (hasMetadataColumns ? 0 : 3);
-            const emptyMsg = `<tr><td colspan="${emptyCols}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
-            studentBody.innerHTML = emptyMsg;
-            adminBody.innerHTML = emptyMsg;
+            const emptyColsStudent = (hasDateColumns ? 9 : 7) - (hasMetadataColumns ? 0 : 3);
+            const emptyColsAdmin = 5; // 5 columnas en la tabla de admin: Categoría, Cantidad, Marca, Lote, Acciones
+            const emptyMsgStudent = `<tr><td colspan="${emptyColsStudent}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
+            const emptyMsgAdmin = `<tr><td colspan="${emptyColsAdmin}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
+            studentBody.innerHTML = emptyMsgStudent;
+            adminBody.innerHTML = emptyMsgAdmin;
             return;
         }
 
@@ -915,7 +935,6 @@ const app = {
             const descVal = p.desc || p.descripcion || '-';
 
             const commonCells = `
-        <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
         <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(quantityLabel)}</span></td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>
@@ -923,6 +942,13 @@ const app = {
         ${prodCell}
         ${expCell}
         <td class="desc-column">${escapeHtml(descVal)}</td>
+    `;
+
+            const adminCells = `
+        <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
+        <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(quantityLabel)}</span></td>
+        <td class="marca-column">${escapeHtml(brandVal)}</td>
+        <td class="lote-column">${escapeHtml(loteVal)}</td>
     `;
 
 
@@ -941,7 +967,7 @@ const app = {
             const trAdmin = document.createElement('tr');
             trAdmin.setAttribute('class', rowClass);
             trAdmin.innerHTML = `
-        ${commonCells}
+        ${adminCells}
         <td class="action-buttons text-right">
             <button class="btn-icon" onclick="app.viewProduct(${p.id})" title="Ver"><i class="ph ph-eye"></i></button>
             <button class="btn-icon" onclick="app.editProduct(${p.id})" title="Editar"><i class="ph ph-pencil"></i></button>
@@ -1854,25 +1880,48 @@ function setupMirrorScrollbars() {
         window.addEventListener('resize', syncWidth);
     });
 }
-
-
-function imprimirPadron() {
+function imprimirPadron(tipoVista) {
     const productos = (app && Array.isArray(app.products)) ? app.products : [];
-    // Si los productos todavía no se cargaron del JSON, evitamos que falle
+
     if (!productos || productos.length === 0) {
-        alert("Los productos aún se están cargando o la lista está vacía. Espera un segundo e intenta de nuevo.");
+        alert("Los productos aún se están cargando o la lista está vacía.");
         return;
     }
 
-    const selectFiltro = document.getElementById('filtro-categoria-print');
+    // 1. Obtener el select correspondiente
+    let selectFiltro = null;
+    if (tipoVista === 'admin') {
+        selectFiltro = document.getElementById('filtro-categoria-print-admin');
+    } else if (tipoVista === 'student') {
+        selectFiltro = document.getElementById('filtro-categoria-print-student');
+    }
+
+    if (!selectFiltro) {
+        selectFiltro = document.getElementById('filtro-categoria-print-admin') ||
+            document.getElementById('filtro-categoria-print-student') ||
+            document.getElementById('filtro-categoria-print');
+    }
+
     const categoriaSeleccionada = selectFiltro ? selectFiltro.value : 'todos';
 
-    // Filtramos comparando tanto 'categoria' como 'category'
-    const productosAImprimir = categoriaSeleccionada === 'todos'
+    // Función helper para remover tildes y caracteres especiales
+    const limpiarTexto = (texto) => {
+        return (texto || '')
+            .toString()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "") // Remueve tildes (á -> a, é -> e)
+            .trim()
+            .toLowerCase();
+    };
+
+    const categoriaLimpia = limpiarTexto(categoriaSeleccionada);
+
+    // 2. Filtrar productos comparando texto normalizado
+    const productosAImprimir = (categoriaLimpia === 'todos' || categoriaLimpia === 'seleccion')
         ? productos
         : productos.filter(p => {
-            const catProd = p.categoria || p.category || '';
-            return catProd.toString().trim().toLowerCase() === categoriaSeleccionada.toString().trim().toLowerCase();
+            const catProd = limpiarTexto(p.categoria || p.category || '');
+            return catProd === categoriaLimpia;
         });
 
     if (productosAImprimir.length === 0) {
@@ -1880,13 +1929,13 @@ function imprimirPadron() {
         return;
     }
 
-    // Abrimos la ventana de impresión
+    // 3. Ventana de Impresión
     const ventanaImpresion = window.open('', '', 'height=700,width=900');
 
     ventanaImpresion.document.write('<html><head><title>Imprimir Inventario</title>');
     ventanaImpresion.document.write('<style>');
     ventanaImpresion.document.write('body { font-family: Arial, sans-serif; padding: 20px; color: #333; }');
-    ventanaImpresion.document.write('h2 { text-align: center; margin-bottom: 20px; }');
+    ventanaImpresion.document.write('h2 { text-align: center; margin-bottom: 20px; text-transform: uppercase; }');
     ventanaImpresion.document.write('table { width: 100%; border-collapse: collapse; margin-top: 10px; }');
     ventanaImpresion.document.write('th, td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 12px; }');
     ventanaImpresion.document.write('th { background-color: #f2f2f2; }');
@@ -1901,24 +1950,23 @@ function imprimirPadron() {
     productosAImprimir.forEach((p, index) => {
         ventanaImpresion.document.write(`<tr>
             <td>${index + 1}</td>
-            <td>${p.name || p.nombre || ''}</td>
+            <td>${p.nombre || p.name || ''}</td>
             <td>${p.categoria || p.category || ''}</td>
             <td>${p.stock !== undefined ? p.stock : (p.cantidad || '')}</td>
-            <td>${p.unit || p.unidad || ''}</td>
-            <td>${p.location || p.marca || ''}</td>
+            <td>${p.unidad || p.unit || ''}</td>
+            <td>${p.marca || p.location || ''}</td>
             <td>${p.lote || ''}</td>
         </tr>`);
     });
 
-    ventanaImpresion.document.write('</tbody></table>');
-    ventanaImpresion.document.write('</body></html>');
-
+    ventanaImpresion.document.write('</tbody></table></body></html>');
     ventanaImpresion.document.close();
 
     setTimeout(() => {
         ventanaImpresion.print();
     }, 500);
-} // <--- Aquí se cierra perfectamente la función imprimirPadron()
+}
+// <--- Aquí se cierra perfectamente la función imprimirPadron()
 
 // 1. Cargar las categorías dinámicamente en el select al inicio
 function cargarFiltroCategorias(productos) {
@@ -1960,4 +2008,66 @@ document.addEventListener("DOMContentLoaded", () => {
             menu.classList.add("oculto");
         }
     });
+});
+
+// Esperar a que cargue el DOM
+document.addEventListener('DOMContentLoaded', () => {
+
+    // 1. Ir del menú principal al Login al pulsar "Administrador"
+    const btnAdmin = document.getElementById('btn-admin'); // Asegúrate de que este ID esté en tu botón de "Administrador"
+    const menuContainer = document.getElementById('menu-container'); // Contenedor de las opciones Alumno/Admin
+    const loginContainer = document.getElementById('container-login'); // Contenedor del formulario de login
+
+    if (btnAdmin) {
+        btnAdmin.addEventListener('click', () => {
+            if (menuContainer) menuContainer.style.display = 'none';
+            if (loginContainer) loginContainer.style.display = 'block';
+        });
+    }
+
+    // 2. Al procesar el login, ir al Panel de Administración
+    const loginForm = document.getElementById('loginForm');
+    const adminPanel = document.getElementById('view-admin'); // Tu sección con la vista del panel
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Evita recargar la página
+
+            // Ocultar formulario de login
+            if (loginContainer) loginContainer.style.display = 'none';
+
+            // Mostrar panel de administración
+            if (adminPanel) adminPanel.style.display = 'block';
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Evita que se recargue la página
+
+            // Obtener credenciales ingresadas
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+
+            // Credenciales válidas (puedes cambiar estos valores)
+            const usuarioValido = "LICC";
+            const correoValido = "LICC@gmail.com";
+            const passwordValida = "12345";
+
+            // Validación
+            if ((usernameInput === usuarioValido || usernameInput === correoValido) && passwordInput === passwordValida) {
+                // Credenciales correctas: navegar al panel admin
+                app.navigate('view-admin');
+
+                // Limpiar campos
+                loginForm.reset();
+            } else {
+                // Mensaje de error
+                alert('Correo/Usuario o contraseña incorrectos.');
+            }
+        });
+    }
 });
