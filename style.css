@@ -293,7 +293,7 @@ body {
 .nav-left p {
     margin: 0;
     font-size: 0.85rem;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .nav-actions {
@@ -1207,7 +1207,8 @@ select option {
 .menu-item:hover i {
     color: white;
 }
-    padding: 1rem 0.75rem !important;
+
+padding: 1rem 0.75rem !important;
 }
 
 .modern-table.hide-other-columns th:nth-child(4),
@@ -3742,4 +3743,53 @@ td.marca-column {
     white-space: nowrap;
     /* Impide que las cabeceras se monten unas sobre otras */
     padding: 12px 15px;
+}
+
+/* Botón flotante de configuración (cambiar contraseña) */
+.btn-floating-config {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 900;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-floating-config:hover {
+    background: var(--primary, #3b82f6);
+    transform: rotate(45deg) scale(1.08);
+}
+
+/* Estilos para el modal flotante de configuración */
+#modalConfig {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999 !important;
+}
+
+#modalConfig.active {
+    display: flex !important;
+}
+
+#modalConfig.hidden {
+    display: none !important;
 }

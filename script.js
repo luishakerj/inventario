@@ -291,6 +291,115 @@ const app = {
         this.populateProductDropdown();
     },
 
+    abrirModalPassword() {
+        const adminView = document.getElementById('view-admin');
+        if (!adminView || !adminView.classList.contains('active')) {
+            alert('Solo el administrador con sesión activa puede cambiar la contraseña.');
+            return;
+        }
+
+        const modal = document.getElementById('modalConfig');
+        const form = document.getElementById('formChangePassword');
+        const msgError = document.getElementById('msgError');
+        if (form) form.reset();
+        if (msgError) {
+            msgError.textContent = '';
+            msgError.style.color = '';
+        }
+        if (modal) {
+            modal.classList.add('active');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+        }
+    },
+
+    cerrarModalPassword() {
+        const modal = document.getElementById('modalConfig');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+        }
+    },
+
+    guardarNuevaPassword(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        const adminView = document.getElementById('view-admin');
+        if (!adminView || !adminView.classList.contains('active')) {
+            alert('Solo el administrador con sesión activa puede cambiar la contraseña.');
+            return;
+        }
+
+        const currentPassInput = document.getElementById('currentPassword');
+        const newPassInput = document.getElementById('newPassword');
+        const confirmPassInput = document.getElementById('confirmPassword');
+        const msgError = document.getElementById('msgError');
+
+        const currentPass = currentPassInput ? currentPassInput.value.trim() : '';
+        const newPass = newPassInput ? newPassInput.value.trim() : '';
+        const confirmPass = confirmPassInput ? confirmPassInput.value.trim() : '';
+
+        const savedPassword = localStorage.getItem('passwordValida');
+        const currentValidPassword = (savedPassword && savedPassword.trim() !== '') ? savedPassword : '1a2b3c4d5e';
+
+        const isCurrentOk = (currentPass === currentValidPassword) || (!savedPassword && currentPass === '12345');
+
+        if (!isCurrentOk) {
+            if (msgError) {
+                msgError.style.color = '#ef4444';
+                msgError.textContent = 'La contraseña actual es incorrecta.';
+            }
+            return;
+        }
+
+        if (newPass.length < 4) {
+            if (msgError) {
+                msgError.style.color = '#ef4444';
+                msgError.textContent = 'La nueva contraseña debe tener al menos 4 caracteres.';
+            }
+            return;
+        }
+
+        if (newPass !== confirmPass) {
+            if (msgError) {
+                msgError.style.color = '#ef4444';
+                msgError.textContent = 'Las contraseñas nuevas no coinciden.';
+            }
+            return;
+        }
+
+        // Guardado inmediato en localStorage
+        localStorage.setItem('passwordValida', newPass);
+
+        if (msgError) {
+            msgError.style.color = '#22c55e';
+            msgError.textContent = '¡Contraseña actualizada de inmediato!';
+        }
+
+        if (typeof showToast === 'function') {
+            showToast('Contraseña de administrador actualizada de inmediato', 'success');
+        }
+
+        setTimeout(() => {
+            this.cerrarModalPassword();
+        }, 800);
+    },
+
+    togglePasswordVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        const icon = btn?.querySelector('i');
+        if (icon) {
+            icon.className = isPassword ? 'ph ph-eye-slash' : 'ph ph-eye';
+        }
+    },
+
     populateReportCategories(selectedCat = null) {
         const catSelect = document.getElementById('report-category');
         if (!catSelect) return;
@@ -1988,86 +2097,70 @@ function cargarFiltroCategorias(productos) {
 
     /// Asegúrate de corregir o mapear la variable global 'productos' directamente así:
 }
-// Listener global fue
+// ==========================================
+// LISTENERS GLOBALES Y GESTIÓN DE ACCESOS
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Ejecuta la verificación de datos iniciales aquí
-    app.verificarDatosIniciales();
+    // 1. Verificación de datos iniciales
+    if (typeof app !== 'undefined' && app.verificarDatosIniciales) {
+        app.verificarDatosIniciales();
+    }
 
+    // 2. Menú flotante de opciones (Admin)
     const btnOpciones = document.getElementById("btnOpciones");
-
     if (btnOpciones) {
         btnOpciones.addEventListener("click", (e) => {
             e.stopPropagation();
-            app.toggleOpcionesMenu();
+            if (typeof app !== 'undefined' && app.toggleOpcionesMenu) {
+                app.toggleOpcionesMenu();
+            }
         });
     }
 
+    // 3. Cerrar menús flotantes al hacer clic afuera
     window.addEventListener("click", (e) => {
-        const menu = document.getElementById("menu-opciones-flotante");
-        const btnOpciones = document.getElementById("btnOpciones");
-        if (menu && btnOpciones && !menu.contains(e.target) && !btnOpciones.contains(e.target)) {
-            menu.classList.add("oculto");
+        const menuAdmin = document.getElementById("menu-opciones-flotante");
+        const btnAdmin = document.getElementById("btnOpciones");
+        if (menuAdmin && btnAdmin && !menuAdmin.contains(e.target) && !btnAdmin.contains(e.target)) {
+            menuAdmin.classList.add("oculto");
+        }
+
+        const menuStudent = document.getElementById("menu-opciones-flotante-student");
+        const btnStudent = e.target.closest('[onclick*="toggleOpcionesMenuStudent"]');
+        if (menuStudent && !btnStudent && !menuStudent.contains(e.target)) {
+            menuStudent.classList.add("oculto");
         }
     });
-});
 
-// Esperar a que cargue el DOM
-document.addEventListener('DOMContentLoaded', () => {
-
-    // 1. Ir del menú principal al Login al pulsar "Administrador"
-    const btnAdmin = document.getElementById('btn-admin'); // Asegúrate de que este ID esté en tu botón de "Administrador"
-    const menuContainer = document.getElementById('menu-container'); // Contenedor de las opciones Alumno/Admin
-    const loginContainer = document.getElementById('container-login'); // Contenedor del formulario de login
-
-    if (btnAdmin) {
-        btnAdmin.addEventListener('click', () => {
-            if (menuContainer) menuContainer.style.display = 'none';
-            if (loginContainer) loginContainer.style.display = 'block';
-        });
-    }
-
-    // 2. Al procesar el login, ir al Panel de Administración
-    const loginForm = document.getElementById('loginForm');
-    const adminPanel = document.getElementById('view-admin'); // Tu sección con la vista del panel
-
+    // 4. Procesar Login Administrativo
+    const loginForm = document.getElementById("loginForm");
     if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Evita recargar la página
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
 
-            // Ocultar formulario de login
-            if (loginContainer) loginContainer.style.display = 'none';
+            const usernameInput = (document.getElementById("username")?.value || "").trim();
+            const passwordInput = (document.getElementById("password")?.value || "").trim();
 
-            // Mostrar panel de administración
-            if (adminPanel) adminPanel.style.display = 'block';
-        });
-    }
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Evita que se recargue la página
-
-            // Obtener credenciales ingresadas
-            const usernameInput = document.getElementById('username').value.trim();
-            const passwordInput = document.getElementById('password').value.trim();
-
-            // Credenciales válidas (puedes cambiar estos valores)
             const usuarioValido = "LICC";
             const correoValido = "LICC@gmail.com";
-            const passwordValida = "12345";
 
-            // Validación
-            if ((usernameInput === usuarioValido || usernameInput === correoValido) && passwordInput === passwordValida) {
-                // Credenciales correctas: navegar al panel admin
-                app.navigate('view-admin');
+            const userMatches = (usernameInput.toLowerCase() === usuarioValido.toLowerCase()) ||
+                                (usernameInput.toLowerCase() === correoValido.toLowerCase()) ||
+                                (usernameInput.toLowerCase() === "admin");
 
-                // Limpiar campos
+            const savedPassword = localStorage.getItem("passwordValida");
+            const defaultPassword = (savedPassword && savedPassword.trim() !== "") ? savedPassword : "1a2b3c4d5e";
+
+            const passMatches = (passwordInput === defaultPassword) || (!savedPassword && passwordInput === "12345");
+
+            if (userMatches && passMatches) {
+                if (typeof app !== "undefined" && app.navigate) {
+                    app.navigate("view-admin");
+                }
                 loginForm.reset();
             } else {
-                // Mensaje de error
-                alert('Correo/Usuario o contraseña incorrectos.');
+                alert("Correo/Usuario o contraseña incorrectos.");
             }
         });
     }

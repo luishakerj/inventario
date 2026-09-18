@@ -22,46 +22,58 @@
 
     <main class="app-container">
 
-        <!-- VISTA: MENÚ PRINCIPAL -->
+        <!-- 1. VISTA: MENÚ PRINCIPAL (INICIO) -->
         <section id="view-menu" class="view active">
-            <div class="glass-panel text-center menu-panel">
+            <div class="menu-container glass-panel"
+                style="max-width: 480px; margin: 60px auto; padding: 3rem 2rem; text-align: center; border-radius: 20px;">
                 <div class="icon-header">
                     <img src="659214464177758344.jpg" alt="UNAP Logo" class="app-logo"
-                        style="max-width: 150px; height: auto;">
+                        style="max-width: 120px; height: auto; margin-bottom: 1.5rem; border-radius: 12px;">
                 </div>
-                <h1 class="main-title">Inventario UELICC</h1>
-                <p class="subtitle">laboratorio</p>
+                <h1 style="color: white; font-size: 2.8rem; margin-bottom: 0.5rem; font-weight: 700;">UELICC</h1>
+                <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem; font-size: 1.1rem;">Sistema de Inventario
+                    de Laboratorio</p>
 
-                <div class="role-selection">
-                    <button class="btn btn-primary" onclick="app.navigate('view-student')">
-                        <i class="ph ph-student"></i> Personal
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="app.navigate('view-student')"
+                        style="padding: 16px 24px; font-size: 1.1rem; border-radius: 12px; font-weight: 500;">
+                        <i class="ph ph-users" style="font-size: 1.3rem;"></i> Personal
+                    </button>
+                    <button class="btn btn-secondary" onclick="app.navigate('view-login')"
+                        style="padding: 16px 24px; font-size: 1.1rem; border-radius: 12px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); font-weight: 500;">
+                        <i class="ph ph-shield-check" style="font-size: 1.3rem;"></i> Administrador
+                    </button>
+                </div>
 
-                    </button>
-                    <button class="btn btn-secondary" onclick="app.navigate('view-login')">
-                        <i class="ph ph-chalkboard-teacher"></i> Administrador
-                    </button>
+                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">Universidad Nacional del PERU -
+                        LICC</p>
                 </div>
             </div>
         </section>
 
         <!-- VISTA: LOGIN -->
         <section id="view-login" class="view">
-            <div class="glass-panel text-center menu-panel" style="padding: 3rem;">
+            <div class="glass-panel text-center menu-panel" style="padding: 3rem; max-width: 450px; margin: 60px auto;">
                 <div class="icon-header">
                     <i class="ph ph-lock-key" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
                 </div>
                 <h2 style="color: white; font-size: 1.8rem; margin-bottom: 0.5rem;">Acceso Administrativo</h2>
-                <p style="color: rgba(255,255,255,0.6); margin-bottom: 2rem;">Ingresa tus credenciales para continuar</p>
+                <p style="color: rgba(255,255,255,0.6); margin-bottom: 2rem;">Ingresa tus credenciales para continuar
+                </p>
 
                 <form id="loginForm" style="text-align: left;">
                     <div class="input-group" style="margin-bottom: 1.5rem;">
-                        <label for="username" style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-size: 0.9rem;">Correo o Usuario</label>
-                        <input type="text" id="username" required placeholder="Ingresa tu correo"
+                        <label for="username"
+                            style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-size: 0.9rem;">Correo
+                            o Usuario</label>
+                        <input type="text" id="username" required placeholder="Ingresa tu correo o usuario"
                             style="width: 100%; padding: 12px 16px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: border-color 0.2s;">
                     </div>
 
                     <div class="input-group" style="margin-bottom: 2rem;">
-                        <label for="password" style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-size: 0.9rem;">Contraseña</label>
+                        <label for="password"
+                            style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-size: 0.9rem;">Contraseña</label>
                         <input type="password" id="password" required placeholder="Ingresa tu contraseña"
                             style="width: 100%; padding: 12px 16px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: border-color 0.2s;">
                     </div>
@@ -74,37 +86,9 @@
 
                 <div style="margin-top: 1.5rem;">
                     <button onclick="app.navigate('view-menu')" class="btn-ghost"
-                        style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
+                        style="color: rgba(255,255,255,0.6); font-size: 0.9rem; background: none; border: none; cursor: pointer;">
                         <i class="ph ph-arrow-left"></i> Volver al menú
                     </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 1. VISTA: MENÚ PRINCIPAL (INICIO) -->
-        <section id="view-menu" class="view active">
-            <div class="menu-container glass-panel"
-                style="max-width: 480px; margin: 60px auto; padding: 3rem 2rem; text-align: center; border-radius: 20px;">
-                <div class="icon-header">
-                    <img src="659214464177758344.jpg" alt="UNAP Logo" class="app-logo"
-                        style="max-width: 120px; height: auto; margin-bottom: 1.5rem; border-radius: 12px;">
-                </div>
-                <h1 style="color: white; font-size: 2.8rem; margin-bottom: 0.5rem; font-weight: 700;">UELICC</h1>
-                <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem; font-size: 1.1rem;">Sistema de Inventario de Laboratorio</p>
-
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <button class="btn btn-primary" onclick="app.navigate('view-student')"
-                        style="padding: 16px 24px; font-size: 1.1rem; border-radius: 12px; font-weight: 500;">
-                        <i class="ph ph-users" style="font-size: 1.3rem;"></i> Personal / Estudiantes
-                    </button>
-                    <button class="btn btn-secondary" onclick="app.navigate('view-admin')"
-                        style="padding: 16px 24px; font-size: 1.1rem; border-radius: 12px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); font-weight: 500;">
-                        <i class="ph ph-shield-check" style="font-size: 1.3rem;"></i> Administrador
-                    </button>
-                </div>
-
-                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                    <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">Universidad Nacional del Altiplano - LICC</p>
                 </div>
             </div>
         </section>
@@ -119,13 +103,14 @@
                         <i class="ph ph-arrow-left" style="font-size: 1.2rem;"></i>
                     </button>
                     <div>
-                        <h2 style="margin: 0; font-size: 1.4rem; color: white; font-weight: 600;">Consulta de Inventario</h2>
-                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Sistema de gestión de productos</p>
+                        <h2 style="margin: 0; font-size: 1.4rem; color: white; font-weight: 600;">Consulta de Inventario
+                        </h2>
+                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Sistema de gestión de
+                            productos</p>
                     </div>
                 </div>
 
-                <div class="nav-actions"
-                    style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                <div class="nav-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                     <!-- Buscador -->
                     <div class="search-bar" style="flex: 1; min-width: 250px;">
                         <i class="ph ph-magnifying-glass"></i>
@@ -171,8 +156,8 @@
                             <button class="menu-item"
                                 onclick="app.abrirModalReportes(); app.toggleOpcionesMenuStudent();">
                                 <i class="ph ph-chart-bar"></i> Reporte
-                            </button>   
-                           
+                            </button>
+
                             <button class="menu-item"
                                 onclick="app.abrirModalHistorial(); app.toggleOpcionesMenuStudent();">
                                 <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
@@ -183,7 +168,8 @@
             </header>
 
             <!-- Grupo de Imprimir Padrón ( Selector + Botón juntos) -->
-            <div class="glass-panel" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; padding: 12px 24px; margin-bottom: 15px;">
+            <div class="glass-panel"
+                style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; padding: 12px 24px; margin-bottom: 15px;">
                 <select id="filtro-categoria-print-student"
                     style="height: 40px; padding: 0 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255,255,255,0.15); font-size: 0.9rem; min-width: 180px;">
                     <option value="todos">Todas las categorías</option>
@@ -255,14 +241,15 @@
                         <i class="ph ph-arrow-left" style="font-size: 1.2rem;"></i>
                     </button>
                     <div>
-                        <h2 style="margin: 0; font-size: 1.4rem; color: white; font-weight: 600;">Panel de Administración</h2>
-                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Gestión completa del inventario</p>
+                        <h2 style="margin: 0; font-size: 1.4rem; color: white; font-weight: 600;">Panel de
+                            Administración</h2>
+                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Gestión completa del
+                            inventario</p>
                     </div>
                 </div>
 
                 <!-- Lado Derecho: Controles encajados en una sola fila -->
-                <div class="nav-actions"
-                    style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                <div class="nav-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
 
                     <!-- Buscador -->
                     <div class="search-bar" style="flex: 1; min-width: 250px;">
@@ -320,6 +307,9 @@
                             <button class="menu-item" onclick="app.abrirModalHistorial(); app.toggleOpcionesMenu();">
                                 <i class="ph ph-clock-counter-clockwise"></i> Ver Historial
                             </button>
+                            <button class="menu-item" onclick="app.abrirModalPassword(); app.toggleOpcionesMenu();">
+                                <i class="ph ph-key"></i> Cambiar Contraseña
+                            </button>
                         </div>
                     </div>
 
@@ -327,7 +317,8 @@
             </header>
 
             <!-- Grupo de Imprimir Padrón separado con color azul -->
-            <div class="glass-panel" style="display: flex; gap: 12px; align-items: center; justify-content: flex-end; padding: 16px 24px; margin: 16px 0; background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1)); border: 1px solid rgba(59, 130, 246, 0.3);">
+            <div class="glass-panel"
+                style="display: flex; gap: 12px; align-items: center; justify-content: flex-end; padding: 16px 24px; margin: 16px 0; background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1)); border: 1px solid rgba(59, 130, 246, 0.3);">
                 <select id="filtro-categoria-print-admin"
                     style="height: 40px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 0.9rem; min-width: 200px;">
                     <option value="todos">Todas las categorías</option>
@@ -362,11 +353,21 @@
                     <table class="modern-table" id="table-admin" style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr>
-                                <th style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Categoría</th>
-                                <th style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Cantidad / Unidad</th>
-                                <th style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Marca</th>
-                                <th style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Lote / Código</th>
-                                <th style="padding: 12px 16px; text-align: right; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">Acciones</th>
+                                <th
+                                    style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">
+                                    Categoría</th>
+                                <th
+                                    style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">
+                                    Cantidad / Unidad</th>
+                                <th
+                                    style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">
+                                    Marca</th>
+                                <th
+                                    style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">
+                                    Lote / Código</th>
+                                <th
+                                    style="padding: 12px 16px; text-align: right; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">
+                                    Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="table-body-admin">
@@ -375,6 +376,12 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Botón Flotante de Configuración / Cambiar Contraseña (Solo visible en Admin) -->
+            <button id="btnConfig" class="btn-floating-config" title="Configuración / Cambiar Contraseña"
+                onclick="app.abrirModalPassword()">
+                <i class="ph ph-gear" style="font-size: 1.6rem;"></i>
+            </button>
         </section>
 
     </main>
@@ -702,8 +709,80 @@
         </div>
     </div>
 
+
+    <!-- Modal emergente para cambiar contraseña -->
+    <div id="modalConfig" class="modal-overlay hidden" style="display: none;">
+        <div class="modal-content glass-panel" style="max-width: 440px;">
+            <div class="modal-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
+                <h3 style="margin: 0; color: white; display: flex; align-items: center; gap: 10px; font-size: 1.3rem;">
+                    <i class="ph ph-shield-check" style="color: var(--primary, #3b82f6);"></i> Cambiar Contraseña
+                </h3>
+                <button type="button" id="btnCloseModal" class="btn-icon" onclick="app.cerrarModalPassword()"
+                    title="Cerrar"
+                    style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">
+                    <i class="ph ph-x" style="font-size: 1.2rem;"></i>
+                </button>
+            </div>
+            <form id="formChangePassword" onsubmit="app.guardarNuevaPassword(event)">
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label for="currentPassword"
+                        style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.85); font-size: 0.9rem;">Contraseña
+                        Actual:</label>
+                    <div style="position: relative;">
+                        <input type="password" id="currentPassword" required placeholder="Ingresa tu contraseña actual"
+                            style="width: 100%; padding: 10px 42px 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.15); color: white; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+                        <button type="button" class="btn-toggle-eye"
+                            onclick="app.togglePasswordVisibility('currentPassword', this)"
+                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; padding: 4px;">
+                            <i class="ph ph-eye" style="font-size: 1.2rem;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label for="newPassword"
+                        style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.85); font-size: 0.9rem;">Nueva
+                        Contraseña:</label>
+                    <div style="position: relative;">
+                        <input type="password" id="newPassword" required minlength="4" placeholder="Mínimo 4 caracteres"
+                            style="width: 100%; padding: 10px 42px 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.15); color: white; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+                        <button type="button" class="btn-toggle-eye"
+                            onclick="app.togglePasswordVisibility('newPassword', this)"
+                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; padding: 4px;">
+                            <i class="ph ph-eye" style="font-size: 1.2rem;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="confirmPassword"
+                        style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.85); font-size: 0.9rem;">Confirmar
+                        Nueva Contraseña:</label>
+                    <div style="position: relative;">
+                        <input type="password" id="confirmPassword" required placeholder="Repite la nueva contraseña"
+                            style="width: 100%; padding: 10px 42px 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.15); color: white; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+                        <button type="button" class="btn-toggle-eye"
+                            onclick="app.togglePasswordVisibility('confirmPassword', this)"
+                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; padding: 4px;">
+                            <i class="ph ph-eye" style="font-size: 1.2rem;"></i>
+                        </button>
+                    </div>
+                </div>
+                <p id="msgError" class="error-text"
+                    style="min-height: 20px; margin: -0.5rem 0 1rem 0; font-size: 0.88rem; text-align: center; font-weight: 500;">
+                </p>
+                <div class="modal-actions" style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" id="btnCancel" class="btn btn-ghost" onclick="app.cerrarModalPassword()"
+                        style="padding: 10px 16px; border-radius: 8px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"
+                        style="padding: 10px 20px; border-radius: 8px; background: var(--primary, #3b82f6); color: white; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                        <i class="ph ph-check"></i> Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script src="data.js"></script>
-    <script src="script.js?v=2026_v2"></script>
+    <script src="script.js?v=2026_v4"></script>
 </body>
 
 </html>
