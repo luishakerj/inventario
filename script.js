@@ -829,7 +829,7 @@ const app = {
             } else if (!loaded) {
                 this.products = [...(this.defaultProducts || [])];
             }
-            try { localStorage.setItem('cirna_inventory', JSON.stringify(this.products)); } catch (e) {}
+            try { localStorage.setItem('cirna_inventory', JSON.stringify(this.products)); } catch (e) { }
         }
     },
 
@@ -855,7 +855,7 @@ const app = {
             unit: normalizeQuantityUnit(product.unit)
         }));
 
-        try { localStorage.setItem('cirna_inventory', JSON.stringify(this.products)); } catch (e) {}
+        try { localStorage.setItem('cirna_inventory', JSON.stringify(this.products)); } catch (e) { }
 
         this.renderTables();
 
@@ -1988,10 +1988,29 @@ function toggleEquipmentFields() {
 
     stateField.classList.toggle('visible', isEquipment(categorySelect.value));
 }
-
-// Inicializar la aplicación cuando cargue el DOM
 // Inicializar la aplicación cuando cargue el DOM
 document.addEventListener('DOMContentLoaded', () => {
+
+    // 1. Conexión en tiempo real con Firebase
+    if (typeof escucharProductosFirebase === 'function') {
+        escucharProductosFirebase((productos) => {
+            console.log("🔥 Productos cargados desde Firebase:", productos);
+
+            // Asigna los productos de Firebase al estado de tu app
+            if (window.app) {
+                app.products = productos;
+
+                // Llama al método encargado de renderizar/pintar la tabla
+                if (typeof app.renderTable === 'function') {
+                    app.renderTable();
+                } else if (typeof app.renderProducts === 'function') {
+                    app.renderProducts();
+                }
+            }
+        });
+    }
+
+    // 2. Listeners de la interfaz existentes
     document.getElementById('product-category')?.addEventListener('change', () => {
         toggleDateFields();
         toggleEquipmentFields();
@@ -2009,8 +2028,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    // Cerrar modal con tecla Escape
+    //cerral modal con tecla escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
@@ -2227,8 +2245,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const correoValido = "LICC@gmail.com";
 
             const userMatches = (usernameInput.toLowerCase() === usuarioValido.toLowerCase()) ||
-                                (usernameInput.toLowerCase() === correoValido.toLowerCase()) ||
-                                (usernameInput.toLowerCase() === "admin");
+                (usernameInput.toLowerCase() === correoValido.toLowerCase()) ||
+                (usernameInput.toLowerCase() === "admin");
 
             const savedPassword = localStorage.getItem("passwordValida");
             const defaultPassword = (savedPassword && savedPassword.trim() !== "") ? savedPassword : "1a2b3c4d5e";
