@@ -708,8 +708,83 @@ const app = {
     // ==========================================
 
     init() {
-        // Cargar productos de localStorage...
-        // Cargar productos de localStorage si ya existen Y tienen datos
+        // ── Intentar cargar desde Firestore primero (sincronización multi-máquina) ──
+        if (window.firebaseReady && typeof escucharProductosFirebase === 'function') {
+            this._initConFirebase();
+        } else {
+            // Firebase no disponible: cargar desde localStorage/data.js
+            this._initLocal();
+        }
+    },
+
+    // Inicialización cuando Firebase está disponible
+    _initConFirebase() {
+        console.log('[Firebase] Cargando inventario desde Firestore...');
+
+        cargarProductosFirebase()
+            .then(productosFirestore => {
+                // Filtrar solo los que NO están en papelera
+                const activos = productosFirestore.filter(p => !p._enPapelera);
+                const enPapelera = productosFirestore.filter(p => p._enPapelera);
+
+                if (activos.length > 0) {
+                    // Firestore tiene datos → usar esos (ignora localStorage y data.js)
+                    console.log('[Firebase] Productos cargados desde Firestore:', activos.length);
+                    this.products = activos.map(p => ({
+                        ...p,
+                        id: isNaN(p.id) ? p.id : parseInt(p.id),
+                        category: autoCategorizarProducto(p),
+                        unit: normalizeQuantityUnit(p.unit)
+                    }));
+                    this.trash = enPapelera;
+                } else {
+                    // Firestore vacío → cargar datos locales y subirlos a Firestore
+                    console.log('[Firebase] Firestore vacío. Cargando datos locales y sincronizando...');
+                    this._cargarDatosLocales();
+                    // Subir datos locales a Firestore para que otras máquinas los vean
+                    this.saveData();
+                }
+
+                this._finalizarInit();
+
+                // ── Listener en tiempo real: cualquier cambio en otra máquina se refleja aquí ──
+                if (typeof escucharProductosFirebase === 'function') {
+                    escucharProductosFirebase(todosLosProductos => {
+                        const activos = todosLosProductos.filter(p => !p._enPapelera);
+                        const enPapelera = todosLosProductos.filter(p => p._enPapelera);
+
+                        this.products = activos.map(p => ({
+                            ...p,
+                            id: isNaN(p.id) ? p.id : parseInt(p.id),
+                            category: autoCategorizarProducto(p),
+                            unit: normalizeQuantityUnit(p.unit)
+                        }));
+                        this.trash = enPapelera;
+
+                        // Actualizar la UI automáticamente
+                        this.renderTables();
+                        if (typeof cargarFiltroCategorias === 'function') {
+                            cargarFiltroCategorias(this.products);
+                        }
+                        console.log('[Firebase] 🔄 Inventario actualizado en tiempo real:', activos.length, 'productos');
+                    });
+                }
+            })
+            .catch(err => {
+                console.warn('[Firebase] Error al cargar desde Firestore, usando datos locales:', err);
+                this._cargarDatosLocales();
+                this._finalizarInit();
+            });
+    },
+
+    // Inicialización sin Firebase (solo localStorage/data.js)
+    _initLocal() {
+        this._cargarDatosLocales();
+        this._finalizarInit();
+    },
+
+    // Carga datos desde localStorage o data.js
+    _cargarDatosLocales() {
         const saved = localStorage.getItem('cirna_inventory');
         let loaded = false;
         if (saved) {
@@ -724,10 +799,7 @@ const app = {
                 if (Array.isArray(parsed) && parsed.length > 0 && !hasCorruptedOthers) {
                     let updated = false;
                     this.products = parsed.map(product => {
-                        let p = {
-                            ...product,
-                            unit: normalizeQuantityUnit(product.unit)
-                        };
+                        let p = { ...product, unit: normalizeQuantityUnit(product.unit) };
                         if (p.id === 190 && (p.name === 'Alcohol etilico' || (p.lote && p.lote.length > 20))) {
                             p.name = 'Alcohol metílico';
                             p.lote = '-';
@@ -735,24 +807,16 @@ const app = {
                         }
                         return p;
                     });
-                    if (updated) {
-                        localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
-                    }
+                    if (updated) localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
                     loaded = true;
                 }
-            } catch (e) {
-                loaded = false;
-            }
+            } catch (e) { loaded = false; }
         }
 
-        // Cargar papelera desde localStorage
+        // Cargar papelera
         const savedTrash = localStorage.getItem('cirna_trash');
         if (savedTrash) {
-            try {
-                this.trash = JSON.parse(savedTrash);
-            } catch (e) {
-                this.trash = [];
-            }
+            try { this.trash = JSON.parse(savedTrash); } catch (e) { this.trash = []; }
         }
 
         const looksLikePlaceholder = Array.isArray(this.products) &&
@@ -760,34 +824,30 @@ const app = {
             (this.products[0]?.nombre === 'Ejemplo 1' || this.products[0]?.name === 'Ejemplo 1');
 
         if (!loaded || looksLikePlaceholder) {
-            // Usar datos del Excel (la lista `products` viene de data.js)
             if (typeof products !== 'undefined' && products.length > 0) {
                 this.products = products;
             } else if (!loaded) {
                 this.products = [...(this.defaultProducts || [])];
             }
-            try {
-                localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
-            } catch (e) {
-                console.warn('No se pudo guardar el inventario en localStorage', e);
-            }
+            try { localStorage.setItem('cirna_inventory', JSON.stringify(this.products)); } catch (e) {}
         }
+    },
 
-        // Cargar actividades registradas
+    // Pasos finales comunes al iniciar (renderizado, actividades, navegación)
+    _finalizarInit() {
+        // Cargar actividades
         const savedActivities = localStorage.getItem('cirna_activities');
         if (savedActivities) {
             try {
                 const parsedActivities = JSON.parse(savedActivities);
                 this.activities = Array.isArray(parsedActivities) ? parsedActivities : [];
-            } catch (e) {
-                this.activities = [];
-            }
+            } catch (e) { this.activities = []; }
         } else {
             this.activities = [];
             this.logActivity('Sistema inicializado', 'Bienvenido al Inventario LICC');
         }
 
-        // Auto-categorizar productos basándose en el nombre
+        // Auto-categorizar productos
         this.products = (this.products || []).map(product => ({
             ...product,
             marca: product.marca || product.location || '',
@@ -795,23 +855,17 @@ const app = {
             unit: normalizeQuantityUnit(product.unit)
         }));
 
-        // Guardar cambios de categorización
-        try {
-            localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
-        } catch (e) {
-            console.warn('No se pudo guardar el inventario en localStorage', e);
-        }
+        try { localStorage.setItem('cirna_inventory', JSON.stringify(this.products)); } catch (e) {}
 
-        // Renderizar tablas al iniciar
         this.renderTables();
 
         if (typeof cargarFiltroCategorias === 'function') {
             cargarFiltroCategorias(this.products);
         }
 
-        // Navegar al menú principal SOLO al cargar la app por primera vez
         this.navigate('view-menu');
     },
+
 
     saveData() {
         localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
