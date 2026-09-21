@@ -31,15 +31,17 @@ async function guardarProductoFirebase(product) {
             ? db.collection('productos').doc(String(product.id))
             : db.collection('productos').doc();
 
+        console.log('[Firebase] Intentando guardar producto:', product.name || product.nombre, 'ID:', docRef.id);
         await docRef.set({
             ...product,
             _updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
 
-        console.log('[Firebase] Producto guardado:', docRef.id);
+        console.log('[Firebase] ✅ Producto guardado exitosamente:', docRef.id);
         return docRef.id;
     } catch (error) {
-        console.error('[Firebase] Error al guardar producto:', error);
+        console.error('[Firebase] ❌ Error al guardar producto:', error);
+        console.error('[Firebase] Detalles del error:', error.code, error.message);
         throw error;
     }
 }
@@ -70,14 +72,18 @@ async function cargarProductosFirebase() {
 }
 
 function escucharProductosFirebase(callback) {
+    console.log('[Firebase] 🎧 Iniciando listener en tiempo real para productos...');
     return db.collection('productos').onSnapshot(snapshot => {
+        console.log('[Firebase] 📡 Snapshot recibido - Cambios detectados:', snapshot.docs.length, 'documentos');
         const productos = [];
         snapshot.forEach(doc => {
             productos.push({ id: doc.id, ...doc.data() });
         });
+        console.log('[Firebase] 🔄 Llamando callback con', productos.length, 'productos');
         callback(productos);
     }, error => {
-        console.error('[Firebase] Error en listener:', error);
+        console.error('[Firebase] ❌ Error en listener:', error);
+        console.error('[Firebase] Detalles del error:', error.code, error.message);
     });
 }
 
