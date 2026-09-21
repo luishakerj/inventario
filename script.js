@@ -816,6 +816,13 @@ const app = {
     saveData() {
         localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
         localStorage.setItem('cirna_trash', JSON.stringify(this.trash));
+        // ── Sincronizar con Firebase Firestore (fire-and-forget) ──
+        if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
+            this.products.forEach(product => {
+                guardarProductoFirebase({ ...product, id: String(product.id) })
+                    .catch(err => console.warn('[Firebase] Error al sincronizar producto:', err));
+            });
+        }
     },
 
     deleteProduct(id) {
@@ -824,6 +831,12 @@ const app = {
             const deletedItem = this.products.splice(index, 1)[0];
             this.trash.push(deletedItem);
             this.saveData();
+
+            // ── Marcar como eliminado en Firebase (mover a papelera) ──
+            if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
+                guardarProductoFirebase({ ...deletedItem, id: String(deletedItem.id), _enPapelera: true })
+                    .catch(err => console.warn('[Firebase] Error al marcar como eliminado:', err));
+            }
 
             // Re-renderizar sin cambiar abruptamente de vista
             this.renderTables();
@@ -872,6 +885,13 @@ const app = {
         this.saveData();
         this.renderTables();
         this.renderTrashTable();
+
+        // ── Restaurar en Firebase (quitar flag _enPapelera) ──
+        if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
+            guardarProductoFirebase({ ...restoredItem, id: String(restoredItem.id), _enPapelera: false })
+                .catch(err => console.warn('[Firebase] Error al restaurar producto:', err));
+        }
+
         showToast(`Producto "${restoredItem?.name || restoredItem?.nombre || 'restaurado'}" restaurado correctamente`, 'success');
     },
 
@@ -881,6 +901,13 @@ const app = {
             this.trash.splice(index, 1);
             this.saveData();
             this.renderTrashTable();
+
+            // ── Eliminar permanentemente de Firebase ──
+            if (window.firebaseReady && typeof eliminarProductoFirebase === 'function') {
+                eliminarProductoFirebase(String(deletedItem?.id))
+                    .catch(err => console.warn('[Firebase] Error al eliminar permanentemente:', err));
+            }
+
             showToast(`Se eliminó "${deletedItem?.name || deletedItem?.nombre || 'el producto'}" permanentemente con éxito`, 'success');
         }
     },
