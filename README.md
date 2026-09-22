@@ -1,97 +1,121 @@
 # Inventario LICC
 
-Sistema de inventario de laboratorio con sincronización en tiempo real entre
-dispositivos usando Firebase Firestore.
+Sistema de inventario de laboratorio con sincronización entre dispositivos
+usando un **backend propio en PHP + MySQL**. Cada PC/celular lee y escribe en la
+misma base de datos, sin depender de servicios en la nube (Firebase) ni de sus
+límites de uso.
+
+> ⚠️ **Cambio importante:** este proyecto ya **no usa Firebase**. Ahora necesita
+> un servidor con **Apache + PHP + MySQL** (por ejemplo, **XAMPP**). El antiguo
+> `server.js` de Node servía solo archivos estáticos y **no ejecuta PHP**.
 
 ---
 
-## Problemas resueltos
+## Requisitos
 
-### 1. Un producto creado no aparecía al buscarlo
-
-**Causa:** en `script.js`, dentro de `renderTables()`, había un **segundo
-filtrado** que leía los campos `#search-input` / `#inputBusqueda` y
-`#category-filter` / `#selectCategoria` — IDs que **no existen** en el HTML (los
-reales son `#search-student` y `#search-admin`). Ese filtro fantasma alteraba la
-lista que ya venía filtrada desde `filterProducts()`, por lo que el buscador
-podía no mostrar resultados.
-
-**Solución:** se eliminó ese filtrado duplicado. Ahora **solo** `filterProducts()`
-decide qué se muestra, y `renderTables()` se limita a pintar lo que recibe.
-
-### 2. Un producto agregado no aparecía en la otra máquina
-
-Varias causas combinadas:
-
-- **`firebase.analytics()` podía lanzar una excepción** al inicializar (por
-  `file://`, dominio no autorizado, bloqueo de red o adblock). Esa excepción
-  cortaba `firebase-config.js` **antes** de definir `window.firebaseReady` y los
-  helpers de Firestore → la app quedaba en modo "solo localStorage" y **nunca
-  sincronizaba**. Ahora analytics es opcional (envuelto en `try/catch`).
-- **Doble listener de Firestore:** `DOMContentLoaded` registraba uno y
-  `app.init()` otro, y el primero sobrescribía `app.products` con datos sin
-  normalizar. Ahora solo hay **un** listener (el de `app.init()`).
-- **`saveData()` subía TODO el inventario local en cada guardado**, de modo que
-  una máquina con datos desfasados **sobrescribía en Firestore los cambios
-  recientes de la otra** (haciendo "desaparecer" productos). Ahora se sube
-  **solo el producto afectado**.
-- **IDs colisionaban:** se usaba `Math.max(id)+1`, que podía coincidir con un
-  producto creado en otra máquina y sobrescribirlo. Ahora el ID de un producto
-  nuevo se basa en el timestamp (único entre dispositivos).
-- **Reglas de Firestore:** si las reglas deniegan lectura/escritura, la app se
-  guarda solo en el dispositivo. Ver la sección *Configurar Firestore*.
+- **XAMPP** (o WAMP / MAMP / LAMP) instalado. Aporta Apache, PHP y MySQL.
+- Opcional: `npm`/`server.js` ya no son necesarios para la sincronización.
 
 ---
 
-## Cómo ejecutar
+## Instalación paso a paso
 
-### Requisitos
-- Node.js instalado (para el servidor local).
+### 1. Colocar el proyecto dentro de htdocs
 
-### Iniciar el servidor
-
-```powershell
-npm start
-```
-
-Aparecerá algo como:
+Copia esta carpeta dentro de la carpeta `htdocs` de XAMPP, por ejemplo:
 
 ```
-En esta PC:      http://localhost:5500
-En el celular:   http://192.168.1.50:5500
+C:\xampp\htdocs\licc-inventario\
 ```
 
-### En el celular
+(La carpeta `htdocs` viene dentro del directorio donde instalaste XAMPP.)
+
+### 2. Crear la base de datos
+
+1. Enciende **Apache** y **MySQL** desde el Panel de Control de XAMPP.
+2. Abre [http://localhost/phpmyadmin](http://localhost/phpmyadmin).
+3. Pestaña **Importar** → selecciona el archivo `db/schema.sql` → **Continuar**.
+
+Esto crea la base `licc_inventario` y la tabla `productos`.
+
+### 3. Configurar credenciales
+
+Abre `config.php` y ajusta los datos de tu MySQL. Con XAMPP por defecto suelen
+venir ya listos (usuario `root`, sin contraseña):
+
+```php
+define('DB_HOST', '127.0.0.1');
+define('DB_PORT', 3306);
+define('DB_NAME', 'licc_inventario');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+```
+
+### 4. Abrir la app
+
+En el navegador de la PC:
+
+```
+http://localhost/licc-inventario/
+```
+
+### 5. Desde el celular
+
 1. Conéctate a la **misma red WiFi** que la PC.
-2. Abre en el navegador la dirección `http://<TU-IP>:5500`.
-3. Verás abajo a la izquierda un indicador de sincronización:
-   - 🟢 **Sincronizado (N productos)** → conectado a la nube.
+2. Abre `http://<TU-IP-LOCAL>/licc-inventario/` (por ejemplo
+   `http://192.168.1.50/licc-inventario/`).
+3. Verás abajo a la izquierda el indicador de sincronización:
+   - 🟢 **Sincronizado (N productos)** → conectado al servidor MySQL.
    - 🟠 **Sin conexión (modo local)** → los cambios NO se comparten.
-   - 🔴 **Sin permiso de Firestore** → hay que corregir las reglas.
+   - 🔴 **Sin conexión con el servidor** → revisa que XAMPP esté encendido.
 
-> ⚠️ **No abras `index.html` con doble clic (`file://`)**: el navegador bloquea
-> la red y Firebase no funcionará. Siempre por `http://`.
-
----
-
-## Configurar Firestore (reglas)
-
-Si el indicador muestra error de permisos:
-
-1. Entra a [Firebase Console](https://console.firebase.google.com) →
-   proyecto **inventario-de-licc**.
-2. **Firestore Database → Reglas**.
-3. Pega el contenido de `firestore.rules` y **Publica**.
+> ⚠️ **No abras `index.html` con doble clic (`file://`)**: el navegador no
+> ejecuta PHP ni permite llamar a `api.php`. Siempre por `http://`.
 
 ---
 
-## Archivos principales
+## Cómo funciona
 
 | Archivo | Rol |
 |---|---|
 | `index.html` | Interfaz y carga de scripts |
 | `script.js` | Lógica de la app (CRUD, búsqueda, sincronización) |
-| `firebase-config.js` | Conexión a Firestore y helpers |
+| `api-config.js` | Traduce las llamadas de la app a peticiones a `api.php` |
+| `api.php` | Backend: recibe listar / guardar / eliminar |
+| `config.php` | Credenciales de MySQL |
+| `db/schema.sql` | Estructura de la base de datos |
 | `data.js` | Inventario inicial por defecto |
-| `server.js` | Servidor local para probar desde el celular |
-| `firestore.rules` | Reglas de seguridad de Firestore |
+
+- **Cargar:** la app pide a `api.php?action=listar` todos los productos.
+- **Guardar:** `api.php?action=guardar` inserta o actualiza **solo el producto
+  afectado** (no reescribe todo el inventario, para no pisar cambios de otros
+  dispositivos).
+- **Eliminar:** mover a papelera = guardar con la marca `_enPapelera`;
+  borrado definitivo = `api.php?action=eliminar`.
+- **Tiempo real:** la app pregunta al servidor cada 4 segundos
+  (`API_POLL_MS` en `api-config.js`) y repinta si hubo cambios.
+
+---
+
+## Notas de seguridad y respaldo
+
+- Al ser MySQL propio, **tú controlas los datos**: haz respaldos periódicos.
+  Desde phpMyAdmin: selecciona `licc_inventario` → **Exportar** → Guardar archivo.
+- Por simplicidad, la app **no tiene login de usuario**. Cualquiera que acceda a
+  la URL puede leer y escribir. Si necesitas autenticación, indícalo para
+  añadirla al backend (`api.php`).
+- Si más adelante quieres exponerla a internet, hazlo tras una contraseña y con
+  HTTPS para no dejar la base accesible públicamente.
+
+---
+
+## Historial de correcciones anteriores (Firestore)
+
+Los siguientes problemas se resolvieron cuando el proyecto usaba Firebase; la
+lógica equivalente se mantiene ahora con MySQL:
+
+- Un producto creado no aparecía al buscarlo: se eliminó un filtrado duplicado
+  en `renderTables()`.
+- Un producto agregado no aparecía en otra máquina: se corrigieron el listener
+  duplicado, la sobrescritura de todo el inventario en cada guardado, IDs
+  colisionantes y las reglas de permisos.

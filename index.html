@@ -366,7 +366,7 @@
                                 <th
                                     style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">
                                     Categoría</th>
-                                <th
+                                <th class="quantity-column"
                                     style="padding: 12px 16px; text-align: left; white-space: nowrap; color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.9rem;">
                                     unidad</th>
                                 <th class="unit-column"
@@ -794,12 +794,8 @@
             </form>
         </div>
     </div>
-    <!-- Firebase CDN (compat API - no bundler required) -->
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics-compat.js"></script>
-    <!-- Configuracion e inicializacion de Firebase -->
-    <script src="firebase-config.js?v=2026_v6"></script>
+    <!-- Backend propio: PHP + MySQL (reemplaza a Firebase) -->
+    <script src="api-config.js?v=2026_v7"></script>
     <!-- Datos e inventario -->
     <script src="data.js?v=2026_v6"></script>
     <script src="script.js?v=2026_v6"></script>

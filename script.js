@@ -737,12 +737,24 @@ const app = {
     // ==========================================
 
     init() {
-        // ── Intentar cargar desde Firestore primero (sincronización multi-máquina) ──
-        if (window.firebaseReady && typeof escucharProductosFirebase === 'function') {
-            this._initConFirebase();
+        // ── Intentar cargar desde el servidor (MySQL via api.php) ──
+        // La comprobación del backend es asíncrona: esperamos su promesa
+        // (window.backendReadyPromise, definida en api-config.js) antes de
+        // decidir, para no caer en modo local por una carrera con
+        // DOMContentLoaded.
+        const decidir = () => {
+            if (window.firebaseReady && typeof escucharProductosFirebase === 'function') {
+                this._initConFirebase();
+            } else {
+                // Backend no disponible: cargar desde localStorage/data.js
+                this._initLocal();
+            }
+        };
+
+        if (window.backendReadyPromise && typeof window.backendReadyPromise.then === 'function') {
+            window.backendReadyPromise.then(decidir).catch(decidir);
         } else {
-            // Firebase no disponible: cargar desde localStorage/data.js
-            this._initLocal();
+            decidir();
         }
     },
 
