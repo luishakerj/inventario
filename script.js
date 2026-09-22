@@ -14,6 +14,14 @@ function autoCategorizarProducto(product) {
     const name = String(product.name || '').trim().toLowerCase();
     const category = String(product.category || '').trim();
 
+    // Si el usuario ya asignó una categoría concreta, respetarla siempre.
+    // Solo se autocategoriza cuando la categoría está vacía o es genérica.
+    const categoryNorm = normalizeCategory(category);
+    const esGenerica = !category || categoryNorm === 'otros' || categoryNorm === 'general';
+    if (!esGenerica) {
+        return category;
+    }
+
     // Si el nombre empieza con "ácido" o "acido", debe ser "Acido"
     if (/^á?cido/.test(name)) {
         return 'Acido';
@@ -753,12 +761,22 @@ const app = {
                         const activos = todosLosProductos.filter(p => !p._enPapelera);
                         const enPapelera = todosLosProductos.filter(p => p._enPapelera);
 
-                        this.products = activos.map(p => ({
+                        const remotos = activos.map(p => ({
                             ...p,
                             id: isNaN(p.id) ? p.id : parseInt(p.id),
                             category: autoCategorizarProducto(p),
                             unit: normalizeQuantityUnit(p.unit)
                         }));
+
+                        // Anti-carrera: si un producto local todavía no ha llegado en el
+                        // snapshot (su escritura sigue en curso), se conserva para que no
+                        // desaparezca de la tabla al guardarlo.
+                        const idsRemotos = new Set(remotos.map(p => String(p.id)));
+                        const pendientes = (this.products || []).filter(p =>
+                            p && !p._enPapelera && !idsRemotos.has(String(p.id))
+                        );
+
+                        this.products = [...remotos, ...pendientes];
                         this.trash = enPapelera;
 
                         // Actualizar la UI automáticamente manteniendo los filtros actuales
@@ -1427,12 +1445,23 @@ const app = {
                 showToast('Se ha editado correctamente', 'success');
             }
         } else {
-            // Crear nuevo
-            const newId = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
+            // Crear nuevo. Se ignoran ids no numéricos (NaN) para evitar
+            // que Math.max devuelva NaN y todos los productos colisionen.
+            const idsValidos = this.products
+                .map(p => parseInt(p.id))
+                .filter(n => Number.isFinite(n));
+            const newId = idsValidos.length > 0 ? Math.max(...idsValidos) + 1 : 1;
             const nuevoProducto = { id: newId, name, category, stock: parseFloat(stock), location, marca: location, image, desc, lote, prodDate, expDate, unit, state };
             console.log('[DEBUG] Producto nuevo creado:', nuevoProducto);
             console.log('[DEBUG] Total productos antes de guardar:', this.products.length);
             this.products.push(nuevoProducto);
+
+            // Subir el producto nuevo a Firestore de inmediato. Así el snapshot del
+            // listener ya lo incluye y no se pierde por la carrera de sincronización.
+            if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
+                guardarProductoFirebase({ ...nuevoProducto, id: String(nuevoProducto.id) })
+                    .catch(err => console.warn('[Firebase] Error al guardar producto nuevo:', err));
+            }
             console.log('[DEBUG] Total productos después de guardar:', this.products.length);
             this.logActivity(`Producto creado: ${name} `, `Categoría: ${category}, Stock: ${stock} `);
             this.registrarEnHistorial({
