@@ -761,8 +761,15 @@ const app = {
                         }));
                         this.trash = enPapelera;
 
-                        // Actualizar la UI automáticamente
-                        this.renderTables();
+                        // Actualizar la UI automáticamente manteniendo los filtros actuales
+                        const currentView = document.querySelector('.view.active')?.id;
+                        if (currentView === 'view-student') {
+                            this.filterProducts('student');
+                        } else if (currentView === 'view-admin') {
+                            this.filterProducts('admin');
+                        } else {
+                            this.renderTables();
+                        }
 
                         // Actualizar papelera si estamos en esa vista
                         const papeleraView = document.getElementById('view-papelera');
@@ -1140,9 +1147,6 @@ const app = {
         if (adminTable) adminTable.classList.toggle('hide-marca-column', hideMarcaColumn);
         if (studentTable) studentTable.classList.toggle('hide-marca-otros', hideMarcaOtros);
         if (adminTable) adminTable.classList.toggle('hide-marca-otros', hideMarcaOtros);
-        document.querySelectorAll('th.quantity-column').forEach(column => {
-            column.textContent = 'Cantidad / Unidad';
-        });
         document.querySelectorAll('th.lote-column, .lot-column').forEach(column => {
             if (column.tagName === 'TH') {
                 column.textContent = showLabMaterialColumns ? 'Medidas/Volumen' : column.classList.contains('lote-column') && column.closest('#table-admin')
@@ -1152,8 +1156,8 @@ const app = {
         });
 
         if (dataToRender.length === 0) {
-            const emptyColsStudent = (hasDateColumns ? 9 : 7) - (hasMetadataColumns ? 0 : 3);
-            const emptyColsAdmin = 6; // 6 columnas en la tabla de admin: Nombre, Categoría, Cantidad, Marca, Lote, Acciones
+            const emptyColsStudent = (hasDateColumns ? 10 : 8) - (hasMetadataColumns ? 0 : 3); // +1 por columna unidad
+            const emptyColsAdmin = 7; // 7 columnas en la tabla de admin: Nombre, Categoría, Cantidad, Unidad, Marca, Lote, Acciones
             const emptyMsgStudent = `<tr><td colspan="${emptyColsStudent}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
             const emptyMsgAdmin = `<tr><td colspan="${emptyColsAdmin}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
             studentBody.innerHTML = emptyMsgStudent;
@@ -1189,6 +1193,7 @@ const app = {
 
             const stockVal = p.stock !== undefined ? p.stock : '-';
             const stockClass = (Number(stockVal) > 0) ? 'stock-ok' : 'stock-low';
+            const unitVal = p.unit || p.unidad || '-';
             const quantityLabel = formatQuantityUnit(p);
 
             const isEquipRow = equipment || p.category === 'Equipos' || p.categoria === 'Equipos';
@@ -1201,7 +1206,8 @@ const app = {
             const commonCells = `
         <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
-        <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(quantityLabel)}</span></td>
+        <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(stockVal)}</span></td>
+        <td class="unit-column">${escapeHtml(unitVal)}</td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>
         <td class="lote-column">${escapeHtml(loteVal)}</td>
         ${prodCell}
@@ -1212,7 +1218,8 @@ const app = {
             const adminCells = `
         <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
-        <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(quantityLabel)}</span></td>
+        <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(stockVal)}</span></td>
+        <td class="unit-column">${escapeHtml(unitVal)}</td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>
         <td class="lote-column">${escapeHtml(loteVal)}</td>
     `;
@@ -1273,7 +1280,9 @@ const app = {
 
         console.log('[DEBUG] Filtrando productos - Vista:', viewRole, 'Query:', query, 'Total productos:', this.products.length);
 
-        const categorySelect = document.getElementById('category-filter-admin');
+        // Usar el filtro de categoría correcto según la vista
+        const categorySelectId = viewRole === 'student' ? 'category-filter-student' : 'category-filter-admin';
+        const categorySelect = document.getElementById(categorySelectId);
         const selectedCat = categorySelect ? categorySelect.value : 'seleccion';
         const hasCategoryFilter = selectedCat && selectedCat !== 'todos' && selectedCat !== 'seleccion';
 
@@ -1441,7 +1450,17 @@ const app = {
         console.log('[DEBUG] Guardando datos y renderizando tablas...');
         this.saveData();
         console.log('[DEBUG] Tablas renderizadas. Total productos en this.products:', this.products.length);
-        this.renderTables();
+
+        // Mantener el filtro actual después de guardar
+        const currentView = document.querySelector('.view.active')?.id;
+        if (currentView === 'view-student') {
+            this.filterProducts('student');
+        } else if (currentView === 'view-admin') {
+            this.filterProducts('admin');
+        } else {
+            this.renderTables();
+        }
+
         this.closeModal('modal-product');
     },
 

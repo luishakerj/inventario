@@ -887,23 +887,37 @@ select option {
     padding: 1rem;
 }
 
-/* Columna 1: Categoría */
+/* Columna 1: Nombre */
 .modern-table th:nth-child(1),
 .modern-table td:nth-child(1) {
     min-width: 150px;
     max-width: 180px;
 }
 
-/* Columna 2: Cantidad/Unidad */
+/* Columna 2: Categoría */
 .modern-table th:nth-child(2),
 .modern-table td:nth-child(2) {
     min-width: 140px;
     max-width: 160px;
 }
 
-/* Columna 3: Marca */
+/* Columna 3: Cantidad */
 .modern-table th:nth-child(3),
 .modern-table td:nth-child(3) {
+    min-width: 100px;
+    max-width: 120px;
+}
+
+/* Columna 4: Unidad */
+.modern-table th:nth-child(4),
+.modern-table td:nth-child(4) {
+    min-width: 80px;
+    max-width: 100px;
+}
+
+/* Columna 5: Marca */
+.modern-table th:nth-child(5),
+.modern-table td:nth-child(5) {
     min-width: 140px;
     max-width: 160px;
 }
@@ -926,47 +940,15 @@ select option {
     border: 0 !important;
 }
 
-/* Columna 4: Lote / Código - BIEN VISIBLE */
-.modern-table th:nth-child(4),
-.modern-table td:nth-child(4) {
+/* Columna 6: Lote / Código - BIEN VISIBLE */
+.modern-table th:nth-child(6),
+.modern-table td:nth-child(6) {
     min-width: 160px;
     max-width: 200px;
     white-space: normal;
 }
 
-/* Columna 5: Acciones - FIJA A LA DERECHA */
-.modern-table th:nth-child(5),
-.modern-table td:nth-child(5) {
-    min-width: 150px;
-    max-width: 180px;
-    text-align: right;
-    white-space: nowrap;
-    position: sticky;
-    right: 0;
-    background: rgba(30, 41, 59, 0.95);
-    z-index: 10;
-}
-
-.modern-table th:nth-child(5) {
-    background: rgba(30, 41, 59, 0.98);
-    z-index: 20;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.modern-table td:nth-child(5) {
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Ocultar columna de descripción en categoría "Otros" */
-.modern-table.hide-description-column th.desc-column,
-.modern-table.hide-description-column td.desc-column {
-    display: none !important;
-    width: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-}
-
-/* Columna 10: Acciones - FIJA A LA DERECHA (para tabla de estudiantes) */
+/* Columna 10: Acciones - FIJA A LA DERECHA */
 .modern-table th:nth-child(10),
 .modern-table td:nth-child(10) {
     min-width: 150px;
@@ -989,40 +971,66 @@ select option {
     border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Ocultar columna de descripción en categoría "Otros" */
+.modern-table.hide-description-column th.desc-column,
+.modern-table.hide-description-column td.desc-column {
+    display: none !important;
+    width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.modern-table td.action-buttons {
+    position: sticky;
+    right: 0;
+    background: rgba(30, 41, 59, 0.95);
+    z-index: 10;
+}
+
+.modern-table th:nth-child(10) {
+    background: rgba(30, 41, 59, 0.98);
+    z-index: 20;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modern-table td:nth-child(10) {
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .modern-table:not(.show-equipment-state) .state-column,
 .modern-table:not(.show-equipment-state) .state-cell {
     display: none !important;
 }
 
-.modern-table.show-equipment-state .other-product-row td:nth-child(9) {
+.modern-table.show-equipment-state .other-product-row td:nth-child(10) {
     display: none !important;
 }
 
-.modern-table.show-equipment-state .other-product-row td:nth-child(4),
 .modern-table.show-equipment-state .other-product-row td:nth-child(5),
 .modern-table.show-equipment-state .other-product-row td:nth-child(6),
 .modern-table.show-equipment-state .other-product-row td:nth-child(7),
-.modern-table.show-equipment-state .other-product-row td:nth-child(8) {
+.modern-table.show-equipment-state .other-product-row td:nth-child(8),
+.modern-table.show-equipment-state .other-product-row td:nth-child(9) {
     display: table-cell !important;
 }
 
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(4),
 .modern-table.show-equipment-state .equipment-product-row td:nth-child(5),
 .modern-table.show-equipment-state .equipment-product-row td:nth-child(6),
 .modern-table.show-equipment-state .equipment-product-row td:nth-child(7),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(8) {
+.modern-table.show-equipment-state .equipment-product-row td:nth-child(8),
+.modern-table.show-equipment-state .equipment-product-row td:nth-child(9) {
     display: none !important;
 }
 
-.modern-table.show-equipment-state th:nth-child(4),
 .modern-table.show-equipment-state th:nth-child(5),
 .modern-table.show-equipment-state th:nth-child(6),
 .modern-table.show-equipment-state th:nth-child(7),
-.modern-table.show-equipment-state th:nth-child(8) {
+.modern-table.show-equipment-state th:nth-child(8),
+.modern-table.show-equipment-state th:nth-child(9) {
     display: none !important;
 }
 
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(9) {
+.modern-table.show-equipment-state .equipment-product-row td:nth-child(10) {
     display: table-cell !important;
 }
 
@@ -1031,14 +1039,14 @@ select option {
     min-width: 0;
 }
 
-.modern-table.show-equipment-state th:nth-child(9),
-.modern-table.show-equipment-state td:nth-child(9) {
+.modern-table.show-equipment-state th:nth-child(10),
+.modern-table.show-equipment-state td:nth-child(10) {
     text-align: center;
     white-space: normal;
 }
 
-.modern-table.show-equipment-state th:nth-child(10),
-.modern-table.show-equipment-state td:nth-child(10) {
+.modern-table.show-equipment-state th:nth-child(5),
+.modern-table.show-equipment-state td:nth-child(5) {
     width: 16%;
     text-align: center;
 }
@@ -1050,19 +1058,24 @@ select option {
 
 .modern-table.show-equipment-state th:nth-child(2),
 .modern-table.show-equipment-state td:nth-child(2) {
-    width: 24%;
+    width: 20%;
 }
 
 .modern-table.show-equipment-state th:nth-child(3),
 .modern-table.show-equipment-state td:nth-child(3) {
-    width: 18%;
+    width: 14%;
 }
 
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(4),
+.modern-table.show-equipment-state th:nth-child(4),
+.modern-table.show-equipment-state td:nth-child(4) {
+    width: 10%;
+}
+
 .modern-table.show-equipment-state .equipment-product-row td:nth-child(5),
 .modern-table.show-equipment-state .equipment-product-row td:nth-child(6),
 .modern-table.show-equipment-state .equipment-product-row td:nth-child(7),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(8) {
+.modern-table.show-equipment-state .equipment-product-row td:nth-child(8),
+.modern-table.show-equipment-state .equipment-product-row td:nth-child(9) {
     display: none !important;
 }
 
@@ -1074,22 +1087,22 @@ select option {
     display: block;
 }
 
-.modern-table.hide-date-columns th:nth-child(6),
-.modern-table.hide-date-columns td:nth-child(6),
 .modern-table.hide-date-columns th:nth-child(7),
-.modern-table.hide-date-columns td:nth-child(7) {
+.modern-table.hide-date-columns td:nth-child(7),
+.modern-table.hide-date-columns th:nth-child(8),
+.modern-table.hide-date-columns td:nth-child(8) {
     display: none !important;
     width: 0 !important;
     padding: 0 !important;
     border: 0 !important;
 }
 
-.modern-table.show-lab-material-columns th:nth-child(6),
-.modern-table.show-lab-material-columns td:nth-child(6),
 .modern-table.show-lab-material-columns th:nth-child(7),
 .modern-table.show-lab-material-columns td:nth-child(7),
 .modern-table.show-lab-material-columns th:nth-child(8),
-.modern-table.show-lab-material-columns td:nth-child(8) {
+.modern-table.show-lab-material-columns td:nth-child(8),
+.modern-table.show-lab-material-columns th:nth-child(9),
+.modern-table.show-lab-material-columns td:nth-child(9) {
     display: none !important;
     width: 0 !important;
     padding: 0 !important;
@@ -1113,21 +1126,26 @@ select option {
 
 .modern-table.show-lab-material-columns th:nth-child(3),
 .modern-table.show-lab-material-columns td:nth-child(3) {
-    width: 14%;
+    width: 12%;
 }
 
-.modern-table.show-lab-material-columns th:nth-child(5),
-.modern-table.show-lab-material-columns td:nth-child(5) {
+.modern-table.show-lab-material-columns th:nth-child(4),
+.modern-table.show-lab-material-columns td:nth-child(4) {
+    width: 8%;
+}
+
+.modern-table.show-lab-material-columns th:nth-child(6),
+.modern-table.show-lab-material-columns td:nth-child(6) {
     width: 18%;
-}
-
-.modern-table.show-lab-material-columns th:nth-child(9),
-.modern-table.show-lab-material-columns td:nth-child(9) {
-    width: 20%;
 }
 
 .modern-table.show-lab-material-columns th:nth-child(10),
 .modern-table.show-lab-material-columns td:nth-child(10) {
+    width: 20%;
+}
+
+.modern-table.show-lab-material-columns th:nth-child(11),
+.modern-table.show-lab-material-columns td:nth-child(11) {
     width: 180px !important;
     min-width: 180px !important;
     max-width: 180px !important;
@@ -1209,28 +1227,35 @@ select option {
     color: white;
 }
 
-padding: 1rem 0.75rem !important;
-}
-
-.modern-table.hide-other-columns th:nth-child(4),
-.modern-table.hide-other-columns td:nth-child(4),
-.modern-table.hide-other-columns th:nth-child(5),
-.modern-table.hide-other-columns td:nth-child(5),
-.modern-table.hide-other-columns th:nth-child(6),
-.modern-table.hide-other-columns td:nth-child(6),
-.modern-table.hide-other-columns th:nth-child(7),
-.modern-table.hide-other-columns td:nth-child(7),
-.modern-table.hide-other-columns th:nth-child(8),
-.modern-table.hide-other-columns td:nth-child(8),
-.modern-table .other-product-row td:nth-child(4),
-.modern-table .other-product-row td:nth-child(5),
-.modern-table .other-product-row td:nth-child(6),
-.modern-table .other-product-row td:nth-child(7),
-.modern-table .other-product-row td:nth-child(8) {
+/* Solo la tabla de personal tiene el juego completo de columnas; en admin los
+   índices son distintos, por eso se acotan estas reglas a #table-student. */
+#table-student.hide-other-columns th:nth-child(5),
+#table-student.hide-other-columns td:nth-child(5),
+#table-student.hide-other-columns th:nth-child(6),
+#table-student.hide-other-columns td:nth-child(6),
+#table-student.hide-other-columns th:nth-child(7),
+#table-student.hide-other-columns td:nth-child(7),
+#table-student.hide-other-columns th:nth-child(8),
+#table-student.hide-other-columns td:nth-child(8),
+#table-student.hide-other-columns th:nth-child(9),
+#table-student.hide-other-columns td:nth-child(9),
+#table-student .other-product-row td:nth-child(4),
+#table-student .other-product-row td:nth-child(5),
+#table-student .other-product-row td:nth-child(7),
+#table-student .other-product-row td:nth-child(8),
+#table-student .other-product-row td:nth-child(9) {
     display: none !important;
     width: 0 !important;
     padding: 0 !important;
     border: 0 !important;
+}
+
+/* En admin "Otros" oculta únicamente Marca y Lote (5 y 6); Acciones (7) siempre visible. */
+#table-admin.hide-other-columns th:nth-child(5),
+#table-admin.hide-other-columns td:nth-child(5),
+#table-admin.hide-other-columns th:nth-child(6),
+#table-admin.hide-other-columns td:nth-child(6) {
+    display: none !important;
 }
 
 .modern-table.hide-date-columns {
@@ -1260,20 +1285,25 @@ padding: 1rem 0.75rem !important;
 
 .modern-table.hide-date-columns th:nth-child(3),
 .modern-table.hide-date-columns td:nth-child(3) {
-    width: 14%;
+    width: 12%;
 }
 
 .modern-table.hide-date-columns th:nth-child(4),
 .modern-table.hide-date-columns td:nth-child(4) {
-    width: 13%;
+    width: 8%;
 }
 
 .modern-table.hide-date-columns th:nth-child(5),
 .modern-table.hide-date-columns td:nth-child(5) {
+    width: 13%;
+}
+
+.modern-table.hide-date-columns th:nth-child(6),
+.modern-table.hide-date-columns td:nth-child(6) {
     width: 17%;
 }
 
-.modern-table.hide-other-columns th:nth-child(10),
+.modern-table.hide-other-columns th:nth-child(1),
 .modern-table.hide-other-columns td:nth-child(1) {
     width: 32%;
 }
@@ -1285,29 +1315,25 @@ padding: 1rem 0.75rem !important;
 
 .modern-table.hide-other-columns th:nth-child(3),
 .modern-table.hide-other-columns td:nth-child(3) {
-    width: 18%;
+    width: 14%;
 }
 
-.modern-table.hide-other-columns th:nth-child(9),
-.modern-table.hide-other-columns td:nth-child(9) {
+.modern-table.hide-other-columns th:nth-child(4),
+.modern-table.hide-other-columns td:nth-child(4) {
+    width: 10%;
+}
+
+.modern-table.hide-other-columns th:nth-child(10),
+.modern-table.hide-other-columns td:nth-child(10) {
     width: 12%;
 }
 
-.modern-table.hide-date-columns th:nth-child(8),
-.modern-table.hide-date-columns td:nth-child(8) {
+.modern-table.hide-date-columns th:nth-child(10),
+.modern-table.hide-date-columns td:nth-child(10) {
     width: 180px !important;
     min-width: 180px !important;
     max-width: 180px !important;
     text-align: right !important;
-    padding: 1rem 0.75rem !important;
-}
-
-.modern-table.hide-date-columns th:nth-child(9),
-.modern-table.hide-date-columns td:nth-child(9) {
-    width: 200px !important;
-    min-width: 200px !important;
-    max-width: 200px !important;
-    text-align: left !important;
     padding: 1rem 0.75rem !important;
 }
 
@@ -1616,13 +1642,12 @@ padding: 1rem 0.75rem !important;
 }
 
 /* ── Materiales de laboratorio: ocultar solo fechas de prod/venc,
-       conservar: Nombre, Categoría, Cantidad, Marca, Lote, Descripción, Acciones ── */
+       conservar: Nombre, Categoría, Cantidad, Unidad, Marca, Lote, Descripción, Acciones ── */
 .modern-table.show-lab-material-columns th:nth-child(4),
 .modern-table.show-lab-material-columns td:nth-child(4) {
-    display: none !important;
-    width: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
+    width: 110px !important;
+    min-width: 110px !important;
+    text-align: center !important;
 }
 
 .modern-table.show-solvent-layout .action-buttons {
@@ -1630,9 +1655,10 @@ padding: 1rem 0.75rem !important;
     overflow-wrap: normal;
 }
 
+/* La columna Unidad ahora es visible siempre (separada de Cantidad). */
 .modern-table .unit-column,
 .modern-table .unit-cell {
-    display: none;
+    display: table-cell !important;
 }
 
 .modern-table.show-acid-layout {
@@ -1824,7 +1850,7 @@ padding: 1rem 0.75rem !important;
 
 .modern-table:not(.show-acid-layout) th.unit-column,
 .modern-table:not(.show-acid-layout) td.unit-cell {
-    display: none !important;
+    display: table-cell !important;
 }
 
 .modern-table.hide-date-columns th:nth-child(6),
@@ -1842,21 +1868,21 @@ padding: 1rem 0.75rem !important;
     display: none !important;
 }
 
-.modern-table.hide-other-columns th:nth-child(5),
-.modern-table.hide-other-columns td:nth-child(5),
-.modern-table.hide-other-columns th:nth-child(6),
-.modern-table.hide-other-columns td:nth-child(6),
-.modern-table.hide-other-columns th:nth-child(7),
-.modern-table.hide-other-columns td:nth-child(7),
-.modern-table.hide-other-columns th:nth-child(8),
-.modern-table.hide-other-columns td:nth-child(8),
-.modern-table.hide-other-columns th:nth-child(9),
-.modern-table.hide-other-columns td:nth-child(9),
-.modern-table .other-product-row td:nth-child(5),
-.modern-table .other-product-row td:nth-child(6),
-.modern-table .other-product-row td:nth-child(7),
-.modern-table .other-product-row td:nth-child(8),
-.modern-table .other-product-row td:nth-child(9) {
+#table-student.hide-other-columns th:nth-child(5),
+#table-student.hide-other-columns td:nth-child(5),
+#table-student.hide-other-columns th:nth-child(6),
+#table-student.hide-other-columns td:nth-child(6),
+#table-student.hide-other-columns th:nth-child(7),
+#table-student.hide-other-columns td:nth-child(7),
+#table-student.hide-other-columns th:nth-child(8),
+#table-student.hide-other-columns td:nth-child(8),
+#table-student.hide-other-columns th:nth-child(9),
+#table-student.hide-other-columns td:nth-child(9),
+#table-student .other-product-row td:nth-child(5),
+#table-student .other-product-row td:nth-child(6),
+#table-student .other-product-row td:nth-child(7),
+#table-student .other-product-row td:nth-child(8),
+#table-student .other-product-row td:nth-child(9) {
     display: none !important;
 }
 
@@ -1882,13 +1908,7 @@ padding: 1rem 0.75rem !important;
     display: none !important;
 }
 
-.modern-table.show-equipment-state th:nth-child(4),
-.modern-table.show-equipment-state td:nth-child(4) {
-    display: none !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    padding: 0 !important;
-}
+/* La columna Unidad (4) se mantiene visible también en equipos. */
 
 .modern-table.show-equipment-state th:nth-child(10),
 .modern-table.show-equipment-state td:nth-child(10),
@@ -1999,7 +2019,7 @@ padding: 1rem 0.75rem !important;
 /* Orden real de columnas para Solventes después de agregar Unidad. */
 .modern-table.show-solvent-layout th.unit-column,
 .modern-table.show-solvent-layout td.unit-cell {
-    display: none !important;
+    display: table-cell !important;
 }
 
 .modern-table.show-solvent-layout th:nth-child(5),
@@ -2277,7 +2297,7 @@ padding: 1rem 0.75rem !important;
 
 .modern-table.show-solvent-layout th.unit-column,
 .modern-table.show-solvent-layout td.unit-cell {
-    display: none !important;
+    display: table-cell !important;
 }
 
 .modern-table.show-solvent-layout th:nth-child(5),
@@ -2626,12 +2646,6 @@ padding: 1rem 0.75rem !important;
     display: none !important;
 }
 
-.modern-table.show-solvent-layout th:nth-child(50),
-.modern-table.show-solvent-layout td:nth-child(50) {
-    width: 264px !important;
-    min-width: 264px !important;
-}
-
 .modern-table.show-solvent-layout th:nth-child(6),
 .modern-table.show-solvent-layout td:nth-child(6) {
     width: 160px !important;
@@ -2639,8 +2653,8 @@ padding: 1rem 0.75rem !important;
     max-width: 160px !important;
 }
 
-.modern-table.show-solvent-layout th:nth-child(10),
-.modern-table.show-solvent-layout td:nth-child(10) {
+.modern-table.show-solvent-layout th:nth-child(11),
+.modern-table.show-solvent-layout td:nth-child(11) {
     display: table-cell !important;
     width: 180px !important;
     min-width: 180px !important;
@@ -2674,12 +2688,24 @@ padding: 1rem 0.75rem !important;
     text-overflow: ellipsis !important;
 }
 
-/* Forzar un ancho consistente para la columna Cantidad / Unidad */
+/* Forzar un ancho consistente para la columna Cantidad */
 .modern-table th.quantity-column,
 .modern-table td.quantity-column {
-    width: 140px !important;
-    min-width: 140px !important;
-    max-width: 140px !important;
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Forzar un ancho consistente para la columna Unidad */
+.modern-table th.unit-column,
+.modern-table td.unit-column {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
     white-space: nowrap !important;
     text-align: left !important;
     overflow: hidden !important;
@@ -2870,19 +2896,33 @@ header,
 }
 
 /* Apply consistent column widths to student table */
+/* Col 3 = Cantidad */
 #table-student th:nth-child(3),
 #table-student td:nth-child(3) {
-    width: 140px !important;
-    max-width: 140px !important;
-    min-width: 140px !important;
+    width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
     white-space: nowrap !important;
     text-align: left !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
 
+/* Col 4 = Unidad */
 #table-student th:nth-child(4),
 #table-student td:nth-child(4) {
+    width: 110px !important;
+    max-width: 110px !important;
+    min-width: 110px !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Col 5 = Marca */
+#table-student th:nth-child(5),
+#table-student td:nth-child(5) {
     width: 150px !important;
     max-width: 150px !important;
     min-width: 150px !important;
@@ -2892,47 +2932,40 @@ header,
     text-overflow: ellipsis !important;
 }
 
-#table-student th:nth-child(5),
-#table-student td:nth-child(5) {
-    width: 160px !important;
-    max-width: 160px !important;
-    min-width: 160px !important;
-    white-space: nowrap !important;
-    text-align: left !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-}
-
+/* Col 6 = Lote */
 #table-student th:nth-child(6),
 #table-student td:nth-child(6) {
-    width: 120px !important;
-    max-width: 120px !important;
-    min-width: 120px !important;
+    width: 140px !important;
+    max-width: 140px !important;
+    min-width: 140px !important;
     white-space: nowrap !important;
     text-align: left !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
 
+/* Col 7 = F. Producción */
 #table-student th:nth-child(7),
 #table-student td:nth-child(7) {
-    width: 120px !important;
-    max-width: 120px !important;
-    min-width: 120px !important;
+    width: 140px !important;
+    max-width: 140px !important;
+    min-width: 140px !important;
     white-space: nowrap !important;
     text-align: left !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
 
+/* Col 8 = F. Vencimiento */
 #table-student th:nth-child(8),
 #table-student td:nth-child(8) {
-    width: 200px !important;
-    max-width: 200px !important;
-    min-width: 200px !important;
-    white-space: normal !important;
+    width: 140px !important;
+    max-width: 140px !important;
+    min-width: 140px !important;
+    white-space: nowrap !important;
     text-align: left !important;
-    overflow-wrap: break-word !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 #table-student th:nth-child(9),
@@ -2952,15 +2985,6 @@ header,
     white-space: normal !important;
     text-align: left !important;
     overflow-wrap: break-word !important;
-}
-
-#table-admin th:nth-child(4),
-#table-admin td:nth-child(4) {
-    width: 20px !important;
-    max-width: 20px !important;
-    min-width: 20px !important;
-    text-align: center !important;
-    white-space: nowrap !important;
 }
 
 #table-admin th:nth-child(5),
@@ -3097,11 +3121,25 @@ header,
     text-overflow: ellipsis !important;
 }
 
-/* Ajusta el ancho de la columna Marca (cuarta columna) */
+/* Ajusta el ancho de la columna Unidad (cuarta columna en admin y personal) */
 #table-admin th:nth-child(4),
 #table-admin td:nth-child(4),
 #table-student th:nth-child(4),
 #table-student td:nth-child(4) {
+    width: 110px !important;
+    max-width: 110px !important;
+    min-width: 110px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    text-align: center !important;
+}
+
+/* Ajusta el ancho de la columna Marca (quinta columna) */
+#table-admin th:nth-child(5),
+#table-admin td:nth-child(5),
+#table-student th:nth-child(5),
+#table-student td:nth-child(5) {
     width: 150px !important;
     max-width: 150px !important;
     min-width: 150px !important;
@@ -3114,6 +3152,14 @@ header,
 .quantity-column {
     width: 100px !important;
     max-width: 100px !important;
+}
+
+.unit-column,
+.unit-cell {
+    width: 110px !important;
+    max-width: 110px !important;
+    white-space: nowrap !important;
+    text-align: center !important;
 }
 
 .marca-column {
@@ -3286,25 +3332,30 @@ td.marca-column {
     table-layout: fixed !important;
 }
 
-/* Anchos para lab materials (cols visibles: 1=Nombre, 2=Cat, 3=Cant, 4=Marca, 5=Lote, 6=Desc, 7=Acciones) */
+/* Anchos para lab materials (cols visibles: 1=Nombre, 2=Cat, 3=Cant, 4=Unidad, 5=Marca, 6=Lote, 7=Desc, 8=Acciones) */
 .modern-table.show-lab-material-columns th.name-column,
 .modern-table.show-lab-material-columns td.name-column {
-    width: 26% !important;
+    width: 22% !important;
 }
 
 .modern-table.show-lab-material-columns th.category-column,
 .modern-table.show-lab-material-columns td.category-column {
-    width: 18% !important;
+    width: 15% !important;
 }
 
 .modern-table.show-lab-material-columns th.quantity-column,
 .modern-table.show-lab-material-columns td.quantity-column {
-    width: 14% !important;
+    width: 10% !important;
+}
+
+.modern-table.show-lab-material-columns th.unit-column,
+.modern-table.show-lab-material-columns td.unit-column {
+    width: 8% !important;
 }
 
 .modern-table.show-lab-material-columns th.marca-column,
 .modern-table.show-lab-material-columns td.marca-column {
-    width: 14% !important;
+    width: 12% !important;
     display: table-cell !important;
 }
 
