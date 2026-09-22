@@ -73,11 +73,11 @@ function showToast(mensaje, tipo = 'success') {
     // Animación de entrada
     requestAnimationFrame(() => toast.classList.add('visible'));
 
-    // Desaparecer después de 3 segundos
+    // Desaparecer después de 10 segundos
     setTimeout(() => {
         toast.classList.remove('visible');
         setTimeout(() => toast.remove(), 400);
-    }, 3000);
+    }, 10000);
 }
 
 function isEquipment(category) {
@@ -763,10 +763,19 @@ const app = {
 
                         // Actualizar la UI automáticamente
                         this.renderTables();
+
+                        // Actualizar papelera si estamos en esa vista
+                        const papeleraView = document.getElementById('view-papelera');
+                        if (papeleraView && papeleraView.classList.contains('active')) {
+                            if (typeof this.renderTrashTable === 'function') {
+                                this.renderTrashTable();
+                            }
+                        }
+
                         if (typeof cargarFiltroCategorias === 'function') {
                             cargarFiltroCategorias(this.products);
                         }
-                        console.log('[Firebase] 🔄 Inventario actualizado en tiempo real:', activos.length, 'productos');
+                        console.log('[Firebase] 🔄 Inventario actualizado en tiempo real:', activos.length, 'productos, Papelera:', enPapelera.length);
                     });
                 }
             })
@@ -919,6 +928,9 @@ const app = {
             if (typeof this.logActivity === 'function') {
                 this.logActivity(`Producto eliminado: ${nombreProducto}`, 'Movido a la papelera de reciclaje');
             }
+
+            // 4. Navegar automáticamente a la papelera
+            this.navigate('view-papelera');
         }
     },
 
@@ -949,8 +961,16 @@ const app = {
         });
     },
 
-    restoreProduct(index) {
+    restoreProduct(id) {
+        const index = this.trash.findIndex(p => String(p.id) === String(id));
+        if (index === -1) {
+            console.error('[ERROR] Producto no encontrado en papelera:', id);
+            return;
+        }
+
         const restoredItem = this.trash.splice(index, 1)[0];
+        restoredItem._enPapelera = false;
+
         this.products.push(restoredItem);
         this.saveData();
         this.renderTables();
@@ -959,22 +979,33 @@ const app = {
         // ── Restaurar en Firebase (quitar flag _enPapelera) ──
         if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
             guardarProductoFirebase({ ...restoredItem, id: String(restoredItem.id), _enPapelera: false })
+                .then(() => {
+                    console.log('[Firebase] ✅ Producto restaurado y sincronizado:', restoredItem.name || restoredItem.nombre);
+                })
                 .catch(err => console.warn('[Firebase] Error al restaurar producto:', err));
         }
 
         showToast(`Producto "${restoredItem?.name || restoredItem?.nombre || 'restaurado'}" restaurado correctamente`, 'success');
     },
 
-    permanentDelete(index) {
+    permanentDelete(id) {
+        const index = this.trash.findIndex(p => String(p.id) === String(id));
+        if (index === -1) {
+            console.error('[ERROR] Producto no encontrado en papelera:', id);
+            return;
+        }
+
         if (confirm("¿Estás seguro de eliminar este insumo permanentemente?")) {
-            const deletedItem = this.trash[index];
-            this.trash.splice(index, 1);
+            const deletedItem = this.trash.splice(index, 1)[0];
             this.saveData();
             this.renderTrashTable();
 
             // ── Eliminar permanentemente de Firebase ──
             if (window.firebaseReady && typeof eliminarProductoFirebase === 'function') {
                 eliminarProductoFirebase(String(deletedItem?.id))
+                    .then(() => {
+                        console.log('[Firebase] ✅ Producto eliminado permanentemente:', deletedItem.name || deletedItem.nombre);
+                    })
                     .catch(err => console.warn('[Firebase] Error al eliminar permanentemente:', err));
             }
 

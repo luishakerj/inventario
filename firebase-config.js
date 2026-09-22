@@ -84,6 +84,12 @@ function escucharProductosFirebase(callback) {
     }, error => {
         console.error('[Firebase] ❌ Error en listener:', error);
         console.error('[Firebase] Detalles del error:', error.code, error.message);
+        // Intentar reconectar automáticamente después de 5 segundos
+        console.log('[Firebase] 🔄 Intentando reconectar en 5 segundos...');
+        setTimeout(() => {
+            console.log('[Firebase] 🔄 Reconectando listener...');
+            escucharProductosFirebase(callback);
+        }, 5000);
     });
 }
 
