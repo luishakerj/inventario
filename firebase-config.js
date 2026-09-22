@@ -88,4 +88,9 @@ function escucharProductosFirebase(callback) {
 }
 
 window.firebaseReady = true;
-console.log('[Firebase] Inicializado correctamente - Proyecto:', firebaseConfig.projectId);
+console.log('[Firebase] ✅ Inicializado correctamente - Proyecto:', firebaseConfig.projectId);
+console.log('[Firebase] ✅ Funciones disponibles:', {
+    guardarProductoFirebase: typeof guardarProductoFirebase,
+    cargarProductosFirebase: typeof cargarProductosFirebase,
+    escucharProductosFirebase: typeof escucharProductosFirebase
+});

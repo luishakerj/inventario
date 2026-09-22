@@ -601,6 +601,7 @@ select:focus {
 
 select option {
     background: var(--bg-color);
+    color: var(--text-main);
 }
 
 .modal-footer {

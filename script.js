@@ -870,12 +870,19 @@ const app = {
     saveData() {
         localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
         localStorage.setItem('cirna_trash', JSON.stringify(this.trash));
+
+        console.log('[DEBUG] saveData llamado - Total productos:', this.products.length, 'Firebase ready:', window.firebaseReady);
+
         // ── Sincronizar con Firebase Firestore (fire-and-forget) ──
         if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
+            console.log('[DEBUG] Sincronizando', this.products.length, 'productos con Firebase...');
             this.products.forEach(product => {
                 guardarProductoFirebase({ ...product, id: String(product.id) })
+                    .then(docId => console.log('[DEBUG] Producto sincronizado:', docId))
                     .catch(err => console.warn('[Firebase] Error al sincronizar producto:', err));
             });
+        } else {
+            console.warn('[DEBUG] Firebase no está listo o guardarProductoFirebase no está disponible');
         }
     },
 
@@ -883,16 +890,24 @@ const app = {
         const index = this.products.findIndex(p => String(p.id) === String(id));
         if (index !== -1) {
             const deletedItem = this.products.splice(index, 1)[0];
+
+            // 1. Marcar explícitamente en el objeto local que está en la papelera
+            deletedItem._enPapelera = true;
+
+            if (!Array.isArray(this.trash)) {
+                this.trash = [];
+            }
             this.trash.push(deletedItem);
+
             this.saveData();
 
-            // ── Marcar como eliminado en Firebase (mover a papelera) ──
+            // 2. Marcar como eliminado en Firebase
             if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
                 guardarProductoFirebase({ ...deletedItem, id: String(deletedItem.id), _enPapelera: true })
                     .catch(err => console.warn('[Firebase] Error al marcar como eliminado:', err));
             }
 
-            // Re-renderizar sin cambiar abruptamente de vista
+            // 3. Re-renderizar ambas tablas
             this.renderTables();
             if (typeof this.renderTrashTable === 'function') {
                 this.renderTrashTable();
@@ -913,20 +928,21 @@ const app = {
 
         trashBody.innerHTML = '';
 
-        if (this.trash.length === 0) {
+        if (!Array.isArray(this.trash) || this.trash.length === 0) {
             trashBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">La papelera está vacía</td></tr>`;
             return;
         }
 
-        this.trash.forEach((p, index) => {
+        this.trash.forEach((p) => {
             const tr = document.createElement('tr');
+            // Usar p.id en lugar del índice para evitar errores si la lista cambia
             tr.innerHTML = `
                 <td>${p.name || p.nombre || '-'}</td>
                 <td>${p.category || p.categoria || '-'}</td>
-                <td>${p.stock || 0}</td>
+                <td>${p.quantity || p.cantidad || p.stock || 0} ${p.unit || ''}</td>
                 <td style="text-align: right;">
-                    <button class="btn-icon" onclick="app.restoreProduct(${index})" title="Restaurar"><i class="ph ph-arrow-counter-clockwise"></i></button>
-                    <button class="btn-icon" onclick="app.permanentDelete(${index})" title="Eliminar definitivamente" style="color: #ef4444;"><i class="ph ph-x"></i></button>
+                    <button class="btn-icon" onclick="app.restoreProduct('${p.id}')" title="Restaurar"><i class="ph ph-arrow-counter-clockwise"></i></button>
+                    <button class="btn-icon" onclick="app.permanentDelete('${p.id}')" title="Eliminar definitivamente" style="color: #ef4444;"><i class="ph ph-x"></i></button>
                 </td>
             `;
             trashBody.appendChild(tr);
@@ -1011,7 +1027,10 @@ const app = {
 
 
     // Renderizar HTML de las tablas
+    // Renderizar HTML de las tablas
     renderTables(dataToRender = this.products) {
+        console.log('[DEBUG] renderTables llamado - Productos a renderizar:', dataToRender.length);
+
         const studentBody = document.getElementById('table-body-student');
         const adminBody = document.getElementById('table-body-admin');
         const studentTable = document.getElementById('table-student');
@@ -1019,6 +1038,30 @@ const app = {
 
         if (!studentBody || !adminBody) return;
         if (!Array.isArray(dataToRender)) dataToRender = [];
+
+        // --- INICIO: FILTRADO INTELIGENTE (Búsqueda + Categoría + Tildes) ---
+        const searchInput = document.getElementById('search-input') || document.getElementById('inputBusqueda');
+        const categorySelect = document.getElementById('category-filter') || document.getElementById('selectCategoria');
+
+        const term = searchInput ? searchInput.value.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "";
+        const selectedCategory = categorySelect ? categorySelect.value : "todas";
+
+        if (term || (selectedCategory && selectedCategory !== 'todas' && selectedCategory !== 'all')) {
+            dataToRender = dataToRender.filter(p => {
+                const name = (p.name || p.nombre || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const cat = (p.category || p.categoria || "");
+
+                const matchesName = name.includes(term);
+                const matchesCat = (selectedCategory === 'todas' || selectedCategory === 'all' || selectedCategory === '' || cat === selectedCategory);
+
+                return matchesName && matchesCat;
+            });
+        }
+        // --- FIN: FILTRADO INTELIGENTE ---
+
+        // Optimización: usar DocumentFragment para mejor rendimiento
+        const studentFragment = document.createDocumentFragment();
+        const adminFragment = document.createDocumentFragment();
 
         studentBody.innerHTML = '';
         adminBody.innerHTML = '';
@@ -1079,7 +1122,7 @@ const app = {
 
         if (dataToRender.length === 0) {
             const emptyColsStudent = (hasDateColumns ? 9 : 7) - (hasMetadataColumns ? 0 : 3);
-            const emptyColsAdmin = 5; // 5 columnas en la tabla de admin: Categoría, Cantidad, Marca, Lote, Acciones
+            const emptyColsAdmin = 6; // 6 columnas en la tabla de admin: Nombre, Categoría, Cantidad, Marca, Lote, Acciones
             const emptyMsgStudent = `<tr><td colspan="${emptyColsStudent}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
             const emptyMsgAdmin = `<tr><td colspan="${emptyColsAdmin}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
             studentBody.innerHTML = emptyMsgStudent;
@@ -1136,6 +1179,7 @@ const app = {
     `;
 
             const adminCells = `
+        <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
         <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(quantityLabel)}</span></td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>
@@ -1153,7 +1197,7 @@ const app = {
             </button>
         </td>
     `;
-            studentBody.appendChild(trStudent);
+            studentFragment.appendChild(trStudent);
 
             const trAdmin = document.createElement('tr');
             trAdmin.setAttribute('class', rowClass);
@@ -1166,8 +1210,15 @@ const app = {
         </td>
     `;
 
-            adminBody.appendChild(trAdmin);
+            adminFragment.appendChild(trAdmin);
         });
+
+        // Optimización: agregar todos los elementos de una vez
+        studentBody.appendChild(studentFragment);
+        adminBody.appendChild(adminFragment);
+
+        console.log('[DEBUG] Renderizado completado - Productos en tabla estudiante:', studentBody.children.length, 'Productos en tabla admin:', adminBody.children.length);
+
         requestAnimationFrame(() => {
             document.querySelectorAll('.table-responsive, .scroll-top-mirror').forEach(scrollContainer => {
                 scrollContainer.scrollLeft = 0;
@@ -1178,12 +1229,18 @@ const app = {
 
 
     filterProducts(viewRole) {
+        console.log('[DEBUG] filterProducts llamado - Vista:', viewRole, 'app.products:', this.products.length);
+
         const inputId = viewRole === 'student' ? 'search-student' : 'search-admin';
         const inputEl = document.getElementById(inputId);
         const rawQuery = inputEl ? inputEl.value : '';
 
+        console.log('[DEBUG] Input ID:', inputId, 'Elemento encontrado:', !!inputEl, 'Valor:', rawQuery);
+
         const normalize = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         const query = normalize(rawQuery);
+
+        console.log('[DEBUG] Filtrando productos - Vista:', viewRole, 'Query:', query, 'Total productos:', this.products.length);
 
         const categorySelect = document.getElementById('category-filter-admin');
         const selectedCat = categorySelect ? categorySelect.value : 'seleccion';
@@ -1290,6 +1347,8 @@ const app = {
         const category = document.getElementById('product-category')?.value || '';
         const stock = parseFloat(document.getElementById('product-stock')?.value) || 0;
 
+        console.log('[DEBUG] Guardando producto:', { idInput, name, category, stock });
+
         const noMetadataCategory = categoryHasNoMetadata(category);
         const laboratoryMaterials = isLaboratoryMaterials(category);
         const equipment = isEquipment(category);
@@ -1331,7 +1390,10 @@ const app = {
             // Crear nuevo
             const newId = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
             const nuevoProducto = { id: newId, name, category, stock: parseFloat(stock), location, marca: location, image, desc, lote, prodDate, expDate, unit, state };
+            console.log('[DEBUG] Producto nuevo creado:', nuevoProducto);
+            console.log('[DEBUG] Total productos antes de guardar:', this.products.length);
             this.products.push(nuevoProducto);
+            console.log('[DEBUG] Total productos después de guardar:', this.products.length);
             this.logActivity(`Producto creado: ${name} `, `Categoría: ${category}, Stock: ${stock} `);
             this.registrarEnHistorial({
                 tipo: 'nuevo_producto',
@@ -1345,7 +1407,9 @@ const app = {
             showToast('Producto creado correctamente', 'success');
         }
 
+        console.log('[DEBUG] Guardando datos y renderizando tablas...');
         this.saveData();
+        console.log('[DEBUG] Tablas renderizadas. Total productos en this.products:', this.products.length);
         this.renderTables();
         this.closeModal('modal-product');
     },
