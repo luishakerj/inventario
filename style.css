@@ -44,12 +44,24 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    /* NOTA: en navegadores moviles (Safari/iOS y Chrome Android)
+       'background-attachment: fixed' junto con 'background-size: cover' hace que
+       la imagen de fondo NO se muestre. Por eso el fondo "desaparecia" en el
+       celular. Aqui se aplica 'fixed' solo en escritorio, y en movil se deja
+       'scroll' (valor por defecto), que si muestra la imagen. */
+    background-attachment: scroll;
     color: var(--text-main);
     min-height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
+}
+
+/* En pantallas grandes (escritorio) si se permite el fondo fijo */
+@media (min-width: 769px) {
+    body {
+        background-attachment: fixed;
+    }
 }
 
 /* Background animated blobs */
