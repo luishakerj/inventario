@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// ============================================================
+// Reglas de seguridad de Firestore para el Inventario LICC
+// ============================================================
+// NOTA IMPORTANTE: si estas reglas NO permiten lectura/escritura a la
+// coleccion "productos", la app se guarda SOLO en el dispositivo y los
+// productos nunca aparecen en otra maquina.
+//
+// Estas reglas permiten lectura y escritura publica (la app no usa login de
+// Firebase Auth, el acceso se controla con la contrasena local). Es suficiente
+// para un inventario interno de laboratorio.
+//
+// Copia este contenido en:
+//   Firebase Console -> Firestore Database -> Reglas -> Pegar -> Publicar
+// ============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /productos/{productoId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+  }
+}

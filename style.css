@@ -1010,81 +1010,69 @@ select option {
     display: none !important;
 }
 
-.modern-table.show-equipment-state .other-product-row td:nth-child(10) {
+/* Layout de equipos para la tabla de personal (10 columnas). Acotado a
+   #table-student para no ocultar columnas de la tabla admin por indice. */
+#table-student.show-equipment-state .other-product-row td:nth-child(10) {
     display: none !important;
 }
 
-.modern-table.show-equipment-state .other-product-row td:nth-child(5),
-.modern-table.show-equipment-state .other-product-row td:nth-child(6),
-.modern-table.show-equipment-state .other-product-row td:nth-child(7),
-.modern-table.show-equipment-state .other-product-row td:nth-child(8),
-.modern-table.show-equipment-state .other-product-row td:nth-child(9) {
+#table-student.show-equipment-state .other-product-row td:nth-child(5),
+#table-student.show-equipment-state .other-product-row td:nth-child(6),
+#table-student.show-equipment-state .other-product-row td:nth-child(7),
+#table-student.show-equipment-state .other-product-row td:nth-child(8),
+#table-student.show-equipment-state .other-product-row td:nth-child(9) {
     display: table-cell !important;
 }
 
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(5),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(6),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(7),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(8),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(9) {
+#table-student.show-equipment-state .equipment-product-row td:nth-child(5),
+#table-student.show-equipment-state .equipment-product-row td:nth-child(6),
+#table-student.show-equipment-state .equipment-product-row td:nth-child(7),
+#table-student.show-equipment-state .equipment-product-row td:nth-child(8),
+#table-student.show-equipment-state .equipment-product-row td:nth-child(9) {
     display: none !important;
 }
 
-.modern-table.show-equipment-state th:nth-child(5),
-.modern-table.show-equipment-state th:nth-child(6),
-.modern-table.show-equipment-state th:nth-child(7),
-.modern-table.show-equipment-state th:nth-child(8),
-.modern-table.show-equipment-state th:nth-child(9) {
+#table-student.show-equipment-state th:nth-child(5),
+#table-student.show-equipment-state th:nth-child(6),
+#table-student.show-equipment-state th:nth-child(7),
+#table-student.show-equipment-state th:nth-child(8),
+#table-student.show-equipment-state th:nth-child(9) {
     display: none !important;
 }
 
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(10) {
+#table-student.show-equipment-state .equipment-product-row td:nth-child(10) {
     display: table-cell !important;
 }
 
-.modern-table.show-equipment-state {
+#table-student.show-equipment-state {
     width: 100%;
     min-width: 0;
 }
 
-.modern-table.show-equipment-state th:nth-child(10),
-.modern-table.show-equipment-state td:nth-child(10) {
+#table-student.show-equipment-state th:nth-child(10),
+#table-student.show-equipment-state td:nth-child(10) {
     text-align: center;
     white-space: normal;
 }
 
-.modern-table.show-equipment-state th:nth-child(5),
-.modern-table.show-equipment-state td:nth-child(5) {
-    width: 16%;
-    text-align: center;
-}
-
-.modern-table.show-equipment-state th:nth-child(1),
-.modern-table.show-equipment-state td:nth-child(1) {
+#table-student.show-equipment-state th:nth-child(1),
+#table-student.show-equipment-state td:nth-child(1) {
     width: 30%;
 }
 
-.modern-table.show-equipment-state th:nth-child(2),
-.modern-table.show-equipment-state td:nth-child(2) {
+#table-student.show-equipment-state th:nth-child(2),
+#table-student.show-equipment-state td:nth-child(2) {
     width: 20%;
 }
 
-.modern-table.show-equipment-state th:nth-child(3),
-.modern-table.show-equipment-state td:nth-child(3) {
+#table-student.show-equipment-state th:nth-child(3),
+#table-student.show-equipment-state td:nth-child(3) {
     width: 14%;
 }
 
-.modern-table.show-equipment-state th:nth-child(4),
-.modern-table.show-equipment-state td:nth-child(4) {
+#table-student.show-equipment-state th:nth-child(4),
+#table-student.show-equipment-state td:nth-child(4) {
     width: 10%;
-}
-
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(5),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(6),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(7),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(8),
-.modern-table.show-equipment-state .equipment-product-row td:nth-child(9) {
-    display: none !important;
 }
 
 .state-field {
@@ -1371,28 +1359,28 @@ select option {
     min-width: 0;
 }
 
-.modern-table.show-equipment-state th:nth-child(1),
-.modern-table.show-equipment-state td:nth-child(1) {
+#table-student.show-equipment-state th:nth-child(1),
+#table-student.show-equipment-state td:nth-child(1) {
     width: 30%;
 }
 
-.modern-table.show-equipment-state th:nth-child(2),
-.modern-table.show-equipment-state td:nth-child(2) {
+#table-student.show-equipment-state th:nth-child(2),
+#table-student.show-equipment-state td:nth-child(2) {
     width: 22%;
 }
 
-.modern-table.show-equipment-state th:nth-child(3),
-.modern-table.show-equipment-state td:nth-child(3) {
+#table-student.show-equipment-state th:nth-child(3),
+#table-student.show-equipment-state td:nth-child(3) {
     width: 18%;
 }
 
-.modern-table.show-equipment-state th:nth-child(9),
-.modern-table.show-equipment-state td:nth-child(9) {
+#table-student.show-equipment-state th:nth-child(9),
+#table-student.show-equipment-state td:nth-child(9) {
     width: 14%;
 }
 
-.modern-table.show-equipment-state th:nth-child(10),
-.modern-table.show-equipment-state td:nth-child(10) {
+#table-student.show-equipment-state th:nth-child(10),
+#table-student.show-equipment-state td:nth-child(10) {
     width: 16%;
 }
 
@@ -1903,25 +1891,32 @@ select option {
     display: none !important;
 }
 
-.modern-table.show-equipment-state th:nth-child(5),
-.modern-table.show-equipment-state th:nth-child(6),
-.modern-table.show-equipment-state th:nth-child(7),
-.modern-table.show-equipment-state th:nth-child(8),
-.modern-table.show-equipment-state th:nth-child(9),
-.modern-table.show-equipment-state td:nth-child(5),
-.modern-table.show-equipment-state td:nth-child(6),
-.modern-table.show-equipment-state td:nth-child(7),
-.modern-table.show-equipment-state td:nth-child(8),
-.modern-table.show-equipment-state td:nth-child(9) {
+/* Solo la tabla de personal tiene el juego completo de columnas en equipos. */
+#table-student.show-equipment-state th:nth-child(5),
+#table-student.show-equipment-state th:nth-child(6),
+#table-student.show-equipment-state th:nth-child(7),
+#table-student.show-equipment-state th:nth-child(8),
+#table-student.show-equipment-state th:nth-child(9),
+#table-student.show-equipment-state td:nth-child(5),
+#table-student.show-equipment-state td:nth-child(6),
+#table-student.show-equipment-state td:nth-child(7),
+#table-student.show-equipment-state td:nth-child(8),
+#table-student.show-equipment-state td:nth-child(9) {
     display: none !important;
 }
 
 /* La columna Unidad (4) se mantiene visible también en equipos. */
 
-.modern-table.show-equipment-state th:nth-child(10),
-.modern-table.show-equipment-state td:nth-child(10),
-.modern-table.show-equipment-state th:nth-child(11),
-.modern-table.show-equipment-state td:nth-child(11) {
+#table-student.show-equipment-state th:nth-child(10),
+#table-student.show-equipment-state td:nth-child(10),
+#table-student.show-equipment-state th:nth-child(11),
+#table-student.show-equipment-state td:nth-child(11) {
+    display: table-cell !important;
+}
+
+/* La columna de acciones de la tabla admin siempre visible en equipos. */
+#table-admin.show-equipment-state th.action-buttons,
+#table-admin.show-equipment-state td.action-buttons {
     display: table-cell !important;
 }
 
@@ -2518,23 +2513,39 @@ select option {
     overflow-wrap: normal;
 }
 
-/* Equipos: solo muestra las columnas utiles y mantiene Acciones alineada. */
+/* Equipos: el layout se adapta a cada tabla porque el orden de columnas difiere.
+   Personal (10 cols): 1 Nombre, 2 Categoría, 3 Cantidad, 4 Unidad, 5 Marca,
+   6 Lote, 7 F.Prod, 8 F.Venc, 9 Desc, 10 Acciones.
+   Admin (7 cols): 1 Nombre, 2 Categoría, 3 Cantidad, 4 Unidad, 5 Marca, 6 Lote, 7 Acciones. */
 .modern-table.show-equipment-state {
     table-layout: fixed !important;
     width: 100% !important;
     min-width: 800px !important;
 }
 
-.modern-table.show-equipment-state th:nth-child(5),
-.modern-table.show-equipment-state td:nth-child(5),
-.modern-table.show-equipment-state th:nth-child(6),
-.modern-table.show-equipment-state td:nth-child(6),
-.modern-table.show-equipment-state th:nth-child(7),
-.modern-table.show-equipment-state td:nth-child(7),
-.modern-table.show-equipment-state th:nth-child(8),
-.modern-table.show-equipment-state td:nth-child(8),
-.modern-table.show-equipment-state th:nth-child(9),
-.modern-table.show-equipment-state td:nth-child(9) {
+/* Tabla personal: se conservan Nombre, Categoría, Cantidad, Unidad y Acciones. */
+#table-student.show-equipment-state th:nth-child(5),
+#table-student.show-equipment-state td:nth-child(5),
+#table-student.show-equipment-state th:nth-child(6),
+#table-student.show-equipment-state td:nth-child(6),
+#table-student.show-equipment-state th:nth-child(7),
+#table-student.show-equipment-state td:nth-child(7),
+#table-student.show-equipment-state th:nth-child(8),
+#table-student.show-equipment-state td:nth-child(8),
+#table-student.show-equipment-state th:nth-child(9),
+#table-student.show-equipment-state td:nth-child(9) {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+}
+
+/* Tabla admin: solo se ocultan Marca (5) y Lote (6). Acciones (7) siempre visible. */
+#table-admin.show-equipment-state th:nth-child(5),
+#table-admin.show-equipment-state td:nth-child(5),
+#table-admin.show-equipment-state th:nth-child(6),
+#table-admin.show-equipment-state td:nth-child(6) {
     display: none !important;
     width: 0 !important;
     min-width: 0 !important;
@@ -2556,86 +2567,48 @@ select option {
 
 .modern-table.show-equipment-state th:nth-child(3),
 .modern-table.show-equipment-state td:nth-child(3) {
-    width: 66px !important;
-    min-width: 66px !important;
-    max-width: 66px !important;
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 140px !important;
 }
 
-.modern-table.show-equipment-state th:nth-child(10),
-.modern-table.show-equipment-state td:nth-child(10),
+/* La columna Unidad se mantiene visible en equipos, en ambas tablas. */
+.modern-table.show-equipment-state th.unit-column,
+.modern-table.show-equipment-state td.unit-column {
+    display: table-cell !important;
+    width: 110px !important;
+    min-width: 100px !important;
+    text-align: center !important;
+}
+
+/* La columna de acciones es siempre la última y se mantiene visible. */
+.modern-table.show-equipment-state th.action-buttons,
 .modern-table.show-equipment-state td.action-buttons {
     display: table-cell !important;
-    width: 240px !important;
-    min-width: 240px !important;
-    max-width: 240px !important;
-    text-align: center;
-    white-space: nowrap;
-}
-
-.modern-table.show-equipment-state th:last-child,
-.modern-table.show-equipment-state td.action-buttons {
-    width: 280px !important;
-    min-width: 280px !important;
-    max-width: 280px !important;
-    text-align: left;
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
-.modern-table.show-equipment-state th:nth-child(9),
-.modern-table.show-equipment-state td:nth-child(9) {
-    display: none !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    max-width: 0 !important;
-    padding: 0 !important;
-}
-
-/* Regla final de Equipos: la columna 10 es la unica columna de acciones. */
-.modern-table.show-equipment-state th:nth-child(4),
-.modern-table.show-equipment-state td:nth-child(4),
-.modern-table.show-equipment-state th:nth-child(5),
-.modern-table.show-equipment-state td:nth-child(5),
-.modern-table.show-equipment-state th:nth-child(6),
-.modern-table.show-equipment-state td:nth-child(6),
-.modern-table.show-equipment-state th:nth-child(7),
-.modern-table.show-equipment-state td:nth-child(7),
-.modern-table.show-equipment-state th:nth-child(8),
-.modern-table.show-equipment-state td:nth-child(8),
-.modern-table.show-equipment-state th:nth-child(9),
-.modern-table.show-equipment-state td:nth-child(9) {
-    display: none !important;
-}
-
-.modern-table.show-equipment-state th:nth-child(10),
-.modern-table.show-equipment-state td:nth-child(10) {
-    display: table-cell !important;
-    width: 180px !important;
-    min-width: 180px !important;
-    max-width: 180px !important;
-    padding: 1rem 0.75rem !important;
-    text-align: right !important;
+    width: 200px !important;
+    min-width: 170px !important;
+    text-align: center !important;
     white-space: nowrap !important;
 }
 
-.modern-table.show-equipment-state td:nth-child(10) .btn-icon {
+.modern-table.show-equipment-state td.action-buttons .btn-icon {
     display: inline-flex !important;
     vertical-align: middle;
     margin: 0 0.35rem !important;
-    position: relative;
-    left: -210px;
+    position: static;
 }
 
-.modern-table.show-equipment-state th:nth-child(5),
-.modern-table.show-equipment-state td:nth-child(5),
-.modern-table.show-equipment-state th:nth-child(6),
-.modern-table.show-equipment-state td:nth-child(6),
-.modern-table.show-equipment-state th:nth-child(7),
-.modern-table.show-equipment-state td:nth-child(7),
-.modern-table.show-equipment-state th:nth-child(8),
-.modern-table.show-equipment-state td:nth-child(8),
-.modern-table.show-equipment-state th:nth-child(9),
-.modern-table.show-equipment-state td:nth-child(9) {
+/* Solo la tabla de personal oculta Marca/Lote/Fechas/Desc en equipos. */
+#table-student.show-equipment-state th:nth-child(5),
+#table-student.show-equipment-state td:nth-child(5),
+#table-student.show-equipment-state th:nth-child(6),
+#table-student.show-equipment-state td:nth-child(6),
+#table-student.show-equipment-state th:nth-child(7),
+#table-student.show-equipment-state td:nth-child(7),
+#table-student.show-equipment-state th:nth-child(8),
+#table-student.show-equipment-state td:nth-child(8),
+#table-student.show-equipment-state th:nth-child(9),
+#table-student.show-equipment-state td:nth-child(9) {
     display: none !important;
     content: none !important;
 }

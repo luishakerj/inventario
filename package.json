@@ -1,4 +1,10 @@
 {
+  "name": "inventario-licc",
+  "version": "1.0.0",
+  "description": "Sistema de Inventario de Laboratorio LICC con sincronizacion en Firestore",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "firebase": "^12.19.0"
   }

@@ -62,6 +62,27 @@ function isLaboratoryMaterials(category) {
     return normalizeCategory(category) === 'materiales de laboratorio';
 }
 
+// Actualiza el indicador visual del estado de sincronización con la nube.
+// estado: 'ok' | 'error' | 'local'
+function setSyncStatus(estado, mensaje) {
+    const el = document.getElementById('sync-status');
+    const txt = document.getElementById('sync-status-text');
+    if (!el || !txt) return;
+
+    const estilos = {
+        ok: { bg: 'rgba(16, 185, 129, 0.18)', bd: 'rgba(16, 185, 129, 0.4)', color: '#10b981', dot: '#10b981' },
+        error: { bg: 'rgba(239, 68, 68, 0.18)', bd: 'rgba(239, 68, 68, 0.4)', color: '#ef4444', dot: '#ef4444' },
+        local: { bg: 'rgba(245, 158, 11, 0.18)', bd: 'rgba(245, 158, 11, 0.4)', color: '#f59e0b', dot: '#f59e0b' }
+    };
+    const s = estilos[estado] || estilos.local;
+    el.style.background = s.bg;
+    el.style.borderColor = s.bd;
+    el.style.color = s.color;
+    const dot = el.querySelector('span');
+    if (dot) dot.style.background = s.dot;
+    txt.textContent = mensaje || '';
+}
+
 // Mostrar notificación flotante de éxito/error
 function showToast(mensaje, tipo = 'success') {
     const container = document.getElementById('toast-container') || (() => {
@@ -735,6 +756,10 @@ const app = {
                 const activos = productosFirestore.filter(p => !p._enPapelera);
                 const enPapelera = productosFirestore.filter(p => p._enPapelera);
 
+                if (typeof setSyncStatus === 'function') {
+                    setSyncStatus('ok', 'Sincronizado (' + activos.length + ' productos)');
+                }
+
                 if (activos.length > 0) {
                     // Firestore tiene datos → usar esos (ignora localStorage y data.js)
                     console.log('[Firebase] Productos cargados desde Firestore:', activos.length);
@@ -761,19 +786,33 @@ const app = {
                         const activos = todosLosProductos.filter(p => !p._enPapelera);
                         const enPapelera = todosLosProductos.filter(p => p._enPapelera);
 
-                        const remotos = activos.map(p => ({
-                            ...p,
-                            id: isNaN(p.id) ? p.id : parseInt(p.id),
-                            category: autoCategorizarProducto(p),
-                            unit: normalizeQuantityUnit(p.unit)
-                        }));
+                        const remotos = activos.map(p => {
+                            const copia = { ...p };
+                            // El campo _pendienteDesde es solo local; Firestore no
+                            // deberia traerlo, pero por si acaso se limpia aqui.
+                            delete copia._pendienteDesde;
+                            return {
+                                ...copia,
+                                id: isNaN(copia.id) ? copia.id : parseInt(copia.id),
+                                category: autoCategorizarProducto(copia),
+                                unit: normalizeQuantityUnit(copia.unit)
+                            };
+                        });
 
                         // Anti-carrera: si un producto local todavía no ha llegado en el
                         // snapshot (su escritura sigue en curso), se conserva para que no
-                        // desaparezca de la tabla al guardarlo.
+                        // desaparezca de la tabla al guardarlo. PERO solo durante unos
+                        // segundos: si el producto ya no existe en Firestore (fue borrado
+                        // en otra máquina), no debe quedar "fantasma" para siempre.
                         const idsRemotos = new Set(remotos.map(p => String(p.id)));
+                        const ahora = Date.now();
                         const pendientes = (this.products || []).filter(p =>
-                            p && !p._enPapelera && !idsRemotos.has(String(p.id))
+                            p && !p._enPapelera &&
+                            !idsRemotos.has(String(p.id)) &&
+                            // Solo conservar los recién creados/editados (últimos 20 s).
+                            // Si ya pasó ese tiempo y Firestore no lo tiene, fue eliminado
+                            // en otra máquina y no debe permanecer en la tabla.
+                            p._pendienteDesde && (ahora - p._pendienteDesde) < 20000
                         );
 
                         this.products = [...remotos, ...pendientes];
@@ -801,11 +840,17 @@ const app = {
                             cargarFiltroCategorias(this.products);
                         }
                         console.log('[Firebase] 🔄 Inventario actualizado en tiempo real:', activos.length, 'productos, Papelera:', enPapelera.length);
+                        if (typeof setSyncStatus === 'function') {
+                            setSyncStatus('ok', 'Sincronizado (' + activos.length + ' productos)');
+                        }
                     });
                 }
             })
             .catch(err => {
                 console.warn('[Firebase] Error al cargar desde Firestore, usando datos locales:', err);
+                if (typeof setSyncStatus === 'function') {
+                    setSyncStatus('error', 'Sin conexion (modo local)');
+                }
                 this._cargarDatosLocales();
                 this._finalizarInit();
             });
@@ -813,6 +858,9 @@ const app = {
 
     // Inicialización sin Firebase (solo localStorage/data.js)
     _initLocal() {
+        if (typeof setSyncStatus === 'function') {
+            setSyncStatus('local', 'Sin conexion (modo local)');
+        }
         this._cargarDatosLocales();
         this._finalizarInit();
     },
@@ -901,23 +949,47 @@ const app = {
     },
 
 
-    saveData() {
+    saveData(productoEspecifico = null) {
         localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
         localStorage.setItem('cirna_trash', JSON.stringify(this.trash));
 
         console.log('[DEBUG] saveData llamado - Total productos:', this.products.length, 'Firebase ready:', window.firebaseReady);
 
-        // ── Sincronizar con Firebase Firestore (fire-and-forget) ──
-        if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
-            console.log('[DEBUG] Sincronizando', this.products.length, 'productos con Firebase...');
-            this.products.forEach(product => {
-                guardarProductoFirebase({ ...product, id: String(product.id) })
-                    .then(docId => console.log('[DEBUG] Producto sincronizado:', docId))
-                    .catch(err => console.warn('[Firebase] Error al sincronizar producto:', err));
-            });
-        } else {
+        if (!window.firebaseReady || typeof guardarProductoFirebase !== 'function') {
             console.warn('[DEBUG] Firebase no está listo o guardarProductoFirebase no está disponible');
+            return;
         }
+
+        // ── Sincronizar con Firebase Firestore (fire-and-forget) ──
+        // IMPORTANTE: antes se subian TODOS los productos locales en cada guardado.
+        // Eso causaba que una maquina con datos desfasados sobrescribiera en
+        // Firestore los cambios recientes de OTRA maquina (el producto nuevo no
+        // aparecia, o desaparecia el de la otra maquina).
+        // Ahora, si se indica un producto concreto, se sube SOLO ese.
+        // Quita los campos internos de la app antes de subir a Firestore
+        // (_pendienteDesde es solo de control local y no debe persistir en la nube).
+        const limpiar = (p) => {
+            const copia = { ...p };
+            delete copia._pendienteDesde;
+            return copia;
+        };
+
+        if (productoEspecifico) {
+            guardarProductoFirebase({ ...limpiar(productoEspecifico), id: String(productoEspecifico.id) })
+                .then(docId => console.log('[DEBUG] Producto sincronizado:', docId))
+                .catch(err => console.warn('[Firebase] Error al sincronizar producto:', err));
+            return;
+        }
+
+        // Si no se indica uno concreto (p. ej. sincronizacion inicial de la carga
+        // local completa), se suben todos. Solo ocurre una vez al arrancar con
+        // Firestore vacio.
+        console.log('[DEBUG] Sincronizando', this.products.length, 'productos con Firebase...');
+        this.products.forEach(product => {
+            guardarProductoFirebase({ ...limpiar(product), id: String(product.id) })
+                .then(docId => console.log('[DEBUG] Producto sincronizado:', docId))
+                .catch(err => console.warn('[Firebase] Error al sincronizar producto:', err));
+        });
     },
 
     deleteProduct(id) {
@@ -933,9 +1005,14 @@ const app = {
             }
             this.trash.push(deletedItem);
 
-            this.saveData();
+            // Persistir en localStorage. NO usar saveData() sin argumento aquí,
+            // porque re-subiría TODOS los productos y podría pisar en Firestore los
+            // cambios recientes de otra máquina. El borrado se sincroniza aparte
+            // (abajo) con saveData(productoConcreto).
+            localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+            localStorage.setItem('cirna_trash', JSON.stringify(this.trash));
 
-            // 2. Marcar como eliminado en Firebase
+            // 2. Marcar como eliminado en Firebase (solo este documento)
             if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
                 guardarProductoFirebase({ ...deletedItem, id: String(deletedItem.id), _enPapelera: true })
                     .catch(err => console.warn('[Firebase] Error al marcar como eliminado:', err));
@@ -997,7 +1074,8 @@ const app = {
         restoredItem._enPapelera = false;
 
         this.products.push(restoredItem);
-        this.saveData();
+        localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+        localStorage.setItem('cirna_trash', JSON.stringify(this.trash));
         this.renderTables();
         this.renderTrashTable();
 
@@ -1022,7 +1100,7 @@ const app = {
 
         if (confirm("¿Estás seguro de eliminar este insumo permanentemente?")) {
             const deletedItem = this.trash.splice(index, 1)[0];
-            this.saveData();
+            localStorage.setItem('cirna_trash', JSON.stringify(this.trash));
             this.renderTrashTable();
 
             // ── Eliminar permanentemente de Firebase ──
@@ -1095,25 +1173,14 @@ const app = {
         if (!studentBody || !adminBody) return;
         if (!Array.isArray(dataToRender)) dataToRender = [];
 
-        // --- INICIO: FILTRADO INTELIGENTE (Búsqueda + Categoría + Tildes) ---
-        const searchInput = document.getElementById('search-input') || document.getElementById('inputBusqueda');
-        const categorySelect = document.getElementById('category-filter') || document.getElementById('selectCategoria');
-
-        const term = searchInput ? searchInput.value.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "";
-        const selectedCategory = categorySelect ? categorySelect.value : "todas";
-
-        if (term || (selectedCategory && selectedCategory !== 'todas' && selectedCategory !== 'all')) {
-            dataToRender = dataToRender.filter(p => {
-                const name = (p.name || p.nombre || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                const cat = (p.category || p.categoria || "");
-
-                const matchesName = name.includes(term);
-                const matchesCat = (selectedCategory === 'todas' || selectedCategory === 'all' || selectedCategory === '' || cat === selectedCategory);
-
-                return matchesName && matchesCat;
-            });
-        }
-        // --- FIN: FILTRADO INTELIGENTE ---
+        // NOTA: aqui antes habia un segundo filtrado que leia elementos con id
+        // 'search-input' / 'inputBusqueda' y 'category-filter' / 'selectCategoria',
+        // que NO existen en el HTML (los reales son 'search-student' y
+        // 'search-admin'). Ese filtrado fantasma dejaba 'dataToRender' con datos
+        // ya filtrados o vacios y hacia que el buscador no mostrara resultados.
+        // El filtrado (busqueda + categoria) lo hace ahora unicamente
+        // app.filterProducts(), que es la unica fuente de verdad y conoce la vista
+        // activa (student/admin). Aqui solo se renderiza lo que llega.
 
         // Optimización: usar DocumentFragment para mejor rendimiento
         const studentFragment = document.createDocumentFragment();
@@ -1431,7 +1498,7 @@ const app = {
             const id = parseInt(idInput);
             const index = this.products.findIndex(p => String(p.id) === String(id));
             if (index !== -1) {
-                this.products[index] = { id, name, category, stock: parseFloat(stock), location, marca: location, image, desc, lote, prodDate, expDate, unit, state };
+                this.products[index] = { id, name, category, stock: parseFloat(stock), location, marca: location, image, desc, lote, prodDate, expDate, unit, state, _pendienteDesde: Date.now() };
                 this.logActivity(`Producto editado: ${name} `, `Categoría: ${category}, Stock: ${stock} `);
                 this.registrarEnHistorial({
                     tipo: 'edicion',
@@ -1443,24 +1510,36 @@ const app = {
                     detalle: desc || 'Producto editado en el inventario'
                 });
                 showToast('Se ha editado correctamente', 'success');
+
+                // Subir a Firestore SOLO este producto editado, para no
+                // sobrescribir con datos locales desfasados los cambios de otra máquina.
+                this.saveData(this.products[index]);
             }
         } else {
-            // Crear nuevo. Se ignoran ids no numéricos (NaN) para evitar
-            // que Math.max devuelva NaN y todos los productos colisionen.
-            const idsValidos = this.products
-                .map(p => parseInt(p.id))
-                .filter(n => Number.isFinite(n));
-            const newId = idsValidos.length > 0 ? Math.max(...idsValidos) + 1 : 1;
-            const nuevoProducto = { id: newId, name, category, stock: parseFloat(stock), location, marca: location, image, desc, lote, prodDate, expDate, unit, state };
+            // Crear nuevo. El id se basa en el timestamp para que sea único
+            // entre distintas máquinas/navegadores (el antiguo Math.max+1 podía
+            // coincidir con un producto creado en OTRA máquina y sobrescribirlo,
+            // haciendo que el producto nuevo "desapareciera" o no apareciera).
+            const newId = Date.now() + Math.floor(Math.random() * 10000);
+            const nuevoProducto = { id: newId, name, category, stock: parseFloat(stock), location, marca: location, image, desc, lote, prodDate, expDate, unit, state, _pendienteDesde: Date.now() };
             console.log('[DEBUG] Producto nuevo creado:', nuevoProducto);
-            console.log('[DEBUG] Total productos antes de guardar:', this.products.length);
             this.products.push(nuevoProducto);
 
             // Subir el producto nuevo a Firestore de inmediato. Así el snapshot del
             // listener ya lo incluye y no se pierde por la carrera de sincronización.
             if (window.firebaseReady && typeof guardarProductoFirebase === 'function') {
                 guardarProductoFirebase({ ...nuevoProducto, id: String(nuevoProducto.id) })
-                    .catch(err => console.warn('[Firebase] Error al guardar producto nuevo:', err));
+                    .then(() => showToast('Producto sincronizado con la nube', 'success'))
+                    .catch(err => {
+                        console.error('[Firebase] ❌ Error al guardar producto nuevo:', err);
+                        const motivo = err && (err.code === 'permission-denied')
+                            ? 'Permisos de Firestore denegados. Revisa las reglas en la consola de Firebase.'
+                            : (err && err.message) || 'Error desconocido';
+                        showToast('No se pudo sincronizar con la nube: ' + motivo, 'error');
+                    });
+            } else {
+                console.warn('[Firebase] ⚠️ No se pudo sincronizar el producto nuevo (Firestore no disponible). Solo se guardó en este dispositivo.');
+                showToast('Guardado solo en este dispositivo (sin conexión a la nube)', 'error');
             }
             console.log('[DEBUG] Total productos después de guardar:', this.products.length);
             this.logActivity(`Producto creado: ${name} `, `Categoría: ${category}, Stock: ${stock} `);
@@ -1477,7 +1556,14 @@ const app = {
         }
 
         console.log('[DEBUG] Guardando datos y renderizando tablas...');
-        this.saveData();
+        // Persistir el inventario en localStorage (la subida a Firestore de este
+        // producto ya se hizo arriba de forma individual para no pisar cambios de
+        // otras máquinas). Aquí llamamos a saveData SIN argumento para que
+        // reescriba el localStorage; si Firebase está listo y no hay producto
+        // concreto, saveData subiría todo, así que para evitar eso guardamos
+        // directamente el estado local tal cual.
+        localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
+        localStorage.setItem('cirna_trash', JSON.stringify(this.trash));
         console.log('[DEBUG] Tablas renderizadas. Total productos en this.products:', this.products.length);
 
         // Mantener el filtro actual después de guardar
@@ -1800,10 +1886,13 @@ const app = {
 
             producto.stock = nuevoStockVal;
             producto.unit = nuevaUnidad;
+            producto._pendienteDesde = Date.now();
             stockRestante = `${nuevoStockVal} ${nuevaUnidad}`.trim();
             loteConsumo = producto.lote || producto.codigo || '-';
 
-            this.saveData();
+            // Sincronizar SOLO el producto cuyo stock cambió (no todo el inventario),
+            // para no sobrescribir en Firestore los cambios recientes de otra máquina.
+            this.saveData(producto);
             this.renderTables();
 
             detalleConsumo = stockActual > 0
@@ -2134,26 +2223,13 @@ function toggleEquipmentFields() {
 // Inicializar la aplicación cuando cargue el DOM
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Conexión en tiempo real con Firebase
-    if (typeof escucharProductosFirebase === 'function') {
-        escucharProductosFirebase((productos) => {
-            console.log("🔥 Productos cargados desde Firebase:", productos);
+    // Nota: la conexion en tiempo real con Firebase la gestiona app.init()
+    // (->_initConFirebase), que ya registra UN listener y normaliza los datos
+    // (auto-categorias, unidades, ids, papelera). Aqui NO se debe registrar otro
+    // listener: si se hacía, se sobreescribia app.products con los datos crudos
+    // de Firestore (sin normalizar) y las tablas quedaban inconsistentes.
 
-            // Asigna los productos de Firebase al estado de tu app
-            if (window.app) {
-                app.products = productos;
-
-                // Llama al método encargado de renderizar/pintar la tabla
-                if (typeof app.renderTable === 'function') {
-                    app.renderTable();
-                } else if (typeof app.renderProducts === 'function') {
-                    app.renderProducts();
-                }
-            }
-        });
-    }
-
-    // 2. Listeners de la interfaz existentes
+    // Listeners de la interfaz existentes
     document.getElementById('product-category')?.addEventListener('change', () => {
         toggleDateFields();
         toggleEquipmentFields();

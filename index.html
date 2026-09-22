@@ -20,6 +20,13 @@
         <div class="blob blob-2"></div>
     </div>
 
+    <!-- Indicador de sincronización en la nube (se actualiza desde script.js) -->
+    <div id="sync-status"
+        style="position: fixed; bottom: 12px; left: 12px; z-index: 9999; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-size: 0.78rem; font-family: Inter, sans-serif; background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.35);">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
+        <span id="sync-status-text">Conectando a la nube...</span>
+    </div>
+
     <main class="app-container">
 
         <!-- 1. VISTA: MENÚ PRINCIPAL (INICIO) -->
@@ -792,10 +799,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics-compat.js"></script>
     <!-- Configuracion e inicializacion de Firebase -->
-    <script src="firebase-config.js"></script>
+    <script src="firebase-config.js?v=2026_v6"></script>
     <!-- Datos e inventario -->
-    <script src="data.js"></script>
-    <script src="script.js?v=2026_v5"></script>
+    <script src="data.js?v=2026_v6"></script>
+    <script src="script.js?v=2026_v6"></script>
 </body>
 
 </html>
