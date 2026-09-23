@@ -55,7 +55,12 @@ function categoryHasNoDates(category) {
 
 function categoryHasNoMetadata(category) {
     const normalized = normalizeCategory(category);
-    return /^articulos? de oficina$/.test(normalized);
+    // "Articulos de oficina" y "Otros" (mobiliario, etc.) no manejan los campos
+    // de Marca, Lote ni F. Producción/Vencimiento, por eso se ocultan esas
+    // columnas en lugar de mostrarlas vacías con "-".
+    return /^articulos? de oficina$/.test(normalized) ||
+        normalized === 'otros' ||
+        normalized === 'otro';
 }
 
 function isLaboratoryMaterials(category) {
@@ -1203,12 +1208,16 @@ const app = {
 
         const hasDateColumns = dataToRender.some(p => !categoryHasNoDates(p.category));
         const hasMetadataColumns = dataToRender.some(p => !categoryHasNoMetadata(p.category));
-        // Lab, limpieza y artículos de limpieza comparten el layout completo de columnas
+        // Materiales de laboratorio usan el layout completo de columnas (Marca/Lote).
+        // Los materiales de limpieza tienen su propio layout (sin Unidad).
         const showLabMaterialColumns = dataToRender.length > 0 &&
-            dataToRender.every(p => isLaboratoryMaterials(p.category) || isCleaningMaterials(p.category));
+            dataToRender.every(p => isLaboratoryMaterials(p.category));
         const showEquipmentLayout = dataToRender.length > 0 &&
             dataToRender.every(p => isEquipment(p.category));
-        const showCleaningMaterialsLayout = false;
+        // Materiales de limpieza: se oculta la columna "UNIDAD" (no aplica) y la
+        // columna de cantidad muestra la cantidad real de producto existente.
+        const showCleaningMaterialsLayout = dataToRender.length > 0 &&
+            dataToRender.every(p => isCleaningMaterials(p.category));
         const showSolventLayout = dataToRender.length > 0 &&
             dataToRender.every(p => isSolvent(p.category));
         const showAcidLayout = dataToRender.length > 0 &&
@@ -1252,6 +1261,13 @@ const app = {
             }
         });
 
+        // Cambiar el encabezado de UNIDAD a CANTIDAD para productos de limpieza
+        document.querySelectorAll('th.unit-column').forEach(column => {
+            if (column.tagName === 'TH') {
+                column.textContent = showCleaningMaterialsLayout ? 'CANTIDAD' : 'UNIDAD';
+            }
+        });
+
         if (dataToRender.length === 0) {
             const emptyColsStudent = (hasDateColumns ? 10 : 8) - (hasMetadataColumns ? 0 : 3); // +1 por columna unidad
             const emptyColsAdmin = 7; // 7 columnas en la tabla de admin: Nombre, Categoría, Cantidad, Unidad, Marca, Lote, Acciones
@@ -1291,6 +1307,10 @@ const app = {
             const stockVal = p.stock !== undefined ? p.stock : '-';
             const stockClass = (Number(stockVal) > 0) ? 'stock-ok' : 'stock-low';
             const unitVal = p.unit || p.unidad || '-';
+            const cleaningMaterials = isCleaningMaterials(p.category);
+            // Para Materiales de limpieza, la columna "cantidad" debe mostrar
+            // la cantidad real de producto (stock), no la unidad.
+            const quantityCellValue = cleaningMaterials ? stockVal : unitVal;
             const quantityLabel = formatQuantityUnit(p);
 
             const isEquipRow = equipment || p.category === 'Equipos' || p.categoria === 'Equipos';
@@ -1300,11 +1320,16 @@ const app = {
             const loteVal = loteReal;
             const descVal = p.desc || p.descripcion || '-';
 
+            // Para equipos, mostrar la unidad (cantidad de equipos) en lugar del stock
+            const displayUnitValue = isEquipRow ? unitVal : stockVal;
+            const displayUnitClass = isEquipRow ? '' : stockClass;
+            const displayUnitHtml = isEquipRow ? escapeHtml(displayUnitValue) : `<span class="stock-badge ${displayUnitClass}">${escapeHtml(displayUnitValue)}</span>`;
+
             const commonCells = `
         <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
-        <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(stockVal)}</span></td>
-        <td class="unit-column">${escapeHtml(unitVal)}</td>
+        <td class="quantity-column">${escapeHtml(quantityCellValue)}</td>
+        <td class="unit-column">${displayUnitHtml}</td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>
         <td class="lote-column">${escapeHtml(loteVal)}</td>
         ${prodCell}
@@ -1315,8 +1340,8 @@ const app = {
             const adminCells = `
         <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
-        <td class="quantity-column"><span class="stock-badge ${stockClass}">${escapeHtml(stockVal)}</span></td>
-        <td class="unit-column">${escapeHtml(unitVal)}</td>
+        <td class="quantity-column">${escapeHtml(quantityCellValue)}</td>
+        <td class="unit-column">${displayUnitHtml}</td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>
         <td class="lote-column">${escapeHtml(loteVal)}</td>
     `;
@@ -1324,12 +1349,11 @@ const app = {
 
             const trStudent = document.createElement('tr');
             trStudent.setAttribute('class', rowClass);
+            // Vista Personal: solo el icono "Ver" (editar/eliminar son exclusivos del administrador).
             trStudent.innerHTML = `
         ${commonCells}
-        <td class="action-buttons text-right">
-            <button class="btn-icon" onclick="app.viewProduct(${p.id})">
-                <i class="ph ph-eye"></i>
-            </button>
+        <td class="action-buttons actions-column text-right">
+            <button class="btn-icon" onclick="app.viewProduct(${p.id})" title="Ver"><i class="ph ph-eye"></i></button>
         </td>
     `;
             studentFragment.appendChild(trStudent);
@@ -1338,7 +1362,7 @@ const app = {
             trAdmin.setAttribute('class', rowClass);
             trAdmin.innerHTML = `
         ${adminCells}
-        <td class="action-buttons text-right">
+        <td class="action-buttons actions-column text-right">
             <button class="btn-icon" onclick="app.viewProduct(${p.id})" title="Ver"><i class="ph ph-eye"></i></button>
             <button class="btn-icon" onclick="app.editProduct(${p.id})" title="Editar"><i class="ph ph-pencil"></i></button>
             <button class="btn-icon text-danger" onclick="app.deleteProduct(${p.id})" title="Eliminar"><i class="ph ph-trash"></i></button>
@@ -2384,7 +2408,7 @@ function imprimirPadron(tipoVista) {
     ventanaImpresion.document.write(`<h2>Padrón de Inventario - ${categoriaSeleccionada.toUpperCase()}</h2>`);
 
     ventanaImpresion.document.write('<table>');
-    ventanaImpresion.document.write('<thead><tr><th>N°</th><th>Nombre</th><th>Categoría</th><th>Cantidad</th><th>Unidad</th><th>Marca</th><th>Lote</th></tr></thead>');
+    ventanaImpresion.document.write('<thead><tr><th>N°</th><th>Nombre</th><th>Categoría</th><th>Unidad</th><th>Cantidad</th><th>Marca</th><th>Lote</th></tr></thead>');
     ventanaImpresion.document.write('<tbody>');
 
     productosAImprimir.forEach((p, index) => {
@@ -2392,8 +2416,8 @@ function imprimirPadron(tipoVista) {
             <td>${index + 1}</td>
             <td>${p.nombre || p.name || ''}</td>
             <td>${p.categoria || p.category || ''}</td>
-            <td>${p.stock !== undefined ? p.stock : (p.cantidad || '')}</td>
             <td>${p.unidad || p.unit || ''}</td>
+            <td>${p.stock !== undefined ? p.stock : (p.cantidad || '')}</td>
             <td>${p.marca || p.location || ''}</td>
             <td>${p.lote || ''}</td>
         </tr>`);

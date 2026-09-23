@@ -968,7 +968,9 @@ select option {
     white-space: normal;
 }
 
-/* Columna 10: Acciones - FIJA A LA DERECHA */
+/* Columna de Acciones - FIJA A LA DERECHA (en Personal es la #10; en Admin es la #7). */
+.modern-table th.actions-column,
+.modern-table td.actions-column,
 .modern-table th:nth-child(10),
 .modern-table td:nth-child(10) {
     min-width: 150px;
@@ -981,12 +983,14 @@ select option {
     z-index: 10;
 }
 
+.modern-table th.actions-column,
 .modern-table th:nth-child(10) {
     background: rgba(30, 41, 59, 0.98);
     z-index: 20;
     border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.modern-table td.actions-column,
 .modern-table td:nth-child(10) {
     border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -1007,14 +1011,48 @@ select option {
     z-index: 10;
 }
 
+/* La columna de Acciones (Ver / Editar / Eliminar) debe permanecer SIEMPRE
+   visible, sin importar el layout de la categoría activa (Materiales de
+   laboratorio, Materiales de limpieza, Artículos de oficina, Otros, etc.).
+   Gana en especificidad a las reglas de layout que ocultan celdas por índice. */
+.modern-table th.actions-column,
+.modern-table td.actions-column,
+.modern-table th.action-buttons,
+.modern-table td.action-buttons {
+    display: table-cell !important;
+    width: auto !important;
+    min-width: 130px !important;
+    padding: 1rem 0.75rem !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    box-sizing: border-box;
+}
+
+.modern-table th.actions-column,
 .modern-table th:nth-child(10) {
     background: rgba(30, 41, 59, 0.98);
     z-index: 20;
     border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.modern-table td.actions-column,
 .modern-table td:nth-child(10) {
     border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* La columna de acciones (admin: #7) tambien debe quedar fija a la derecha. */
+#table-admin th.actions-column,
+#table-admin td.actions-column {
+    position: sticky;
+    right: 0;
+    background: rgba(30, 41, 59, 0.95);
+    z-index: 10;
+}
+
+#table-admin th.actions-column {
+    background: rgba(30, 41, 59, 0.98);
+    z-index: 20;
 }
 
 .modern-table:not(.show-equipment-state) .state-column,
@@ -2708,24 +2746,23 @@ select option {
     text-overflow: ellipsis !important;
 }
 
-/* Forzar un ancho consistente para la columna Cantidad */
+/* Ocultar la columna cantidad (ahora contiene unidad) */
 .modern-table th.quantity-column,
 .modern-table td.quantity-column {
-    width: 100px !important;
-    min-width: 100px !important;
-    max-width: 100px !important;
-    white-space: nowrap !important;
-    text-align: left !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
 }
 
 /* Forzar un ancho consistente para la columna Unidad */
 .modern-table th.unit-column,
 .modern-table td.unit-column {
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
     white-space: nowrap !important;
     text-align: left !important;
     overflow: hidden !important;
@@ -3865,4 +3902,71 @@ td.marca-column {
 
 #modalConfig.hidden {
     display: none !important;
+}
+/* ==========================================================================
+   GARANTÍA: la columna de Acciones (Ver / Editar / Eliminar) debe mostrarse
+   SIEMPRE, en cualquier categoría y en ambas vistas (Personal y Administración).
+
+   Los layouts de "Materiales de laboratorio", "Materiales de limpieza",
+   "Artículos de oficina" y "Otros" ocultan celdas por índice (nth-child), y en
+   la tabla de administración esos índices coincidían con la columna de Acciones
+   (la #7), dejándola invisible. Estas reglas, con especificidad y orden
+   superiores, restauran la columna de Acciones en todos esos casos.
+   ========================================================================== */
+.modern-table th.actions-column,
+.modern-table td.actions-column,
+.modern-table th.action-buttons,
+.modern-table td.action-buttons {
+    display: table-cell !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    min-width: 150px !important;
+    padding: 1rem 0.75rem !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+}
+
+/* Layouts de categorías que ocultaban la columna de acciones por índice:
+   se restaura explícitamente la celda/encabezado de Acciones. */
+.modern-table.show-lab-material-columns th.actions-column,
+.modern-table.show-lab-material-columns td.actions-column,
+.modern-table.show-cleaning-materials-layout th.actions-column,
+.modern-table.show-cleaning-materials-layout td.actions-column,
+.modern-table.show-equipment-state th.actions-column,
+.modern-table.show-equipment-state td.actions-column,
+.modern-table.show-solvent-layout th.actions-column,
+.modern-table.show-solvent-layout td.actions-column,
+.modern-table.show-acid-layout th.actions-column,
+.modern-table.show-acid-layout td.actions-column,
+.modern-table.show-base-layout th.actions-column,
+.modern-table.show-base-layout td.actions-column,
+.modern-table.hide-other-columns th.actions-column,
+.modern-table.hide-other-columns td.actions-column,
+.modern-table.hide-date-columns th.actions-column,
+.modern-table.hide-date-columns td.actions-column {
+    display: table-cell !important;
+    visibility: visible !important;
+    width: auto !important;
+    min-width: 150px !important;
+    padding: 1rem 0.75rem !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+}
+
+/* En la tabla de administración la columna de acciones debe quedar fija a la
+   derecha, con fondo opaco para que no se solapen las columnas al desplazar. */
+#table-admin th.actions-column,
+#table-admin td.actions-column {
+    position: sticky !important;
+    right: 0 !important;
+    background: rgba(30, 41, 59, 0.96) !important;
+    z-index: 10 !important;
+}
+
+#table-admin th.actions-column {
+    background: rgba(30, 41, 59, 0.99) !important;
+    z-index: 20 !important;
 }
