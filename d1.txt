@@ -1,0 +1,25 @@
+﻿const products =
+    [
+        {
+            "id": 1,
+            "name": "Ácido acético",
+            "category": "Solventes",
+            "stock": 1,
+            "unit": "100 ML",
+            "location": "-",
+            "lote": "A-01",
+            "prodDate": "",
+            "expDate": "",
+            "desc": "sellado",
+            "image": null
+        },
+        {
+            "id": 2,
+            "name": "Ácido acético glacial",
+            "category": "Solventes",
+            "stock": 1,
+            "unit": "2.5 L",
+            "location": "FERMONT",
+            "lote": "530443",
+            "prodDate": "",
+            "expDate": "",

@@ -249,8 +249,29 @@ const UNIT_SYSTEM = {
     }
 };
 
+// Devuelve la cantidad real de un producto.
+// En la data importada, algunas categorias (Equipos, Materiales de limpieza,
+// etc.) guardaron el conteo en el campo 'unit' (un numero) y dejaron 'stock'
+// en 0. Para no mostrar 0 cuando en realidad hay existencias, si el stock es
+// 0/vacio y 'unit' es un numero puro, se usa ese numero como cantidad.
+// Al agregar cantidad y unidad por separado en el formulario ("5" + "KG"),
+// el usuario ya no necesita escribir "5 KG" en la unidad, por eso el conteo a
+// veces queda en 'unit'.
+function getCantidad(product) {
+    if (!product) return 0;
+    const rawStock = product.stock;
+    const stock = (rawStock === '' || rawStock === null || rawStock === undefined) ? 0 : Number(rawStock);
+    if (Number.isFinite(stock) && stock !== 0) return stock;
+
+    const rawUnit = String(product.unit ?? '').trim();
+    if (/^\d+(?:[.,]\d+)?$/.test(rawUnit)) {
+        return Number(rawUnit.replace(',', '.'));
+    }
+    return Number.isFinite(stock) ? stock : 0;
+}
+
 function formatQuantityUnit(product) {
-    const quantity = product.stock ?? 0;
+    const quantity = getCantidad(product);
     const unit = normalizeQuantityUnit(product.unit);
     if (isEquipment(product.category) || categoryHasNoMetadata(product.category)) {
         return `${quantity} / ${unit || '-'}`;
@@ -906,6 +927,27 @@ const app = {
                         }
                         return p;
                     });
+
+                    // Migración de datos: los productos sembrados (mismos ids que
+                    // data.js) que quedaron con stock 0 o sin unidad se completan
+                    // con los valores corregidos del Excel, sin tocar los campos
+                    // que el usuario ya editó (solo se rellena lo que falta).
+                    if (typeof products !== 'undefined' && Array.isArray(products) && products.length > 0) {
+                        const semilla = new Map(products.map(sp => [String(sp.id), sp]));
+                        this.products = this.products.map(p => {
+                            if (!p || p._enPapelera) return p;
+                            const sp = semilla.get(String(p.id));
+                            if (!sp) return p;
+                            const fixed = { ...p };
+                            const sinStock = fixed.stock === '' || fixed.stock === null || fixed.stock === undefined || Number(fixed.stock) === 0;
+                            const sinUnidad = !fixed.unit || !String(fixed.unit).trim() || String(fixed.unit).trim() === '-';
+                            if (sinStock && sp.stock) fixed.stock = sp.stock;
+                            if (sinUnidad && sp.unit) fixed.unit = normalizeQuantityUnit(sp.unit);
+                            if (fixed.stock !== p.stock || fixed.unit !== p.unit) updated = true;
+                            return fixed;
+                        });
+                    }
+
                     if (updated) localStorage.setItem('cirna_inventory', JSON.stringify(this.products));
                     loaded = true;
                 }
@@ -1261,16 +1303,19 @@ const app = {
             }
         });
 
-        // Cambiar el encabezado de UNIDAD a CANTIDAD para productos de limpieza
+        // Encabezado de la columna de unidad: en la mayoria de categorias muestra
+        // la medida (unidad) y ademas cuantos hay (cantidad), por eso se rotula
+        // "Unidad/Cantidad". Para Materiales de limpieza solo aplica la cantidad.
         document.querySelectorAll('th.unit-column').forEach(column => {
             if (column.tagName === 'TH') {
-                column.textContent = showCleaningMaterialsLayout ? 'CANTIDAD' : 'UNIDAD';
+                column.textContent = showCleaningMaterialsLayout ? 'Cantidad' : 'Unidad/Cantidad';
             }
         });
 
         if (dataToRender.length === 0) {
-            const emptyColsStudent = (hasDateColumns ? 10 : 8) - (hasMetadataColumns ? 0 : 3); // +1 por columna unidad
-            const emptyColsAdmin = 7; // 7 columnas en la tabla de admin: Nombre, Categoría, Cantidad, Unidad, Marca, Lote, Acciones
+            // La columna "cantidad" ya no existe; los totales bajan en 1.
+            const emptyColsStudent = (hasDateColumns ? 9 : 7) - (hasMetadataColumns ? 0 : 3);
+            const emptyColsAdmin = 6; // Nombre, Categoría, Unidad, Marca, Lote, Acciones
             const emptyMsgStudent = `<tr><td colspan="${emptyColsStudent}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
             const emptyMsgAdmin = `<tr><td colspan="${emptyColsAdmin}" class="text-center" style="padding: 2rem; color: var(--text-muted);">No se encontraron productos.</td></tr>`;
             studentBody.innerHTML = emptyMsgStudent;
@@ -1304,14 +1349,16 @@ const app = {
             const marcaReal = p.marca || p.brand || p.fabricante || p.location || '-';
             const loteReal = p.lote || p.codigo || '-';
 
-            const stockVal = p.stock !== undefined ? p.stock : '-';
+            // getCantidad resuelve el caso en que 'stock' quedo en 0 y el
+            // conteo real vive en 'unit' (dato importado de Excel).
+            const stockVal = getCantidad(p);
             const stockClass = (Number(stockVal) > 0) ? 'stock-ok' : 'stock-low';
-            const unitVal = p.unit || p.unidad || '-';
+            const rawUnitVal = p.unit || p.unidad || '';
+            // Si la unidad es solo un numero, es en realidad el conteo: no se
+            // repite como medida para no mostrar "1 · 1".
+            const unitEsConteo = /^\d+(?:[.,]\d+)?$/.test(String(rawUnitVal).trim());
+            const unitVal = unitEsConteo ? '' : (rawUnitVal || '-');
             const cleaningMaterials = isCleaningMaterials(p.category);
-            // Para Materiales de limpieza, la columna "cantidad" debe mostrar
-            // la cantidad real de producto (stock), no la unidad.
-            const quantityCellValue = cleaningMaterials ? stockVal : unitVal;
-            const quantityLabel = formatQuantityUnit(p);
 
             const isEquipRow = equipment || p.category === 'Equipos' || p.categoria === 'Equipos';
             const rowClass = isEquipRow ? 'equipment-product-row' : '';
@@ -1320,15 +1367,18 @@ const app = {
             const loteVal = loteReal;
             const descVal = p.desc || p.descripcion || '-';
 
-            // Para equipos, mostrar la unidad (cantidad de equipos) en lugar del stock
-            const displayUnitValue = isEquipRow ? unitVal : stockVal;
-            const displayUnitClass = isEquipRow ? '' : stockClass;
-            const displayUnitHtml = isEquipRow ? escapeHtml(displayUnitValue) : `<span class="stock-badge ${displayUnitClass}">${escapeHtml(displayUnitValue)}</span>`;
+            // La columna "Unidad/Cantidad" muestra cuantos hay (stock) y, si aplica,
+            // la medida del envase (unidad). Para Materiales de limpieza solo aplica
+            // la cantidad, por eso se muestra unicamente el stock.
+            const stockBadge = `<span class="stock-badge ${stockClass}">${escapeHtml(stockVal)}</span>`;
+            const medidaTexto = (unitVal && unitVal !== '-') ? ` <span class="unit-measure" style="color: var(--text-muted); font-size: 0.85rem;">· ${escapeHtml(unitVal)}</span>` : '';
+            const displayUnitHtml = cleaningMaterials
+                ? stockBadge
+                : `${stockBadge}${medidaTexto}`;
 
             const commonCells = `
         <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
-        <td class="quantity-column">${escapeHtml(quantityCellValue)}</td>
         <td class="unit-column">${displayUnitHtml}</td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>
         <td class="lote-column">${escapeHtml(loteVal)}</td>
@@ -1340,7 +1390,6 @@ const app = {
             const adminCells = `
         <td class="name-column">${escapeHtml(p.name || p.nombre || '-')}</td>
         <td class="category-column">${escapeHtml(p.category || p.categoria || '-')}</td>
-        <td class="quantity-column">${escapeHtml(quantityCellValue)}</td>
         <td class="unit-column">${displayUnitHtml}</td>
         <td class="marca-column">${escapeHtml(brandVal)}</td>
         <td class="lote-column">${escapeHtml(loteVal)}</td>
@@ -1698,8 +1747,8 @@ const app = {
                 <span class="value">${escapeHtml(p.category || '-')}</span>
             </div>
             <div class="detail-item">
-                <span class="label">Unidad</span>
-                <span class="value">${escapeHtml(p.unit || p.unidad || '-')}</span>
+                <span class="label">Cantidad</span>
+                <span class="value">${escapeHtml(getCantidad(p))}</span>
             </div>
 `;
 

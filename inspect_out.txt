@@ -1,0 +1,194 @@
+﻿================================================================================
+SHEET: SOLVENTES
+  row 1: [0]='INVENTARIO DE INSUMOS QU�MICOS (SOLVENTES) - 30/06/2026'
+  row 2: [0]='N�' | [1]='NOMBRE DE REACTIVOS' | [2]='DESCRIPCI�N' | [3]='MARCA' | [4]='LOTE' | [5]='FECHA DE PRODUCCI�N' | [6]='FECHA DE VENCIMIENTO' | [7]='UND' | [8]='CANTIDAD  EN        (g)  O  (mL)' | [9]='FISCALIZADO'
+  row 3: [0]=1 | [1]='�cido ac�tico' | [2]='sellado' | [3]=' -' | [4]='A-01' | [5]='SF' | [6]='SF' | [7]=1 | [8]='100 ML'
+  row 4: [0]=2 | [1]='�cido ac�tico glacial' | [2]='en uso' | [3]='FERMONT' | [4]=530443 | [5]='SF' | [6]='SF' | [7]=1 | [8]='2.5 L' | [9]='X'
+  row 5: [0]=3 | [1]='�cido ac�tico glacial' | [2]='sellado' | [3]='FERMONT' | [4]=530443 | [5]='SF' | [6]='SF' | [7]=1 | [8]=' 2.5 L' | [9]='X'
+  row 6: [0]=4 | [1]='�cido ac�tico glacial' | [2]='sellado' | [3]='EMSURE/SUPELCO' | [4]='K56414363502' | [5]='SF' | [6]=datetime.datetime(2025, 12, 31, 0, 0) | [7]=1 | [8]='2.5L' | [9]='X'
+  row 7: [0]=5 | [1]='Alcohol et�lico absoluto' | [2]='sellado' | [3]='J.T. BAKER' | [4]='E13W68' | [7]=1 | [8]='4 L' | [9]='X'
+  row 8: [0]=6 | [1]='Alcohol et�lico absoluto' | [2]='en uso' | [3]='J.T. BAKER' | [4]=2331105858 | [7]=2 | [8]='4 L' | [9]='X'
+  row 9: [0]=7 | [1]='Alcohol met�lico' | [2]='en uso' | [3]=' -' | [4]=' -' | [5]=' -' | [6]=' -' | [7]=1 | [8]='1 L' | [9]='X'
+  row 10: [0]=8 | [1]='Butanol' | [2]='en uso' | [3]='GERMANY' | [4]='B1012' | [7]=1 | [8]='1L'
+  row 11: [0]=9 | [1]='Butanol' | [2]='en uso' | [3]='FISHER SCIENTIFIC' | [4]=80619 | [5]='SF' | [6]='SF' | [7]=1 | [8]='2.5 L' | [9]='X'
+  row 12: [0]=11 | [1]='�cido sulfurico ' | [2]='Sellado' | [3]='SUPELCO' | [4]='Z0972131503' | [7]=1 | [8]='2.5L'
+  row 13: [0]=12 | [1]='�cido clorh�drico fuming 37%' | [2]='sellado' | [3]='SUPELCO' | [4]='Z0950317437' | [7]=1 | [8]='2.5L'
+  row 14: [0]=13 | [1]='METANOL' | [2]='Sellado' | [3]='SPECTRUM' | [4]='2NC0177' | [5]='SF' | [6]=datetime.datetime(2029, 2, 1, 0, 0) | [7]=2 | [8]='1L'
+================================================================================
+SHEET: �CIDOS
+  row 1: [0]='INVENTARIO DE INSUMOS QU�MICOS (�CIDOS) - 30/06/2026'
+  row 2: [0]='N�' | [1]='NOMBRE DE REACTIVOS' | [2]='DESCRIPCI�N' | [3]='MARCA' | [4]='LOTE' | [5]='FECHA DE PRODUCCI�N' | [6]='FECHA DE VENCIMIENTO' | [7]='UND' | [8]='CANTIDAD  EN        (g)  O  (mL)' | [9]='FISCALIZADO'
+  row 3: [0]=1 | [1]='�cido 4-bromofenilbor�nico, 95 %' | [2]='sellado' | [3]='SIGMA - ALDRICH' | [4]='MKCJ8298' | [5]='SF' | [6]='SF' | [7]=3 | [8]='5 G'
+  row 4: [0]=2 | [1]='�cido asc�rbico ' | [2]='en uso' | [3]='MERCK' | [4]='F572227006' | [5]='SF' | [6]='SF' | [7]=1 | [8]='100 G'
+  row 5: [0]=4 | [1]='�cido b�rico' | [2]='en uso' | [3]='FERMONT' | [4]=526101 | [5]='SF' | [6]='SF' | [7]=1 | [8]='500 G'
+  row 6: [0]=5 | [1]='�cido c�trico monohidratado' | [2]='sellado' | [3]='FISHER CHEMICALS' | [4]=125459 | [5]='SF' | [6]='SF' | [7]=2 | [8]='500 G'
+  row 7: [0]=6 | [1]='�cido c�trico monohidratado' | [2]='sellado' | [3]='EMSURE/MERCK' | [4]='K50160844 902' | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 KG'
+  row 8: [0]=7 | [1]='�cido etilendiaminotetraac�tico (EDTA)' | [2]='en uso' | [3]='SPECTRUM' | [4]='E1908A' | [5]='SF' | [6]=datetime.datetime(2025, 7, 1, 0, 0) | [7]=1 | [8]='1 KG'
+  row 9: [0]=8 | [1]='�cido g�lico' | [2]='sellado' | [3]='SIGMA - ALDRICH' | [4]=392866 | [7]=1 | [8]='250G'
+  row 10: [0]=9 | [1]='�cido etilendiaminotetraac�tico (EDTA)' | [2]='en uso' | [3]='SUPELCO' | [4]='K52625318031' | [5]='SF' | [6]=datetime.datetime(2025, 7, 31, 0, 0) | [7]=1 | [8]='250 G'
+  row 11: [0]=10 | [1]='�cido succ�nico' | [2]='sellado' | [3]='SIGMA - ALDRICH' | [4]='SLBZ5010' | [5]='SF' | [6]='SF' | [7]=1 | [8]='500 G'
+  row 12: [0]=11 | [1]='�cido tiobarbit�rico' | [2]='en uso' | [3]='SIGMA - ALDRICH' | [4]='BCBZ1796' | [5]='SF' | [6]='SF' | [7]=1 | [8]='25 G'
+  row 13: [0]=12 | [1]='�cido 2 tiobarbit�rico' | [2]='sellado' | [3]='SIGMA - ALDRICH' | [4]=102648457 | [5]='SF' | [6]='SF' | [7]=1 | [8]='25 G'
+  row 14: [0]=13 | [1]='�cido tiobarbit�rico' | [2]='en uso' | [3]='MERCK' | [4]='LO14100280 718' | [5]='SF' | [6]='SF' | [7]=1 | [8]='25 G'
+================================================================================
+SHEET: BASES Y SALES
+  row 1: [1]='INVENTARIO DE REACTIVOS QU�MICOS ANAL�TICOS (SALES Y BASES) - 30/06/2026'
+  row 2: [1]='N�' | [2]='NOMBRE DE REACTIVOS' | [3]='DESCRIPCI�N' | [4]='MARCA' | [5]='LOTE' | [6]='FECHA DE PRODUCCI�N' | [7]='FECHA DE VENCIMIENTO' | [8]='UND' | [9]='CANTIDAD  EN        (g)  O  (mL)' | [10]='FISCALIZADO'
+  row 3: [1]=1 | [2]='1,10 Fenantrolina monohidratado' | [3]='sellado' | [4]='MERK' | [5]='K41229625' | [6]='SF' | [7]='SF' | [8]=1 | [9]='10 G'
+  row 4: [1]=2 | [2]='1-Naphthol' | [3]='en uso' | [4]='MERK' | [5]='S5440523 948' | [6]='SF' | [7]='SF' | [8]=1 | [9]='50 G' | [11]=' '
+  row 5: [1]=3 | [2]='4-(Dimetilamino)-benzaldeh�do' | [3]='SELLADO' | [4]='SIGMA' | [5]=102843821 | [6]='SF' | [7]='SF' | [8]=1 | [9]='25G'
+  row 6: [1]=4 | [2]='4-(Dimetilamino)-benzaldeh�do' | [3]='sellado' | [4]='KgaA/MERCK' | [5]='G277958948' | [6]='SF' | [7]='SF' | [8]=1 | [9]='100 G'
+  row 7: [1]=5 | [2]='4-aninopiridina (t�xico)' | [3]='sellado' | [4]='MERK' | [5]='S35201017' | [6]='SF' | [7]='SF' | [8]=1 | [9]='10 G'
+  row 8: [1]=6 | [2]='Azul de metileno' | [3]='sellado' | [4]='SCHARLAU' | [5]=17634701 | [6]='SF' | [7]=datetime.datetime(2027, 1, 1, 0, 0) | [8]=1 | [9]='25 G'
+  row 9: [1]=7 | [2]='Bicarbonato de sodio' | [3]='sellado' | [4]='SIGMA - ALDRICH' | [5]='SLCG63876' | [6]='SF' | [7]='SF' | [8]=1 | [9]='500 G'
+  row 10: [1]=8 | [2]='Bicarbonato de sodio' | [3]='en uso' | [4]='SPECTRUM' | [5]='574B70' | [6]='SF' | [7]=datetime.datetime(2026, 9, 1, 0, 0) | [8]=2 | [9]='500 G'
+  row 11: [1]=9 | [2]='Biftalato de potasio' | [3]='envase ambar tapa roja' | [4]=' -' | [5]=' A-03' | [6]=' -' | [7]=' -' | [8]=1 | [9]='50 g'
+  row 12: [1]=10 | [2]='Cadmio' | [3]='sellado' | [4]='MERK' | [5]='A685504942' | [6]='SF' | [7]='SF' | [8]=1 | [9]='250 G' | [10]='PELIGROSO' | [15]=' '
+  row 13: [1]=11 | [2]='Carbonato de Amonio' | [3]='en uso ' | [4]='SIGMA - ALDRICH' | [5]='MKCL0762' | [6]='SF' | [7]='SF' | [8]=1 | [9]='25 G'
+  row 14: [1]=12 | [2]='Carbonato de Amonio' | [3]='sellado' | [4]='SIGMA - ALDRICH' | [5]='MKCL0762' | [6]='SF' | [7]='SF' | [8]=1 | [9]='25 G'
+================================================================================
+SHEET: POL�MEROS
+  row 1: [0]='INVENTARIO DE INSUMOS - POL�MEROS Y OTROS -  30 /06/2026'
+  row 2: [0]='N�' | [1]='NOMBRE DE REACTIVOS' | [2]='DESCRIPCI�N' | [3]='MARCA' | [4]='LOTE/C�D' | [5]='FECHA DE PRODUCCI�N' | [6]='FECHA DE VENCIMIENTO' | [7]='UND' | [8]='CANTIDAD  EN        (g)  O  (mL)' | [9]='EN OTROS ENVASES'
+  row 3: [0]=1 | [1]='Alginato nanogel' | [2]='envase de vidrio 2 L. con tapa verde (Estefany)' | [3]=' - ' | [4]='GQB0303301' | [5]=' - ' | [6]=' - ' | [7]=1 | [8]='250 g' | [9]='x'
+  row 4: [0]=2 | [1]='Biosimplus' | [2]='envase de cafe de vidrio de 500ml ' | [3]=' -' | [4]=' -' | [5]=' -' | [6]=' -' | [7]=1 | [8]='300 g' | [9]='x'
+  row 5: [0]=3 | [1]='Carboximetilcelulosa (CMC)' | [2]='Botella pl�sctica blanca con tapa gris de 2.5 kg rotulado' | [3]=' - ' | [4]=' -' | [5]=' -' | [6]=' -' | [7]=' -' | [8]='2.5 kg' | [9]='x'
+  row 6: [0]=4 | [1]='Gelatina 280 Bloom' | [2]='Botella pl�stica blanca con tapa gris de 2.5 kg rotulado' | [4]='PE280-18-37' | [5]=datetime.datetime(2018, 12, 2, 0, 0) | [6]=datetime.datetime(2023, 12, 2, 0, 0) | [7]=1 | [8]='2 KG' | [9]='x' | [12]=' '
+  row 7: [0]=6 | [1]='Goma ar�bica' | [2]='En uso' | [3]='SIGMA-ALDRICH' | [4]=102826653 | [7]=1 | [8]='500g'
+  row 8: [0]=7 | [1]='Proteina de soya' | [2]='Botella pl�sctica blanca con tapa gris de 2.5 kg rotulado.' | [3]=' - ' | [4]=20 | [5]=' -' | [6]=' -' | [7]=1 | [8]='2.5 kg' | [9]='x'
+  row 9: [0]=8 | [1]='Prote�na de soya' | [2]='Envase ambar de �cido tricloroac�tico de 250g' | [3]=' - ' | [4]=' - ' | [5]=' - ' | [6]=' - ' | [7]=1 | [8]='250g' | [9]='x'
+  row 10: [0]=9 | [1]='Prote�na de soya' | [2]='envase de cloruro  de sodio de 1 kg' | [3]=' - ' | [4]=' - ' | [5]=' - ' | [6]=' - ' | [7]=1 | [8]='1 Kg' | [9]='x'
+  row 11: [0]=10 | [1]='Quitosano' | [2]='Sellado' | [3]='SIGMA-ALDRICH' | [4]=102508921 | [5]='SF' | [6]='SF' | [7]=1 | [8]='250 g'
+  row 12: [0]=11 | [1]='Quitosano' | [2]='Sellado' | [3]='SIGMA-ALDRICH' | [4]=102659879 | [5]='SF' | [6]='SF' | [7]=1 | [8]='250 g'
+  row 13: [0]=12 | [1]='Sangre atomizada' | [2]='Envase ambar de aceite de pecado de 1 L ' | [3]=' - ' | [4]=' - ' | [5]=' - ' | [6]=' - ' | [7]=1 | [8]='100 g' | [9]='x'
+  row 14: [0]=13 | [1]='Sangre bobina en polvo' | [2]='Envase sin etiqueta original  de 500g ' | [3]=' - ' | [4]=' -' | [5]=' - ' | [6]=' - ' | [7]=1 | [8]='500 g' | [9]='x'
+================================================================================
+SHEET: VENCIDOS
+  row 0: [2]=' '
+  row 1: [0]='INVENTARIO DE INSUMOS QU�MICOS VENCIDOS -  30 /06/2026'
+  row 2: [0]='N�' | [1]='NOMBRE DE REACTIVOS' | [2]='DESCRIPCI�N' | [3]='MARCA' | [4]='LOTE' | [5]='FECHA DE PRODUCCI�N' | [6]='FECHA DE VENCIMIENTO' | [7]='UND' | [8]='CANTIDAD  EN        (g)  O  (mL)' | [9]='FISCALIZADO'
+  row 3: [0]=1 | [1]='2 - Propanol' | [2]='abierto' | [3]='EMSURE' | [4]='K51766134939' | [5]='SF' | [6]=datetime.datetime(2024, 8, 31, 0, 0) | [7]=2 | [8]='2.5 L' | [9]='x'
+  row 4: [0]=2 | [1]='Acetato c�prico (II)' | [2]='Sellado' | [3]='ICN BIOMEDICALS' | [4]='8670K' | [5]='SF' | [6]=datetime.datetime(2015, 10, 26, 0, 0) | [7]=1 | [8]='500 g'
+  row 5: [0]=3 | [1]='�cido ac�tico ' | [3]='SUPELCO' | [4]='K52950363050' | [7]=1 | [8]='1L'
+  row 6: [0]=4 | [1]='�cido ac�tico ' | [2]='Sellado' | [3]='EMSURE' | [4]='K51002663903' | [5]='SF' | [6]=datetime.datetime(2024, 1, 31, 0, 0) | [7]=1 | [8]='2.5 L'
+  row 7: [0]=5 | [1]='�cido b�rico' | [2]='abierto' | [3]='SPECTRUM' | [4]=91780 | [5]='SF' | [6]=datetime.datetime(2020, 7, 7, 0, 0) | [7]=1 | [8]='500 g'
+  row 8: [0]=6 | [1]='�cido f�rmico' | [2]='Sellado' | [3]='SCHARLAU' | [4]=15769902 | [5]='SF' | [6]=datetime.datetime(2019, 10, 1, 0, 0) | [7]=2 | [8]='1 L' | [9]='x'
+  row 9: [0]=7 | [1]='agua de peptona tamponada' | [2]='Sellado' | [3]='Grano cult/ MERCK' | [4]='VM877428911' | [7]=1 | [8]='500G'
+  row 10: [0]=8 | [1]='Carbonato �cido de sodio' | [2]='Sellado' | [3]='EMSURE/SUPELCO' | [4]='K51701429015' | [5]='SF' | [6]=datetime.datetime(2024, 9, 30, 0, 0) | [7]=1 | [8]='500 g' | [9]='x'
+  row 11: [0]=9 | [1]='Cloroformo' | [2]='abierto' | [3]='EMSURE/SUPELCO' | [4]='K53117745106' | [5]='SF' | [6]=datetime.datetime(2024, 1, 31, 0, 0) | [7]=1 | [8]='2.5 L' | [9]='x'
+  row 12: [0]=10 | [1]='Cloroformo' | [2]='abierto' | [3]='EMSURE/ SUPELCO' | [4]='K52886245045' | [5]='SF' | [6]=datetime.datetime(2023, 10, 31, 0, 0) | [7]=1 | [8]='2.5L' | [9]='x'
+  row 13: [0]=12 | [1]='Cloroformo' | [2]='abierto' | [3]='EMSURE/ SUPELCO' | [7]=1 | [8]='2.5L' | [9]='X'
+  row 14: [0]=13 | [1]='Cloroformo' | [2]='abierto' | [3]='EMSURE/ SUPELCO' | [4]='K53900445149' | [5]='SF' | [6]=datetime.datetime(2024, 11, 30, 0, 0) | [7]=1 | [8]='2.5 L' | [9]='x'
+================================================================================
+SHEET: CONGELADOS Y REFRIGERADOS
+  row 1: [0]='INVENTARIO DE INSUMOS QU�MICOS (REACTIVOS Y ENCIMAS) - 30/06/2026'
+  row 2: [0]='N�' | [1]='NOMBRE DE REACTIVOS' | [2]='DESCRIPCI�N' | [3]='MARCA' | [4]='LOTE' | [5]='FECHA DE PRODUCCI�N' | [6]='FECHA DE VENCIMIENTO' | [7]='UND' | [8]='CANTIDAD  EN        (g)  O  (mL)' | [9]='ALMACENAMIENTO' | [10]='TOTAL DE UNIDADES' | [11]=' '
+  row 3: [0]=1 | [1]='1,1,3,3-Tetraethoxypropane' | [2]='aproximado de 80 ml, envase ambar tapa negra (en uso)' | [3]='SIGMA - ALDRICH' | [4]='BCBL7362V' | [5]='SF' | [6]='SF' | [7]=1 | [8]=' 100 ml' | [9]='2 a 8 �C' | [10]=1
+  row 4: [0]=2 | [1]='1,1,3,3-Tetraethoxypropane' | [2]='envase ambar' | [3]='HIMEDIA' | [4]=713631 | [5]='SF' | [6]='SF' | [7]=1 | [8]=' 100 G' | [9]='2 a 8 �C' | [10]=1
+  row 5: [0]=3 | [1]="ABTS (2,2'-Azinobis-(3-Ethylbenzthiazolin-6-Sulfonic Acid))" | [2]='envase blanco tapa roja (abierto)' | [3]='EDM MILLIPORE CORP/ MERCK' | [4]=3816393 | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 G' | [9]='2 a 8 �C' | [10]=12 | [11]=' '
+  row 6: [0]=4 | [1]="ABTS (2,2'-Azinobis-(3-Ethylbenzthiazolin-6-Sulfonic Acid))" | [2]='envase blanco tapa roja (abierto)' | [3]='EDM MILLIPORE CORP/ MERCK' | [4]=3780213 | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 G' | [9]='2 a 8 �C' | [13]=' '
+  row 7: [0]=5 | [1]="ABTS (2,2'-Azinobis-(3-Ethylbenzthiazolin-6-Sulfonic Acid))" | [2]='envase blanco tapa roja (sellado)' | [3]='EDM MILLIPORE CORP/ MERCK' | [4]=3758694 | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 G' | [9]='2 a 8 �C'
+  row 8: [0]=6 | [1]="ABTS (2,2'-Azinobis-(3-Ethylbenzthiazolin-6-Sulfonic Acid))" | [2]='envase blanco tapa roja (sellado)' | [3]='EDM MILLIPORE CORP/ MERCK' | [4]=3845743 | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 G' | [9]='2 a 8 �C'
+  row 9: [0]=6 | [1]="ABTS (2,2'-Azinobis-(3-Ethylbenzthiazolin-6-Sulfonic Acid))" | [2]='envase blanco tapa roja (abierto)' | [3]='SIGMA - ALDRICH' | [4]=1003551620 | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 G' | [9]='2 a 8 �C'
+  row 10: [0]=7 | [1]="ABTS (2,2'-Azinobis-(3-Ethylbenzthiazolin-6-Sulfonic Acid))" | [2]='envase blanco tapa roja (abierto)' | [3]='SIGMA - ALDRICH' | [4]=1003568260 | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 G' | [9]='2 a 8 �C'
+  row 11: [0]=8 | [1]="ABTS (2,2'-Azinobis-(3-Ethylbenzthiazolin-6-Sulfonic Acid))" | [2]='envase blanco tapa roja (sellado)' | [3]='SIGMA - ALDRICH' | [4]=302962 | [5]=datetime.datetime(2024, 9, 6, 0, 0) | [6]='SF' | [7]=1 | [8]='1 G' | [9]='2 a 8 �C'
+  row 12: [0]=9 | [1]="ABTS (2,2'-Azinobis-(3-Ethylbenzthiazolin-6-Sulfonic Acid))" | [2]='envase blanco tapa roja (sellado)' | [3]='SIGMA - ALDRICH' | [4]=369538 | [5]=datetime.datetime(2024, 12, 30, 0, 0) | [6]='SF' | [7]=1 | [8]='1 G ' | [9]='2 a 8 �C'
+  row 13: [0]=10 | [1]='ABTS(2,2-Azino-bis(3-ethylbenzothiazoline-6-sulfonicacid)' | [2]='envase blanco tapa roja' | [3]='SIGMA - ALDRICH' | [4]=346768 | [5]='SF' | [6]='SF' | [7]=1 | [8]='2G' | [9]='2 a 8 �C'
+  row 14: [0]=11 | [1]='ABTS' | [2]='Envase azul' | [4]=12774725 | [5]='SF' | [6]=datetime.datetime(2019, 7, 1, 0, 0) | [7]=1 | [8]='2g' | [9]='2 a 8 �C'
+================================================================================
+SHEET: EQUIPOS
+  row 0: [1]='INVENTARIO DE EQUIPOS'
+  row 1: [1]='CODIGO' | [2]='NOMBRE' | [3]='CANTIDAD' | [4]='ESTADO'
+  row 2: [1]='60221804-0003' | [2]='HIGH-QUALITY COLORIMETER NR60CP' | [3]=1 | [4]='OPERATIVO'
+  row 3: [1]='67363964-0014' | [2]='MOLINO' | [3]=1 | [4]='INOPERATIVO'
+  row 4: [1]='67224331-' | [2]='BA�O MARIA' | [3]=1 | [4]='INOPERATIVO '
+  row 5: [1]='67225698-0006' | [2]='ESTUFA (BINDEL)' | [3]=1 | [4]='OPERATIVO'
+  row 6: [1]='799122-02' | [2]='DESCASIFICADOR (LYTON)' | [3]=1 | [4]='INOPERATIVO'
+  row 7: [1]='53229331-0021' | [2]='ROTAVAPOR (DLAB)' | [3]=1 | [4]='INOPERATIVO'
+  row 8: [1]='67220764-0038' | [2]='MOTOR DE ROTAVAPOR' | [3]=1 | [4]='INOPERATIVO'
+  row 9: [1]=67222726 | [2]='COMPRESOR DE AIRE (SCHULZ)' | [3]=1 | [4]='OPERATIVO'
+  row 10: [1]=53223677 | [2]='ESPECTROFOT�METRO DE ABSORCI�N' | [3]=1 | [4]='INOPERATIVO'
+  row 11: [1]='SIN C�DIGO' | [2]='AGITADOR M�GNETICO ' | [3]=4 | [4]='OPERATIVO'
+  row 12: [1]='04220240-0065' | [2]='AGITADOR M�GNETICO ' | [3]=1 | [4]='OPERATIVO'
+  row 13: [1]='53226680-0004' | [2]='HOMOGENIZADOR ULTRATURAX' | [3]=1 | [4]='OPERATIVO'
+  row 14: [1]=3289027 | [2]='HOMOGENIZADOR ULTRATURAX' | [3]=1 | [4]='OPERATIVO'
+================================================================================
+SHEET: MATERIALES DE LAB
+  row 1: [1]='INVENTARIO DE MATERIALES  '
+  row 2: [1]='N�' | [2]='NOMBRE DE MATERIALES (VIDRIO)' | [3]='MEDIDAS/VOLUMEN' | [4]='MARCA' | [5]='UND'
+  row 3: [1]=1 | [2]='Vaso de precipitado' | [3]='5000ml' | [4]='Duran' | [5]=2
+  row 4: [1]=2 | [2]='Vaso de precipitado' | [3]='3000ml' | [4]='Kyntel' | [5]=5
+  row 5: [1]=3 | [2]='Vaso de precipitado' | [3]='3000ml' | [4]='Duran' | [5]=3
+  row 6: [1]=4 | [2]='Vaso de precipitado' | [3]='3000ml' | [4]='Germany' | [5]=1
+  row 7: [1]=5 | [2]='Vaso de precipitado' | [3]='2000ml' | [4]='Duran' | [5]=1
+  row 8: [1]=6 | [2]='Vaso de precipitado' | [3]='1000ml' | [4]='Labbox' | [5]=2
+  row 9: [1]=7 | [3]='1000ml' | [4]='Pyrex' | [5]=1
+  row 10: [1]=8 | [2]='Vaso de precipitado' | [3]='800ml' | [4]='Labbox' | [5]=4
+  row 11: [1]=9 | [3]='800ml' | [4]='Iso Lab' | [5]=1
+  row 12: [1]=10 | [2]='Vaso de precipitado' | [3]='600ml' | [4]='Glassco' | [5]=8
+  row 13: [1]=11 | [2]='Vaso de precipitado' | [3]='600ml' | [4]='Lasany' | [5]=2
+  row 14: [1]=12 | [2]='Vaso de precipitado' | [3]='600ml' | [4]='Labbox' | [5]=11
+================================================================================
+SHEET: MATERIALES DE LIMPIEZA
+  row 1: [1]='MATERIALES DE LIMPIEZA  '
+  row 2: [1]='N�' | [2]='NOMBRE DE ART�CULOS' | [3]='CANTIDAD'
+  row 3: [1]=1 | [2]='Detergente' | [3]='5kg'
+  row 4: [1]=2 | [2]='Legias (3.8L)' | [3]=0
+  row 5: [1]=3 | [2]='Jabon liquido (4L)' | [3]=2
+  row 6: [1]=4 | [2]='Jabon antibacterial (4L)' | [3]=2
+  row 7: [1]=5 | [2]='Virutex (20 unidades)' | [3]=1
+  row 8: [1]=6 | [2]='Bolsa de basura (50unidades)' | [3]=2
+  row 9: [1]=7 | [2]='Par de guantes virutex' | [3]=1
+  row 10: [1]=8 | [2]='Lava vajillas grandes ' | [3]=2
+  row 11: [1]=9 | [2]='Toallas de tela' | [3]=3
+  row 12: [1]=10 | [2]='Papel toalla ' | [3]=3
+  row 13: [1]=11 | [2]='Pares de toallas de mano ' | [3]=3
+  row 14: [1]=12 | [2]='Escobilla' | [3]=1
+================================================================================
+SHEET: ARTICULOS DE OFICINA
+  row 1: [1]='MATERIALES DE OFICINA'
+  row 2: [1]='N�' | [2]='ART�CULOS' | [3]='CANTIDAD'
+  row 3: [1]=1 | [2]='Cuadernos' | [3]=0
+  row 4: [1]=2 | [2]='Reglas (30cm)4' | [3]=4
+  row 5: [1]=3 | [2]='Folders' | [3]=3
+  row 6: [1]=4 | [2]='Paq, sobre manila (A4)' | [3]=20
+  row 7: [1]=5 | [2]='Paq de fundas de Porta papel  ' | [3]=3
+  row 8: [1]=6 | [2]='Tableros' | [3]=2
+  row 9: [1]=7 | [2]='Tijeras' | [3]=2
+  row 10: [1]=8 | [2]='Correctores ' | [3]=4
+  row 11: [1]=9 | [2]='Paq, de bolsa herm�tica ' | [3]=1
+  row 12: [1]=10 | [2]='Caja de Rotuladores' | [3]=1
+  row 13: [1]=11 | [2]=' Adesivas diferentes colores' | [3]=20
+  row 14: [1]=12 | [2]='Lapiceros' | [3]=25
+================================================================================
+SHEET: OTROS
+  row 1: [0]='N�' | [1]='INVENTARIO DE ARTICULOS DE MADERA Y METAL ' | [5]='MATERIAL DE C�RAMICA'
+  row 2: [1]='CODIGO' | [2]='ART�CULOS' | [3]='CANTIDAD' | [5]='N�' | [6]='NOMBRE' | [7]='CANTIDAD'
+  row 3: [0]=1 | [1]=74644186 | [2]='Estante de metal ' | [3]=1 | [5]=1 | [6]='Crisoles' | [7]=6
+  row 4: [0]=2 | [1]=74644118 | [2]='Estante de madera' | [3]=1 | [5]=2 | [6]='morteros' | [7]=2
+  row 5: [0]=3 | [1]=74643712 | [2]='Escritorio' | [3]=1 | [5]=3 | [6]='Embudo de Buchner' | [7]=6
+  row 6: [0]=4 | [1]='74646084-0617' | [2]='Escritorio' | [3]=1
+  row 7: [0]=5 | [1]='74649408-1611' | [2]='Silla larga' | [3]=1
+  row 8: [0]=6 | [1]='74649408-1616' | [2]='Silla larga' | [3]=1
+  row 9: [0]=7 | [1]='74649408-2244' | [2]='Silla larga' | [3]=1
+  row 10: [0]=8 | [1]='74649408-1620' | [2]='Silla larga' | [3]=1
+  row 11: [0]=9 | [1]='74648119-1146' | [2]='Silla de madera' | [3]=1
+  row 12: [0]=10 | [1]='74648468-0018' | [2]='Silla de madera' | [3]=1
+  row 13: [0]=11 | [1]=74648119 | [2]='Silla de madera' | [3]=1
+  row 14: [0]=12 | [1]='74648458-0021' | [2]='silla de madera' | [3]=1
+================================================================================
+SHEET: PRO.FREJOL
+  row 1: [0]='N�' | [1]='NOMBRE DE REACTIVOS' | [2]='DESCRIPCI�N' | [3]='MARCA' | [4]='LOTE/C�D' | [5]='FECHA DE PRODUCCI�N' | [6]='FECHA DE VENCIMIENTO' | [7]='UND' | [8]='CANTIDAD' | [9]='ALMACENAMIENTO' | [10]='TOTAL DE UNIDADES'
+  row 2: [0]=1 | [1]='2,2-Difenil-1-picrilhidrazilo (DPPH)' | [2]='Frasco �mbar peque�o en bolsa' | [3]='Sigma-Aldrich' | [4]='D9132-1G' | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 g' | [9]='2 a 8� C' | [10]=1
+  row 3: [0]=2 | [1]='ABTS' | [2]='Frasco pl�stico blanco con tapa roja (Refr. +2�C a +8�C)' | [3]='Sigma-Aldrich' | [4]='A1888-1G' | [5]='SF' | [6]='SF' | [7]=1 | [8]='1 g' | [9]='2 a 8� C' | [10]=1
+  row 4: [0]=3 | [1]='�cido tricloroac�tico' | [2]='Frasco peque�o de vidrio �mbar con tapa roja (Refr. +2�C a +8�C)' | [3]='Sigma-Aldrich' | [4]='T6399-5G' | [5]='SF' | [6]='SF' | [7]=1 | [8]='5 g' | [9]='2 a 8� C' | [10]=1
+  row 5: [0]=4 | [1]='�cido g�lico' | [2]='Envase pl�stico blanco con tapa roja' | [3]='Sigma-Aldrich' | [4]='G7384-250G' | [5]='SF' | [6]='SF' | [7]=1 | [8]='250 g' | [10]=1
+  row 6: [0]=6 | [1]='Persulfato de potasio' | [2]='Envase pl�stico blanco con tapa gris' | [3]='Supelco' | [4]='1.05091.0250' | [5]='SF' | [6]='SF' | [7]=1 | [8]='250 g' | [10]=1
+  row 7: [0]=7 | [1]='�cido tricloroac�tico' | [2]='Frasco peque�o de vidrio �mbar con tapa roja (Refr. +2�C a +8�C)' | [3]='Sigma-Aldrich' | [4]='T6399-5G' | [5]='SF' | [6]='SF' | [7]=1 | [8]='5 g' | [9]='2 a 8� C' | [10]=1
+  row 8: [0]=8 | [1]='Matraz con tapa rosca' | [2]='Erlenmeyer de vidrio borosilicato 3.3 (250 mL), Tapa azul, Lote 1204 SC 4' | [3]='Biohall' | [4]='-' | [5]='SF' | [6]='SF' | [7]='250 ml' | [10]=2
+  row 9: [0]=9 | [1]='Vaso de precipitado' | [2]='Vasos graduados de vidrio' | [3]='Glassco / Boro 3.3' | [4]='-' | [5]='SF' | [6]='SF' | [7]='250 ml' | [10]=1
+  row 10: [0]=11 | [1]='Vaso de precipitado' | [2]='Vasos graduados de vidrio' | [3]='Glassco / Boro 3.3' | [4]='-' | [5]='SF' | [6]='SF' | [7]='50 ml' | [10]=1
+  row 11: [0]=12 | [1]='Vaso de precipitado' | [2]='Vasos graduados de vidrio' | [3]='Glassco / Boro 3.3' | [4]='-' | [5]='SF' | [6]='SF' | [7]='25 ml' | [10]=2
+  row 12: [0]=13 | [1]='Vaso de precipitado' | [2]='Vasos graduados de vidrio' | [3]='Glassco / Boro 3.3' | [4]='-' | [5]='SF' | [6]='SF' | [7]='10 ml' | [10]=1
+  row 13: [0]=14 | [1]='Jeringa' | [2]='Jeringas pl�sticas de dosificaci�n' | [3]='-' | [4]='-' | [5]='SF' | [6]='SF' | [7]='10 ml' | [10]=3
+  row 14: [0]=15 | [1]='Microtubos' | [2]='Microtubos tipo Eppendorf pl�sticos con tapa (1.5 - 2 mL)' | [3]='-' | [4]='-' | [5]='SF' | [6]='SF' | [7]='2 ml' | [10]=15

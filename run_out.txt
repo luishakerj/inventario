@@ -1,0 +1,15 @@
+﻿✅ Padrón generado: padron_generado.html
+SOLVENTES: 19 productos
+ÁCIDOS: 21 productos
+BASES Y SALES: 85 productos
+POLÍMEROS: 25 productos
+VENCIDOS: 65 productos
+CONGELADOS Y REFRIGERADOS: 77 productos
+EQUIPOS: 24 productos
+MATERIALES DE LAB: 132 productos
+MATERIALES DE LIMPIEZA: 12 productos
+ARTICULOS DE OFICINA: 49 productos
+OTROS: 29 productos
+PRO.FREJOL: 15 productos
+
+✅ Total: 553 productos exportados a products.json

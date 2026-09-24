@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+import re
 from datetime import datetime
 
 
@@ -239,6 +240,168 @@ def process_simple_sheet(df, category, id_counter, name_kw='ART', qty_kw='CANTID
     return products, id_counter
 
 
+def process_lab_materials_sheet(df, category, id_counter):
+    """Hoja MATERIALES DE LAB: encabezado con 'NOMBRE DE MATERIALES (VIDRIO)'.
+    Columnas reales:
+      B = NOMBRE DE MATERIALES (VIDRIO) -> nombre
+      C = MEDIDAS/VOLUMEN               -> unidad/medida (ej. "5000ml")
+      D = MARCA                         -> marca (location)
+      E = UND                           -> conteo (stock)
+    La medida (mL/g/etc.) estaba quedando vacia porque la hoja caia en
+    process_standard_sheet, que no busca 'MEDIDAS/VOLUMEN'.
+    """
+    header_row = None
+    for i, row in df.iterrows():
+        if any(pd.notna(v) and 'NOMBRE' in str(v).strip().upper() for v in row.values):
+            header_row = i
+            break
+    if header_row is None:
+        return [], id_counter
+    df = df.copy()
+    df.columns = df.iloc[header_row]
+    df = df[header_row + 1:]
+
+    def find(*keywords):
+        for c in df.columns:
+            if pd.isna(c):
+                continue
+            cu = str(c).strip().upper()
+            if any(k in cu for k in keywords):
+                return c
+        return None
+    name_col = find('NOMBRE')
+    unit_col = find('MEDIDAS', 'VOLUMEN')
+    marca_col = find('MARCA')
+    stock_col = find('UND')
+
+    products = []
+    for _, row in df.iterrows():
+        name = get_cell(row, name_col)
+        if scalar_isna(name):
+            continue
+        name_str = str(name).strip()
+        if name_str == '' or name_str.upper() in ['N', 'NAN', 'NOMBRE DE MATERIALES (VIDRIO)']:
+            continue
+        # La medida del material (ej. "5000ml") es la unidad a mostrar.
+        unit_raw = get_cell(row, unit_col)
+        unit_str = '' if scalar_isna(unit_raw) else str(unit_raw).strip()
+        if unit_str.upper() in ['NAN', '-']:
+            unit_str = ''
+
+        # UND es el conteo de piezas que hay.
+        stock_raw = get_cell(row, stock_col)
+        stock = 0
+        if not scalar_isna(stock_raw):
+            try:
+                stock = int(float(stock_raw))
+            except (ValueError, TypeError):
+                pass
+        product = {
+            'id': id_counter,
+            'name': name_str,
+            'category': category,
+            'stock': stock,
+            'unit': unit_str,
+            'location': get_str(get_cell(row, marca_col)),
+            'lote': '',
+            'prodDate': '',
+            'expDate': '',
+            'desc': '',
+            'image': None
+        }
+        products.append(product)
+        id_counter += 1
+    return products, id_counter
+
+def process_frejol_sheet(df, category, id_counter):
+    # Hoja PRO.FREJOL: su encabezado esta en la fila que contiene
+    # "NOMBRE DE REACTIVOS". Columnas reales:
+    #   B=NOMBRE DE REACTIVOS, C=DESCRIPCION, D=MARCA, E=LOTE/COD,
+    #   F=FECHA DE PRODUCCION, G=FECHA DE VENCIMIENTO, H=UND,
+    #   I=CANTIDAD (medida del envase), K=TOTAL DE UNIDADES (cuantos hay)
+    # La cantidad real va en "TOTAL DE UNIDADES" y la unidad en "UND".
+    header_row = None
+    for i, row in df.iterrows():
+        for v in row.values:
+            if pd.notna(v) and 'NOMBRE' in str(v).strip().upper():
+                header_row = i
+                break
+        if header_row is not None:
+            break
+    if header_row is None:
+        return [], id_counter
+    df = df.copy()
+    df.columns = df.iloc[header_row]
+    df = df[header_row + 1:]
+
+    def find(*keywords):
+        for c in df.columns:
+            if pd.isna(c):
+                continue
+            cu = str(c).strip().upper()
+            if any(k in cu for k in keywords):
+                return c
+        return None
+    name_col  = find('NOMBRE')
+    marca_col = find('MARCA')
+    lote_col  = find('LOTE')
+    prod_col  = find('PRODUCCI')
+    exp_col   = find('VENC')
+    und_col   = find('UND')
+    qty_col   = find('TOTAL DE UNIDADES', 'TOTAL')
+    med_col   = find('CANTIDAD')
+    desc_col  = find('DESCRIP')
+
+    products = []
+    for _, row in df.iterrows():
+        name = get_cell(row, name_col)
+        if scalar_isna(name):
+            continue
+        name_str = str(name).strip()
+        if name_str == '' or name_str.upper() in ['N', 'NAN', 'NOMBRE DE REACTIVOS']:
+            continue
+        # Cantidad real = "TOTAL DE UNIDADES" (K); si no hay, usar "CANTIDAD".
+        qty_raw = get_cell(row, qty_col)
+        if scalar_isna(qty_raw):
+            qty_raw = get_cell(row, med_col)
+        stock = 0
+        if not scalar_isna(qty_raw):
+            try:
+                stock = int(float(qty_raw))
+            except (ValueError, TypeError):
+                pass
+        # Unidad: "CANTIDAD" (I) es la medida del envase (ej. "5 g", "250 g").
+        # "UND" (H) es medida o un numero suelto; solo se usa si CANT esta vacio
+        # y UND no es un numero puro (si es numero, ese valor es el stock).
+        und_raw = get_cell(row, und_col)
+        unit_str = '' if scalar_isna(und_raw) else str(und_raw).strip()
+        if unit_str.upper() in ['NAN', '-']:
+            unit_str = ''
+        med_raw = get_cell(row, med_col)
+        med_str = '' if scalar_isna(med_raw) else str(med_raw).strip()
+        if med_str.upper() in ['NAN', '-']:
+            med_str = ''
+        # Si UND es un numero puro ("1", "2"), es conteo, no medida.
+        if unit_str and re.fullmatch(r'\d+(?:[.,]\d+)?', unit_str):
+            unit_str = ''
+        unit_final = med_str if med_str else unit_str
+
+        product = {
+            'id': id_counter,
+            'name': name_str,
+            'category': category,
+            'stock': stock,
+            'unit': unit_final,
+            'location': get_str(get_cell(row, marca_col)),
+            'lote': get_str(get_cell(row, lote_col)),
+            'prodDate': get_date(get_cell(row, prod_col)),
+            'expDate': get_date(get_cell(row, exp_col)),
+            'desc': get_str(get_cell(row, desc_col)),
+            'image': None
+        }
+        products.append(product)
+        id_counter += 1
+    return products, id_counter
 # ---- MAIN LOOP ----
 all_products = []
 id_counter = 1
@@ -250,6 +413,13 @@ for sheet in xls.sheet_names:
 
     if 'OFICINA' in sheet_upper:
         prods, id_counter = process_simple_sheet(df_raw, category, id_counter, name_kw='ART', qty_kw='CANTIDAD')
+    elif 'LAB' in sheet_upper and 'LIMPIEZA' not in sheet_upper:
+        # MATERIALES DE LAB: la medida del envase (MEDIDAS/VOLUMEN, ej. "5000ml")
+        # es la unidad; UND es el conteo de piezas.
+        prods, id_counter = process_lab_materials_sheet(df_raw, category, id_counter)
+    elif 'FREJOL' in sheet_upper or 'FRÉJOL' in sheet_upper:
+        # PRO.FREJOL: layout por columnas fijas, sin fila de encabezado 'NOMBRE'.
+        prods, id_counter = process_frejol_sheet(df_raw, category, id_counter)
     elif 'OTROS' in sheet_upper:
         # OTROS has two side-by-side tables; process col-2 (ARTÍCULOS) and col-6 (NOMBRE)
         prods1, id_counter = process_simple_sheet(df_raw, category, id_counter, name_kw='ART', qty_kw='CANTIDAD')
