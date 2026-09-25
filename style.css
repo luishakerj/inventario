@@ -1055,6 +1055,18 @@ select option {
     z-index: 20;
 }
 
+/* Las categorías Artículos de oficina y Otros no ocultan la columna de
+   acciones: deben conservar Ver, Editar yEliminar en Administración y Ver
+   en Personal, aunque se oculten sus columnas de marca/lote/fechas. */
+#table-admin th.actions-column,
+#table-admin td.actions-column,
+#table-student th.actions-column,
+#table-student td.actions-column {
+    display: table-cell !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
 .modern-table:not(.show-equipment-state) .state-column,
 .modern-table:not(.show-equipment-state) .state-cell {
     display: none !important;
@@ -1296,11 +1308,13 @@ select option {
     border: 0 !important;
 }
 
-/* En admin "Otros" oculta únicamente Marca y Lote (5 y 6); Acciones (7) siempre visible. */
-#table-admin.hide-other-columns th:nth-child(5),
-#table-admin.hide-other-columns td:nth-child(5),
-#table-admin.hide-other-columns th:nth-child(6),
-#table-admin.hide-other-columns td:nth-child(6) {
+/* En administración, la tabla tiene 6 columnas visibles: Nombre,
+   Categoría, Unidad, Marca, Lote y Acciones. Para Artículos de oficina y
+   Otros se oculta solo Marca/Lote; nunca se oculta la columna de acciones. */
+#table-admin.hide-other-columns th.marca-column,
+#table-admin.hide-other-columns td.marca-column,
+#table-admin.hide-other-columns th.lote-column,
+#table-admin.hide-other-columns td.lote-column {
     display: none !important;
 }
 
@@ -3912,6 +3926,7 @@ td.marca-column {
 #modalConfig.hidden {
     display: none !important;
 }
+
 /* ==========================================================================
    GARANTÍA: la columna de Acciones (Ver / Editar / Eliminar) debe mostrarse
    SIEMPRE, en cualquier categoría y en ambas vistas (Personal y Administración).
@@ -3975,7 +3990,65 @@ td.marca-column {
     z-index: 10 !important;
 }
 
+/* Mantiene visible el contenido de la columna de acciones en la vista de
+   administrador, incluso cuando la categoría no tiene marca, lote o fechas. */
+#table-admin .actions-column,
+#table-admin .action-buttons {
+    display: table-cell !important;
+    visibility: visible !important;
+    width: 190px !important;
+    min-width: 190px !important;
+    max-width: 190px !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+}
+
 #table-admin th.actions-column {
     background: rgba(30, 41, 59, 0.99) !important;
     z-index: 20 !important;
+}
+
+/* Corrección definitiva para Artículos de oficina y Otros:
+   la columna Acciones es la sexta en esta tabla y no debe quedar limitada
+   por las reglas de Marca/Lote ni recortada por overflow: hidden. */
+#table-admin th.actions-column,
+#table-admin td.actions-column {
+    display: table-cell !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 190px !important;
+    min-width: 190px !important;
+    max-width: none !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    position: sticky !important;
+    right: 0 !important;
+    z-index: 30 !important;
+}
+
+#table-admin td.actions-column {
+    padding: 0.75rem !important;
+}
+
+#table-admin td.actions-column .action-buttons {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.5rem !important;
+    width: max-content !important;
+    min-width: 150px !important;
+    position: static !important;
+    overflow: visible !important;
+}
+
+#table-admin th.actions-column.actions-column,
+#table-admin td.actions-column.actions-column,
+#table-admin td.actions-column.action-buttons {
+    width: 190px !important;
+    min-width: 190px !important;
+    max-width: none !important;
+    overflow: visible !important;
+    display: table-cell !important;
 }
