@@ -2591,16 +2591,25 @@ select option {
     padding: 0 !important;
 }
 
-/* Tabla admin: solo se ocultan Marca (5) y Lote (6). Acciones (7) siempre visible. */
+/* Tabla admin: solo se ocultan Marca (4) y Lote (5). Acciones (6) siempre visible.
+   (La tabla admin tiene 6 columnas: Nombre, Categoria, Unidad, Marca, Lote, Acciones). */
+#table-admin.show-equipment-state th:nth-child(4),
+#table-admin.show-equipment-state td:nth-child(4),
 #table-admin.show-equipment-state th:nth-child(5),
-#table-admin.show-equipment-state td:nth-child(5),
-#table-admin.show-equipment-state th:nth-child(6),
-#table-admin.show-equipment-state td:nth-child(6) {
+#table-admin.show-equipment-state td:nth-child(5) {
     display: none !important;
     width: 0 !important;
     min-width: 0 !important;
     max-width: 0 !important;
     padding: 0 !important;
+}
+
+/* Asegurar explicitamente que Acciones (6a y ultima columna) nunca se oculte en Equipos. */
+#table-admin.show-equipment-state th:nth-child(6),
+#table-admin.show-equipment-state td:nth-child(6) {
+    display: table-cell !important;
+    width: 200px !important;
+    min-width: 170px !important;
 }
 
 .modern-table.show-equipment-state th:nth-child(1),
