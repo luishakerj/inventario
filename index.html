@@ -790,11 +790,15 @@
             </form>
         </div>
     </div>
-    <!-- Backend propio: PHP + MySQL (reemplaza a Firebase) -->
-    <script src="api-config.js?v=2026_v7"></script>
-    <!-- Datos e inventario -->
+    <!-- Firebase SDK (compat) para restaurar la sincronizacion con Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics-compat.js"></script>
+    <!-- Configuracion y operaciones de Firebase -->
+    <script src="firebase-config.js?v=2026_v7"></script>
+    <!-- Datos iniciales de respaldo; Firebase tiene prioridad cuando esta disponible -->
     <script src="data.js?v=2026_v6"></script>
-    <script src="script.js?v=2026_v6"></script>
+    <script src="script.js?v=2026_v7"></script>
 </body>
 
 </html>
