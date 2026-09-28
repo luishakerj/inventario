@@ -1308,6 +1308,19 @@ select option {
     border: 0 !important;
 }
 
+/* La regla anterior oculta por indice las columnas 5..9 para "Otros" y
+   "Articulos de oficina", pero en la tabla de Personal la columna de Acciones
+   es la #9 (la ultima), por eso quedaba oculta. Se restaura aqui mostrando
+   unicamente el icono "Ver". */
+#table-student.hide-other-columns th.actions-column,
+#table-student.hide-other-columns td.actions-column,
+#table-student .other-product-row td.actions-column {
+    display: table-cell !important;
+    width: auto !important;
+    padding: 0.75rem 1rem !important;
+    border: 1px solid var(--border-color, rgba(148, 163, 184, 0.2)) !important;
+}
+
 /* En administración, la tabla tiene 6 columnas visibles: Nombre,
    Categoría, Unidad, Marca, Lote y Acciones. Para Artículos de oficina y
    Otros se oculta solo Marca/Lote; nunca se oculta la columna de acciones. */
@@ -4052,3 +4065,98 @@ td.marca-column {
     overflow: visible !important;
     display: table-cell !important;
 }
+/* === Vista Personal: la columna de Acciones SIEMPRE visible (solo icono Ver) ===
+/* Los layouts 'Otros' y 'Articulos de oficina' ocultan columnas por indice
+/* (5..9) y con ello se llevaba la columna de Acciones (#9 en Personal).
+/* Estas reglas ganan por especificidad y por ir al final del archivo. */
+#table-student th.actions-column,
+#table-student th.action-buttons,
+#table-student td.actions-column,
+#table-student td.action-buttons {
+    display: table-cell !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    /* Sin sticky: la celda fija se montaba sobre la columna vecina al
+       desplazar horizontalmente y terminaba tapando el contenido. */
+    position: static !important;
+    padding: 0.75rem 0.1rem !important;
+    border: 1px solid var(--border-color, rgba(148, 163, 184, 0.2)) !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+#table-student.hide-other-columns td.actions-column,
+#table-student.hide-date-columns td.actions-column,
+#table-student .other-product-row td.actions-column {
+    display: table-cell !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+}
+
+/* Columna compacta: el encabezado conserva el texto 'Acciones' completo
+   pero en tamano reducido y sin partirse en dos lineas, y el boton 'Ver'
+   ocupa el menor ancho posible. */
+#table-student th.action-buttons,
+#table-student th.actions-column {
+    font-size: 0.55rem !important;
+    padding-left: 0.1rem !important;
+    padding-right: 0.1rem !important;
+    letter-spacing: 0;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow: visible !important;
+}
+
+#table-student td.action-buttons .btn-icon,
+#table-student td.actions-column .btn-icon {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 28px !important;
+    height: 28px !important;
+}
+
+/* === Categorias "Otros" y "Articulos de oficina": tabla compacta === */
+/* En estas categorias solo quedan 4 columnas visibles (Nombre, Categoria,
+   Unidad/Cantidad y Acciones), pero la tabla conservaba el min-width global
+   de 1400px, por lo que el espacio sobrante se repartia entre ellas y la
+   columna de Categoria quedaba exageradamente ancha. */
+#table-student.hide-other-columns {
+    table-layout: fixed !important;
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+#table-student.hide-other-columns th.name-column,
+#table-student.hide-other-columns td.name-column {
+    width: 26% !important;
+    min-width: 0 !important;
+    max-width: 26% !important;
+}
+
+#table-student.hide-other-columns th.category-column,
+#table-student.hide-other-columns td.category-column {
+    width: 16% !important;
+    min-width: 0 !important;
+    max-width: 16% !important;
+}
+
+#table-student.hide-other-columns th.unit-column,
+#table-student.hide-other-columns td.unit-column {
+    width: 14% !important;
+    min-width: 0 !important;
+    max-width: 14% !important;
+}
+
+#table-student.hide-other-columns th.actions-column,
+#table-student.hide-other-columns th.action-buttons,
+#table-student.hide-other-columns td.actions-column,
+#table-student.hide-other-columns td.action-buttons {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+}
+
