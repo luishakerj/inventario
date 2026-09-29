@@ -4065,6 +4065,7 @@ td.marca-column {
     overflow: visible !important;
     display: table-cell !important;
 }
+
 /* === Vista Personal: la columna de Acciones SIEMPRE visible (solo icono Ver) ===
 /* Los layouts 'Otros' y 'Articulos de oficina' ocultan columnas por indice
 /* (5..9) y con ello se llevaba la columna de Acciones (#9 en Personal).
@@ -4119,6 +4120,36 @@ td.marca-column {
     height: 28px !important;
 }
 
+/* En la tabla de Personal, Acciones es la columna 9 en el layout de Equipos. */
+#table-student.show-equipment-state th:nth-child(9).actions-column,
+#table-student.show-equipment-state td:nth-child(9).actions-column {
+    display: table-cell !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    padding: 0.75rem 0.1rem !important;
+}
+
+/* Acciones en Administracion usa menos espacio para Otros y Articulos de oficina. */
+#table-admin.hide-other-columns th.actions-column,
+#table-admin.hide-other-columns td.actions-column {
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
+    padding: 0.5rem !important;
+}
+
+#table-admin.hide-other-columns td.actions-column .action-buttons {
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 0.25rem !important;
+}
+
+#table-admin.hide-other-columns td.actions-column .btn-icon {
+    margin-left: 0.15rem !important;
+    margin-right: 0.15rem !important;
+}
+
 /* === Categorias "Otros" y "Articulos de oficina": tabla compacta === */
 /* En estas categorias solo quedan 4 columnas visibles (Nombre, Categoria,
    Unidad/Cantidad y Acciones), pero la tabla conservaba el min-width global
@@ -4159,4 +4190,3 @@ td.marca-column {
     min-width: 48px !important;
     max-width: 48px !important;
 }
-
