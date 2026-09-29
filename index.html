@@ -412,6 +412,7 @@
                 </div>
 
                 <div class="form-group">
+
                     <label for="product-desc">Descripción</label>
                     <input type="text" id="product-desc">
                 </div>
@@ -560,6 +561,15 @@
             </div>
 
             <!-- FORMULARIO DE REPORTE -->
+
+            <div class="form-group">
+                <label for="report-person-name">Nombre de la persona</label>
+                <input type="text" id="report-person-name" placeholder="Ej. Juan Pérez" required>
+            </div>
+            <div class="form-group">
+                <label for="report-title">Título para el reporte</label>
+                <input type="text" id="report-title" placeholder="Ej. Análisis bromatológico mensual" required>
+            </div>
 
             <div style="padding: 1.5rem; max-height: 600px; overflow-y: auto;">
                 <!-- Categoría de insumo que se usó -->
@@ -718,6 +728,40 @@
         </div>
     </div>
 
+
+    <!-- MODAL: DETALLE DE UN REGISTRO DEL HISTORIAL -->
+    <div id="modal-detalle-historial" class="modal-overlay">
+        <div class="modal-content glass-panel"
+            style="max-width: 560px; width: 92%; max-height: 85vh; overflow-y: auto; color: #f8fafc; background: #0f172a; border-radius: 12px; border: 1px solid #334155; padding: 1.5rem;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="ph ph-magnifying-glass" style="font-size: 1.5rem; color: #38bdf8;"></i>
+                    <h3 style="color: #38bdf8; font-size: 1.25rem; margin: 0;">📄 Detalle del Registro</h3>
+                </div>
+                <button type="button" class="btn btn-ghost" onclick="app.cerrarDetalleHistorial()"
+                    style="cursor: pointer; background: transparent; border: none; color: #94a3b8; font-size: 1.3rem;">✕</button>
+            </div>
+
+            <div id="detalle-historial-contenido">
+                <!-- Se inyecta con JS -->
+            </div>
+
+            <div id="detalle-historial-imagen" style="margin-top: 1rem; text-align: center; display: none;">
+                <img id="detalle-historial-img" src="" alt="Foto del insumo"
+                    style="max-width: 100%; max-height: 260px; border-radius: 8px; border: 1px solid #334155;">
+            </div>
+
+            <div
+                style="margin-top: 1.25rem; padding-top: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn btn-primary" onclick="app.imprimirDetalleHistorial()"
+                    style="background: linear-gradient(135deg, #3b82f6, #2563eb); border: none; color: white; border-radius: 8px; padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <i class="ph ph-printer"></i> Imprimir
+                </button>
+                <button type="button" class="btn btn-ghost" onclick="app.cerrarDetalleHistorial()">Cerrar</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal emergente para cambiar contraseña -->
     <div id="modalConfig" class="modal-overlay hidden" style="display: none;">

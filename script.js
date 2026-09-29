@@ -612,6 +612,7 @@ const app = {
 
         const nuevoItem = {
             id: Date.now() + Math.floor(Math.random() * 1000),
+            ...item,
             fecha: item.fecha || new Date().toLocaleString('es-ES'),
             tipo: item.tipo || 'reporte', // 'nuevo_producto', 'reporte', 'edicion'
             tipoTexto: item.tipoTexto || (item.tipo === 'nuevo_producto' ? 'Nuevo Producto' : item.tipo === 'edicion' ? 'Producto Editado' : 'Reporte'),
@@ -736,10 +737,123 @@ const app = {
                     <span style="color: ${badgeColor}; font-weight: 600; background: ${badgeBg}; border: 1px solid ${badgeBorder}; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; display: inline-block;">
                         ${escapeHtml(badgeText)}
                     </span>
+                    <button type="button" title="Ver a detalle"
+                        onclick="app.verDetalleHistorial('${String(rep.id || Date.now())}')"
+                        style="margin-left: 6px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; vertical-align: middle;">
+                        <i class=\"ph ph-eye\"></i> Ver
+                    </button>
                 </td>
             `;
             tbody.appendChild(tr);
         });
+    },
+
+    verDetalleHistorial(id) {
+        let reportes = [];
+        try {
+            reportes = JSON.parse(localStorage.getItem('inventario_reportes')) || [];
+            if (!Array.isArray(reportes)) reportes = [];
+        } catch (e) {
+            reportes = [];
+        }
+
+        const rep = reportes.find(r => String(r.id) === String(id));
+        if (!rep) {
+            alert('No se encontró el registro del historial.');
+            return;
+        }
+
+        const cont = document.getElementById('detalle-historial-contenido');
+        if (!cont) return;
+
+        const esNuevo = rep.tipo === 'nuevo_producto' || rep.tipo === 'entrada';
+        const esEdicion = rep.tipo === 'edicion';
+        let badgeColor = '#38bdf8', badgeBg = 'rgba(56, 189, 248, 0.18)', badgeBorder = 'rgba(56, 189, 248, 0.35)';
+        let badgeText = rep.tipoTexto || 'REPORTE';
+        if (esNuevo) {
+            badgeColor = '#10b981'; badgeBg = 'rgba(16, 185, 129, 0.18)'; badgeBorder = 'rgba(16, 185, 129, 0.35)';
+            badgeText = rep.tipoTexto || 'NUEVO PRODUCTO';
+        } else if (esEdicion) {
+            badgeColor = '#f59e0b'; badgeBg = 'rgba(245, 158, 11, 0.18)'; badgeBorder = 'rgba(245, 158, 11, 0.35)';
+            badgeText = rep.tipoTexto || 'EDITADO';
+        }
+
+        const fila = (etiqueta, valor, color) => `
+            <div style="display: flex; justify-content: space-between; gap: 12px; padding: 0.6rem 0.75rem; border-bottom: 1px solid #1e293b;">
+                <span style="color: #94a3b8; font-size: 0.85rem; white-space: nowrap;">${etiqueta}</span>
+                <span style="color: ${color || '#f8fafc'}; font-weight: 500; text-align: right; word-break: break-word;">${escapeHtml(valor || '-')}</span>
+            </div>`;
+
+        cont.innerHTML = `
+            <div style="margin-bottom: 0.75rem; text-align: center;">
+                <span style="color: ${badgeColor}; font-weight: 600; background: ${badgeBg}; border: 1px solid ${badgeBorder}; padding: 5px 14px; border-radius: 8px; font-size: 0.8rem; display: inline-block;">
+                    ${escapeHtml(badgeText)}
+                </span>
+            </div>
+            ${fila('Nombre', rep.nombre)}
+            ${fila('Categoría', rep.categoria)}
+            ${fila('Cantidad usada', rep.cantidad !== undefined && rep.cantidad !== '' ? String(rep.cantidad) : '-', '#38bdf8')}
+            ${fila('Lote / Código', rep.lote, '#94a3b8')}
+            ${fila('Marca', rep.marca, '#94a3b8')}
+            ${fila('Persona responsable', rep.persona)}
+            ${fila('Título del reporte', rep.titulo)}
+            ${fila('Fecha de uso', rep.fechaUso, '#94a3b8')}
+            ${fila('Fecha de registro', rep.fecha, '#94a3b8')}
+            ${rep.detalle && rep.detalle !== '-' ? fila('Detalle / Observación', rep.detalle) : ''}
+        `;
+
+        // Mostrar imagen si el registro la tiene
+        const imgWrap = document.getElementById('detalle-historial-imagen');
+        const img = document.getElementById('detalle-historial-img');
+        if (imgWrap && img) {
+            if (rep.imagen) {
+                img.src = rep.imagen;
+                imgWrap.style.display = 'block';
+            } else {
+                img.src = '';
+                imgWrap.style.display = 'none';
+            }
+        }
+
+        this._detalleHistorialActual = rep;
+        this.openModal('modal-detalle-historial');
+    },
+
+    cerrarDetalleHistorial() {
+        this.closeModal('modal-detalle-historial');
+        this._detalleHistorialActual = null;
+    },
+
+    imprimirDetalleHistorial() {
+        const rep = this._detalleHistorialActual;
+        if (!rep) return;
+        const win = window.open('', '_blank', 'width=800,height=600');
+        if (!win) { alert('No se pudo abrir la ventana de impresión.'); return; }
+        const filas = [
+            ['Tipo', rep.tipoTexto || rep.tipo],
+            ['Nombre', rep.nombre],
+            ['Categoría', rep.categoria],
+            ['Cantidad usada', rep.cantidad],
+            ['Lote / Código', rep.lote],
+            ['Marca', rep.marca],
+            ['Persona responsable', rep.persona],
+            ['Título del reporte', rep.titulo],
+            ['Fecha de uso', rep.fechaUso],
+            ['Fecha de registro', rep.fecha],
+            ['Detalle / Observación', rep.detalle && rep.detalle !== '-' ? rep.detalle : '']
+        ].filter(f => f[1] !== undefined && f[1] !== null && f[1] !== '')
+            .map(f => `<tr><th style="text-align:left; padding:6px 10px; border-bottom:1px solid #ddd; background:#f1f5f9;">${f[0]}</th><td style="padding:6px 10px; border-bottom:1px solid #ddd;">${String(f[1])}</td></tr>`)
+            .join('');
+        win.document.write(`
+            <html><head><title>Detalle del registro</title></head>
+            <body style="font-family: Arial, sans-serif; padding: 24px;">
+                <h2 style="margin-top:0;">Detalle del Registro - Historial</h2>
+                <table style="border-collapse: collapse; width: 100%; max-width: 600px;">${filas}</table>
+                ${rep.imagen ? '<div style="margin-top:16px;"><img src="' + rep.imagen + '" style="max-width:300px; border-radius:8px;"></div>' : ''}
+            </body></html>`);
+        win.document.close();
+        win.focus();
+        win.print();
     },
 
     limpiarHistorial() {
@@ -1995,6 +2109,19 @@ const app = {
             }
         }
 
+        // Leer la foto del insumo (opcional) y guardarla en el registro
+        const imagenInput = document.getElementById('report-item-image');
+        let imagenData = null;
+        const leerImagen = imagenInput && imagenInput.files && imagenInput.files[0]
+            ? new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => resolve(null);
+                reader.readAsDataURL(imagenInput.files[0]);
+            })
+            : Promise.resolve(null);
+
+        leerImagen.then((imagenData) => {
         this.registrarEnHistorial({
             tipo: 'reporte',
             tipoTexto: 'Reporte de Uso',
@@ -2004,7 +2131,12 @@ const app = {
             marca: producto ? (producto.marca || producto.brand || producto.location || '-') : '-',
             lote: loteConsumo,
             detalle: detalleConsumo,
-            fecha: fechaUso
+            fecha: fechaUso,
+            persona: document.getElementById('report-person-name')?.value?.trim() || '-',
+            titulo: document.getElementById('report-title')?.value?.trim() || '-',
+            fechaUso: fechaUsoRaw || '',
+            imagen: imagenData
+        });
         });
 
         this.logActivity(`Reporte generado: ${nombreInsumo} `, `Cantidad: ${cantidadValor} ${unidadSeleccionada}, Categoría: ${categoriaInsumo} ${stockRestante !== null ? `| Stock restante: ${stockRestante}` : ''} `);
