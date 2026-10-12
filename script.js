@@ -133,7 +133,8 @@ function isAcid(category) {
 }
 
 function isBase(category) {
-    return normalizeCategory(category) === 'bases y sales';
+    const norm = normalizeCategory(category);
+    return norm === 'sales' || norm === 'bases y sales';
 }
 
 function isOther(category) {
@@ -145,7 +146,7 @@ function isMarca(category) {
 }
 
 function isReagent(category) {
-    return ['solventes', 'acido', 'bases y sales', 'polimeros', 'congelados y refrigerador', 'congelados y refrigerados'].includes(normalizeCategory(category));
+    return ['solventes', 'acido', 'sales', 'bases y sales', 'polimeros', 'congelados y refrigerador', 'congelados y refrigerados'].includes(normalizeCategory(category));
 }
 
 function normalizeQuantityUnit(unit) {
@@ -461,7 +462,7 @@ const app = {
 
         const currentVal = selectedCat !== null ? selectedCat : catSelect.value;
         const defaultCats = [
-            'Solventes', 'Acido', 'Bases y sales', 'Polimeros',
+            'Solventes', 'Acido', 'Sales', 'Polimeros',
             'Equipos', 'Materiales de laboratorio', 'Materiales de limpieza',
             'Articulos de oficina', 'Otros'
         ];
@@ -2372,7 +2373,7 @@ const app = {
     // Filtrar categorías con búsqueda
     filterCategories(query) {
         const categories = [
-            'Solventes', 'Ácido', 'Bases y sales', 'Polímeros', 'Vencidos', 'Congelados y refrigerados',
+            'Solventes', 'Ácido', 'Sales', 'Polímeros', 'Vencidos', 'Congelados y refrigerados',
             'Equipos', 'Materiales de laboratorio', 'Materiales de limpieza', 'Artículos de oficina', 'Otros', 'Pro frejol'
         ];
 

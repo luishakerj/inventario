@@ -66,7 +66,8 @@ xls = pd.ExcelFile('INVENTARIO (LICC - CIRNA) 2026 - 17082026.xlsx')
 CATEGORY_MAP = {
     'SOLVENTES': 'Solventes',
     'CIDOS': 'Acido',
-    'BASES Y SALES': 'Bases y sales',
+    'BASES Y SALES': 'Sales',
+    'SALES': 'Sales',
     'POLMEROS': 'Polimeros',
     'VENCIDOS': 'Vencidos',
     'CONGELADOS Y REFRIGERADOS': 'Congelados y refrigerador',
