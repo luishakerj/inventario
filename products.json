@@ -522,7 +522,7 @@
     {
         "id": 41,
         "name": "1,10 Fenantrolina monohidratado",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "10 G",
         "location": "MERK",
@@ -535,7 +535,7 @@
     {
         "id": 42,
         "name": "1-Naphthol",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "50 G",
         "location": "MERK",
@@ -548,7 +548,7 @@
     {
         "id": 43,
         "name": "4-(Dimetilamino)-benzaldehído",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "25G",
         "location": "SIGMA",
@@ -561,7 +561,7 @@
     {
         "id": 44,
         "name": "4-(Dimetilamino)-benzaldehído",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "KgaA/MERCK",
@@ -574,7 +574,7 @@
     {
         "id": 45,
         "name": "4-aninopiridina (tóxico)",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "10 G",
         "location": "MERK",
@@ -587,7 +587,7 @@
     {
         "id": 46,
         "name": "Azul de metileno",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "25 G",
         "location": "SCHARLAU",
@@ -600,7 +600,7 @@
     {
         "id": 47,
         "name": "Bicarbonato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -613,7 +613,7 @@
     {
         "id": 48,
         "name": "Bicarbonato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 2,
         "unit": "500 G",
         "location": "SPECTRUM",
@@ -626,7 +626,7 @@
     {
         "id": 49,
         "name": "Biftalato de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "50 g",
         "location": "-",
@@ -639,7 +639,7 @@
     {
         "id": 50,
         "name": "Cadmio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "250 G",
         "location": "MERK",
@@ -652,7 +652,7 @@
     {
         "id": 51,
         "name": "Carbonato de Amonio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "25 G",
         "location": "SIGMA - ALDRICH",
@@ -665,7 +665,7 @@
     {
         "id": 52,
         "name": "Carbonato de Amonio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "25 G",
         "location": "SIGMA - ALDRICH",
@@ -678,7 +678,7 @@
     {
         "id": 53,
         "name": "Citrato de potasio tribasico monohidratado",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1 KG",
         "location": "SIGMA - ALDRICH",
@@ -691,7 +691,7 @@
     {
         "id": 54,
         "name": "Citrato de Trisodio Dihidrato",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "EMSURE/MERCK",
@@ -704,7 +704,7 @@
     {
         "id": 55,
         "name": "Cloruro de bario dihidratato (cristal)",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1 KG",
         "location": "J.K. BAKER",
@@ -717,7 +717,7 @@
     {
         "id": 56,
         "name": "Cloruro de bario dihidratato.",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 2,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -730,7 +730,7 @@
     {
         "id": 57,
         "name": "Cloruro de calcio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "2.5 KG",
         "location": "15",
@@ -743,7 +743,7 @@
     {
         "id": 58,
         "name": "Cloruro de hierro",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "5 G",
         "location": "SIGMA - ALDRICH",
@@ -756,7 +756,7 @@
     {
         "id": 59,
         "name": "Cloruro de hierro III",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -769,7 +769,7 @@
     {
         "id": 60,
         "name": "Cloruro de mercurio II",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1 KG",
         "location": "MERK",
@@ -782,7 +782,7 @@
     {
         "id": 61,
         "name": "Cloruro de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 2,
         "unit": "1 KG",
         "location": "EMSURE/SUPELCO",
@@ -795,7 +795,7 @@
     {
         "id": 62,
         "name": "Cloruro de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1 KG",
         "location": "EMSURE/SUPELCO",
@@ -808,7 +808,7 @@
     {
         "id": 63,
         "name": "Cloruro de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1 KG",
         "location": "SIGMA - ALDRICH",
@@ -821,7 +821,7 @@
     {
         "id": 64,
         "name": "Cloruro de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1KG",
         "location": "EMSURE",
@@ -834,7 +834,7 @@
     {
         "id": 65,
         "name": "Cloruro de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 4,
         "unit": "1 KG",
         "location": "EMSURE",
@@ -847,7 +847,7 @@
     {
         "id": 66,
         "name": "Cloruro de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 4,
         "unit": "1 KG",
         "location": "EMSURE/SUPELCO",
@@ -860,7 +860,7 @@
     {
         "id": 67,
         "name": "Eriochrome Black (INDICADOR DE NEGRO DE ERIOCROMO)",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -873,7 +873,7 @@
     {
         "id": 68,
         "name": "Fenolftaleína",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -886,7 +886,7 @@
     {
         "id": 69,
         "name": "Fenolftaleína",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "50 G",
         "location": "-",
@@ -899,7 +899,7 @@
     {
         "id": 70,
         "name": "Fluoresceína sódica",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "50 G",
         "location": "MERK",
@@ -912,7 +912,7 @@
     {
         "id": 71,
         "name": "POTASIO DIHIDROGENO FOSFATO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1KG",
         "location": "EMSURE",
@@ -925,7 +925,7 @@
     {
         "id": 72,
         "name": "Propilo 3,4,5- trihidroxibenzoato",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 2,
         "unit": "100G",
         "location": "SIGMA ALDRICH",
@@ -938,7 +938,7 @@
     {
         "id": 73,
         "name": "Murexida (purpurato de amonio)",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "10 G",
         "location": "MERK",
@@ -951,7 +951,7 @@
     {
         "id": 74,
         "name": "Naranja de metilo",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -964,7 +964,7 @@
     {
         "id": 75,
         "name": "N-BENZILALFAMETILBENCILAMINA",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "10 ML",
         "location": "SIGMA - ALDRICH",
@@ -977,7 +977,7 @@
     {
         "id": 76,
         "name": "Óxido de arsénico",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "SIGMA - ALDRICH",
@@ -990,7 +990,7 @@
     {
         "id": 77,
         "name": "Óxido de cromo VI (chromium VI)",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "250 G",
         "location": "MERK",
@@ -1003,7 +1003,7 @@
     {
         "id": 78,
         "name": "Peroxidisulfato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1 KG",
         "location": "EMSURE/MERCK",
@@ -1016,7 +1016,7 @@
     {
         "id": 79,
         "name": "Peroxidodisulfato de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "250 G",
         "location": "EMSURE",
@@ -1029,7 +1029,7 @@
     {
         "id": 80,
         "name": "Monocloruro de yodo",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -1042,7 +1042,7 @@
     {
         "id": 81,
         "name": "Rojo de fenol",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "25 G",
         "location": "MERK",
@@ -1055,7 +1055,7 @@
     {
         "id": 82,
         "name": "Sulfato de amonio acs.",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "FERMONT",
@@ -1068,7 +1068,7 @@
     {
         "id": 83,
         "name": "Sulfato de cobre anhidro II",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "250 G",
         "location": "EMSURE/MERCK",
@@ -1081,7 +1081,7 @@
     {
         "id": 84,
         "name": "Sulfato de cobre extrapuro",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "SRL",
@@ -1094,7 +1094,7 @@
     {
         "id": 85,
         "name": "Sulfato de cobre II pentahidratado",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1107,7 +1107,7 @@
     {
         "id": 86,
         "name": "Sulfato de cobre II pentahidratado",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1120,7 +1120,7 @@
     {
         "id": 87,
         "name": "Sulfato de cobre II pentahidratado",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "SIGMA - ALDRICH",
@@ -1133,7 +1133,7 @@
     {
         "id": 88,
         "name": "sulfato de hierro II heptahidrato",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1146,7 +1146,7 @@
     {
         "id": 89,
         "name": "Sulfato de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1 KG",
         "location": "EMSURE/SUPELCO",
@@ -1159,7 +1159,7 @@
     {
         "id": 90,
         "name": "Sulfato de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "5 KG",
         "location": "EMSURE/SUPELCO",
@@ -1172,7 +1172,7 @@
     {
         "id": 91,
         "name": "Sulfato de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 g",
         "location": "-",
@@ -1185,7 +1185,7 @@
     {
         "id": 92,
         "name": "Tabletas Kjeldahl",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1.25 KG",
         "location": "KgaA/MERCK",
@@ -1198,7 +1198,7 @@
     {
         "id": 93,
         "name": "Tartrato de potasio y sodio tetrahidratado",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 2,
         "unit": "500 G",
         "location": "EMSURE/MERCK",
@@ -1211,7 +1211,7 @@
     {
         "id": 94,
         "name": "Tiocinato de amonio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1224,7 +1224,7 @@
     {
         "id": 95,
         "name": "Tiocinato de amonio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "EMSURE/MERCK",
@@ -1237,7 +1237,7 @@
     {
         "id": 96,
         "name": "Tiocinato de potasio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "250 G",
         "location": "EMSURE/MERCK",
@@ -1250,7 +1250,7 @@
     {
         "id": 97,
         "name": "Tiosulfato de sodio pentahidratado",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "EMSURE/MERCK",
@@ -1263,7 +1263,7 @@
     {
         "id": 98,
         "name": "Vainillina",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -1276,7 +1276,7 @@
     {
         "id": 99,
         "name": "Vainillina",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -1289,7 +1289,7 @@
     {
         "id": 100,
         "name": "Vainillina",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100 G",
         "location": "SIGMA - ALDRICH",
@@ -1302,7 +1302,7 @@
     {
         "id": 101,
         "name": "Yoduro de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1 KG",
         "location": "EMSURE/MERCK",
@@ -1315,7 +1315,7 @@
     {
         "id": 102,
         "name": "Zinc",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "MERK",
@@ -1328,7 +1328,7 @@
     {
         "id": 103,
         "name": "Zinc",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1341,7 +1341,7 @@
     {
         "id": 104,
         "name": "SULFATO DE SODIO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1KG",
         "location": "SUPELCO",
@@ -1354,7 +1354,7 @@
     {
         "id": 105,
         "name": "ACETATO DE POTASIO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500G",
         "location": "SIGMA ALDRICH",
@@ -1367,7 +1367,7 @@
     {
         "id": 106,
         "name": "PENTOXIDO DE DIFÓSFORO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1KG",
         "location": "SUPELCO",
@@ -1380,7 +1380,7 @@
     {
         "id": 107,
         "name": "1,13,3 - TETRAMETOXIPROPANO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500ML",
         "location": "SIGMA",
@@ -1393,7 +1393,7 @@
     {
         "id": 108,
         "name": "FOLIN Y CIOCALTEU FENOL",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500ML",
         "location": "SIGMA",
@@ -1406,7 +1406,7 @@
     {
         "id": 109,
         "name": "FOLIN Y CIOCALTEU FENOL",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500ML",
         "location": "SUPELCO",
@@ -1419,7 +1419,7 @@
     {
         "id": 110,
         "name": "NITRITO DE SODIO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500G",
         "location": "SIGMA",
@@ -1432,7 +1432,7 @@
     {
         "id": 111,
         "name": "SULFATO DE MANGANESO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "250G",
         "location": "SUPELCO",
@@ -1445,7 +1445,7 @@
     {
         "id": 112,
         "name": "SELENITO DE SODIO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "10G",
         "location": "SIGMA",
@@ -1458,7 +1458,7 @@
     {
         "id": 113,
         "name": "RODAMINA B",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "25G",
         "location": "SIGMA",
@@ -1471,7 +1471,7 @@
     {
         "id": 114,
         "name": "alginato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100g",
         "location": "CDH",
@@ -1484,7 +1484,7 @@
     {
         "id": 115,
         "name": "Rojo de Metilo",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100gr",
         "location": "Scharlau",
@@ -1497,7 +1497,7 @@
     {
         "id": 116,
         "name": "Acetato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 2,
         "unit": "1KG",
         "location": "SUPELCO",
@@ -1510,7 +1510,7 @@
     {
         "id": 117,
         "name": "Acetato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 0,
         "unit": "500G",
         "location": "SUPELCO",
@@ -1523,7 +1523,7 @@
     {
         "id": 118,
         "name": "SULFATO DE SODIO",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "1KG",
         "location": "SUPELCO",
@@ -1536,7 +1536,7 @@
     {
         "id": 119,
         "name": "Dihidratado tungstato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "25G",
         "location": "SIGMA ALDRICH",
@@ -1549,7 +1549,7 @@
     {
         "id": 120,
         "name": "Quercetin",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 0,
         "unit": "10g",
         "location": "SIGMA ALDRICH",
@@ -1562,7 +1562,7 @@
     {
         "id": 121,
         "name": "chitosan",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 2,
         "unit": "250G",
         "location": "SIGMA ALDRICH",
@@ -1575,7 +1575,7 @@
     {
         "id": 122,
         "name": "Cloruro de Aluminio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100G",
         "location": "SIGMA ALDRICH",
@@ -1588,7 +1588,7 @@
     {
         "id": 123,
         "name": "Cloruro de calcio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "100GR",
         "location": "",
@@ -1601,7 +1601,7 @@
     {
         "id": 124,
         "name": "Citrato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "500G",
         "location": "FERMONT",
@@ -1614,7 +1614,7 @@
     {
         "id": 125,
         "name": "Acetato de sodio",
-        "category": "Sales",
+        "category": "Sal",
         "stock": 1,
         "unit": "250G",
         "location": "SUPELCO",
