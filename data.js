@@ -523,7 +523,7 @@ const products =
     {
         "id": 41,
         "name": "1,10 Fenantrolina monohidratado",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "10 G",
         "location": "MERK",
@@ -536,7 +536,7 @@ const products =
     {
         "id": 42,
         "name": "1-Naphthol",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "50 G",
         "location": "MERK",
@@ -549,7 +549,7 @@ const products =
     {
         "id": 43,
         "name": "4-(Dimetilamino)-benzaldehído",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "25G",
         "location": "SIGMA",
@@ -562,7 +562,7 @@ const products =
     {
         "id": 44,
         "name": "4-(Dimetilamino)-benzaldehído",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "KgaA/MERCK",
@@ -575,7 +575,7 @@ const products =
     {
         "id": 45,
         "name": "4-aninopiridina (tóxico)",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "10 G",
         "location": "MERK",
@@ -588,7 +588,7 @@ const products =
     {
         "id": 46,
         "name": "Azul de metileno",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "25 G",
         "location": "SCHARLAU",
@@ -601,7 +601,7 @@ const products =
     {
         "id": 47,
         "name": "Bicarbonato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -614,7 +614,7 @@ const products =
     {
         "id": 48,
         "name": "Bicarbonato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 2,
         "unit": "500 G",
         "location": "SPECTRUM",
@@ -627,7 +627,7 @@ const products =
     {
         "id": 49,
         "name": "Biftalato de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "50 g",
         "location": "-",
@@ -640,7 +640,7 @@ const products =
     {
         "id": 50,
         "name": "Cadmio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "250 G",
         "location": "MERK",
@@ -653,7 +653,7 @@ const products =
     {
         "id": 51,
         "name": "Carbonato de Amonio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "25 G",
         "location": "SIGMA - ALDRICH",
@@ -666,7 +666,7 @@ const products =
     {
         "id": 52,
         "name": "Carbonato de Amonio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "25 G",
         "location": "SIGMA - ALDRICH",
@@ -679,7 +679,7 @@ const products =
     {
         "id": 53,
         "name": "Citrato de potasio tribasico monohidratado",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1 KG",
         "location": "SIGMA - ALDRICH",
@@ -692,7 +692,7 @@ const products =
     {
         "id": 54,
         "name": "Citrato de Trisodio Dihidrato",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "EMSURE/MERCK",
@@ -705,7 +705,7 @@ const products =
     {
         "id": 55,
         "name": "Cloruro de bario dihidratato (cristal)",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1 KG",
         "location": "J.K. BAKER",
@@ -718,7 +718,7 @@ const products =
     {
         "id": 56,
         "name": "Cloruro de bario dihidratato.",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 2,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -731,7 +731,7 @@ const products =
     {
         "id": 57,
         "name": "Cloruro de calcio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "2.5 KG",
         "location": "15",
@@ -744,7 +744,7 @@ const products =
     {
         "id": 58,
         "name": "Cloruro de hierro",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "5 G",
         "location": "SIGMA - ALDRICH",
@@ -757,7 +757,7 @@ const products =
     {
         "id": 59,
         "name": "Cloruro de hierro III",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -770,7 +770,7 @@ const products =
     {
         "id": 60,
         "name": "Cloruro de mercurio II",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1 KG",
         "location": "MERK",
@@ -783,7 +783,7 @@ const products =
     {
         "id": 61,
         "name": "Cloruro de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 2,
         "unit": "1 KG",
         "location": "EMSURE/SUPELCO",
@@ -796,7 +796,7 @@ const products =
     {
         "id": 62,
         "name": "Cloruro de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1 KG",
         "location": "EMSURE/SUPELCO",
@@ -809,7 +809,7 @@ const products =
     {
         "id": 63,
         "name": "Cloruro de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1 KG",
         "location": "SIGMA - ALDRICH",
@@ -822,7 +822,7 @@ const products =
     {
         "id": 64,
         "name": "Cloruro de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1KG",
         "location": "EMSURE",
@@ -835,7 +835,7 @@ const products =
     {
         "id": 65,
         "name": "Cloruro de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 4,
         "unit": "1 KG",
         "location": "EMSURE",
@@ -848,7 +848,7 @@ const products =
     {
         "id": 66,
         "name": "Cloruro de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 4,
         "unit": "1 KG",
         "location": "EMSURE/SUPELCO",
@@ -861,7 +861,7 @@ const products =
     {
         "id": 67,
         "name": "Eriochrome Black (INDICADOR DE NEGRO DE ERIOCROMO)",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -874,7 +874,7 @@ const products =
     {
         "id": 68,
         "name": "Fenolftaleína",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -887,7 +887,7 @@ const products =
     {
         "id": 69,
         "name": "Fenolftaleína",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "50 G",
         "location": "-",
@@ -900,7 +900,7 @@ const products =
     {
         "id": 70,
         "name": "Fluoresceína sódica",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "50 G",
         "location": "MERK",
@@ -913,7 +913,7 @@ const products =
     {
         "id": 71,
         "name": "POTASIO DIHIDROGENO FOSFATO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1KG",
         "location": "EMSURE",
@@ -926,7 +926,7 @@ const products =
     {
         "id": 72,
         "name": "Propilo 3,4,5- trihidroxibenzoato",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 2,
         "unit": "100G",
         "location": "SIGMA ALDRICH",
@@ -939,7 +939,7 @@ const products =
     {
         "id": 73,
         "name": "Murexida (purpurato de amonio)",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "10 G",
         "location": "MERK",
@@ -952,7 +952,7 @@ const products =
     {
         "id": 74,
         "name": "Naranja de metilo",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -965,7 +965,7 @@ const products =
     {
         "id": 75,
         "name": "N-BENZILALFAMETILBENCILAMINA",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "10 ML",
         "location": "SIGMA - ALDRICH",
@@ -978,7 +978,7 @@ const products =
     {
         "id": 76,
         "name": "Óxido de arsénico",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "SIGMA - ALDRICH",
@@ -991,7 +991,7 @@ const products =
     {
         "id": 77,
         "name": "Óxido de cromo VI (chromium VI)",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "250 G",
         "location": "MERK",
@@ -1004,7 +1004,7 @@ const products =
     {
         "id": 78,
         "name": "Peroxidisulfato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1 KG",
         "location": "EMSURE/MERCK",
@@ -1017,7 +1017,7 @@ const products =
     {
         "id": 79,
         "name": "Peroxidodisulfato de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "250 G",
         "location": "EMSURE",
@@ -1030,7 +1030,7 @@ const products =
     {
         "id": 80,
         "name": "Monocloruro de yodo",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -1043,7 +1043,7 @@ const products =
     {
         "id": 81,
         "name": "Rojo de fenol",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "25 G",
         "location": "MERK",
@@ -1056,7 +1056,7 @@ const products =
     {
         "id": 82,
         "name": "Sulfato de amonio acs.",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "FERMONT",
@@ -1069,7 +1069,7 @@ const products =
     {
         "id": 83,
         "name": "Sulfato de cobre anhidro II",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "250 G",
         "location": "EMSURE/MERCK",
@@ -1082,7 +1082,7 @@ const products =
     {
         "id": 84,
         "name": "Sulfato de cobre extrapuro",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "SRL",
@@ -1095,7 +1095,7 @@ const products =
     {
         "id": 85,
         "name": "Sulfato de cobre II pentahidratado",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1108,7 +1108,7 @@ const products =
     {
         "id": 86,
         "name": "Sulfato de cobre II pentahidratado",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1121,7 +1121,7 @@ const products =
     {
         "id": 87,
         "name": "Sulfato de cobre II pentahidratado",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "SIGMA - ALDRICH",
@@ -1134,7 +1134,7 @@ const products =
     {
         "id": 88,
         "name": "sulfato de hierro II heptahidrato",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1147,7 +1147,7 @@ const products =
     {
         "id": 89,
         "name": "Sulfato de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1 KG",
         "location": "EMSURE/SUPELCO",
@@ -1160,7 +1160,7 @@ const products =
     {
         "id": 90,
         "name": "Sulfato de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "5 KG",
         "location": "EMSURE/SUPELCO",
@@ -1173,7 +1173,7 @@ const products =
     {
         "id": 91,
         "name": "Sulfato de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 g",
         "location": "-",
@@ -1186,7 +1186,7 @@ const products =
     {
         "id": 92,
         "name": "Tabletas Kjeldahl",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1.25 KG",
         "location": "KgaA/MERCK",
@@ -1199,7 +1199,7 @@ const products =
     {
         "id": 93,
         "name": "Tartrato de potasio y sodio tetrahidratado",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 2,
         "unit": "500 G",
         "location": "EMSURE/MERCK",
@@ -1212,7 +1212,7 @@ const products =
     {
         "id": 94,
         "name": "Tiocinato de amonio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1225,7 +1225,7 @@ const products =
     {
         "id": 95,
         "name": "Tiocinato de amonio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "EMSURE/MERCK",
@@ -1238,7 +1238,7 @@ const products =
     {
         "id": 96,
         "name": "Tiocinato de potasio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "250 G",
         "location": "EMSURE/MERCK",
@@ -1251,7 +1251,7 @@ const products =
     {
         "id": 97,
         "name": "Tiosulfato de sodio pentahidratado",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "EMSURE/MERCK",
@@ -1264,7 +1264,7 @@ const products =
     {
         "id": 98,
         "name": "Vainillina",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -1277,7 +1277,7 @@ const products =
     {
         "id": 99,
         "name": "Vainillina",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "MERK",
@@ -1290,7 +1290,7 @@ const products =
     {
         "id": 100,
         "name": "Vainillina",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100 G",
         "location": "SIGMA - ALDRICH",
@@ -1303,7 +1303,7 @@ const products =
     {
         "id": 101,
         "name": "Yoduro de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1 KG",
         "location": "EMSURE/MERCK",
@@ -1316,7 +1316,7 @@ const products =
     {
         "id": 102,
         "name": "Zinc",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "MERK",
@@ -1329,7 +1329,7 @@ const products =
     {
         "id": 103,
         "name": "Zinc",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500 G",
         "location": "SIGMA - ALDRICH",
@@ -1342,7 +1342,7 @@ const products =
     {
         "id": 104,
         "name": "SULFATO DE SODIO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1KG",
         "location": "SUPELCO",
@@ -1355,7 +1355,7 @@ const products =
     {
         "id": 105,
         "name": "ACETATO DE POTASIO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500G",
         "location": "SIGMA ALDRICH",
@@ -1368,7 +1368,7 @@ const products =
     {
         "id": 106,
         "name": "PENTOXIDO DE DIFÓSFORO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1KG",
         "location": "SUPELCO",
@@ -1381,7 +1381,7 @@ const products =
     {
         "id": 107,
         "name": "1,13,3 - TETRAMETOXIPROPANO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500ML",
         "location": "SIGMA",
@@ -1394,7 +1394,7 @@ const products =
     {
         "id": 108,
         "name": "FOLIN Y CIOCALTEU FENOL",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500ML",
         "location": "SIGMA",
@@ -1407,7 +1407,7 @@ const products =
     {
         "id": 109,
         "name": "FOLIN Y CIOCALTEU FENOL",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500ML",
         "location": "SUPELCO",
@@ -1420,7 +1420,7 @@ const products =
     {
         "id": 110,
         "name": "NITRITO DE SODIO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500G",
         "location": "SIGMA",
@@ -1433,7 +1433,7 @@ const products =
     {
         "id": 111,
         "name": "SULFATO DE MANGANESO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "250G",
         "location": "SUPELCO",
@@ -1446,7 +1446,7 @@ const products =
     {
         "id": 112,
         "name": "SELENITO DE SODIO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "10G",
         "location": "SIGMA",
@@ -1459,7 +1459,7 @@ const products =
     {
         "id": 113,
         "name": "RODAMINA B",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "25G",
         "location": "SIGMA",
@@ -1472,7 +1472,7 @@ const products =
     {
         "id": 114,
         "name": "alginato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100g",
         "location": "CDH",
@@ -1485,7 +1485,7 @@ const products =
     {
         "id": 115,
         "name": "Rojo de Metilo",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100gr",
         "location": "Scharlau",
@@ -1498,7 +1498,7 @@ const products =
     {
         "id": 116,
         "name": "Acetato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 2,
         "unit": "1KG",
         "location": "SUPELCO",
@@ -1511,7 +1511,7 @@ const products =
     {
         "id": 117,
         "name": "Acetato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 0,
         "unit": "500G",
         "location": "SUPELCO",
@@ -1524,7 +1524,7 @@ const products =
     {
         "id": 118,
         "name": "SULFATO DE SODIO",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "1KG",
         "location": "SUPELCO",
@@ -1537,7 +1537,7 @@ const products =
     {
         "id": 119,
         "name": "Dihidratado tungstato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "25G",
         "location": "SIGMA ALDRICH",
@@ -1550,7 +1550,7 @@ const products =
     {
         "id": 120,
         "name": "Quercetin",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 0,
         "unit": "10g",
         "location": "SIGMA ALDRICH",
@@ -1563,7 +1563,7 @@ const products =
     {
         "id": 121,
         "name": "chitosan",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 2,
         "unit": "250G",
         "location": "SIGMA ALDRICH",
@@ -1576,7 +1576,7 @@ const products =
     {
         "id": 122,
         "name": "Cloruro de Aluminio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100G",
         "location": "SIGMA ALDRICH",
@@ -1589,7 +1589,7 @@ const products =
     {
         "id": 123,
         "name": "Cloruro de calcio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "100GR",
         "location": "",
@@ -1602,7 +1602,7 @@ const products =
     {
         "id": 124,
         "name": "Citrato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "500G",
         "location": "FERMONT",
@@ -1615,7 +1615,7 @@ const products =
     {
         "id": 125,
         "name": "Acetato de sodio",
-        "category": "Sal",
+        "category": "Bases y sales",
         "stock": 1,
         "unit": "250G",
         "location": "SUPELCO",
